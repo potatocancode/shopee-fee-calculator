@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蝦皮、露天、momo 手續費比較 2026｜同一個商品在哪個平台賺最多</title>
+<meta name="description" content="免費電商平台手續費比較：輸入售價、運費和成本，一次算出蝦皮、露天、momo 摩天商城各被收多少手續費、每件淨利多少。依 2026 年各平台公開費率計算。">
+<link rel="canonical" href="https://potatocancode.github.io/shopee-fee-calculator/compare/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="蝦皮 vs 露天 vs momo 手續費比較｜同一個商品在哪賺最多？">
+<meta property="og:description" content="輸入售價和成本，一次比較三個平台的手續費和每件淨利。">
+<meta property="og:url" content="https://potatocancode.github.io/shopee-fee-calculator/compare/">
+<meta property="og:image" content="https://potatocancode.github.io/shopee-fee-calculator/compare/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--teal:#1f6f78;--teal-l:#e3f1f2;--ink:#1d2a2e;--mute:#5b6b70;--line:#d6e2e4;--bg:#f7fafa;--card:#fff;--bad:#c62828;--good:#1a7f37;--best:#fff6e5}
+@media (prefers-color-scheme:dark){:root{--teal:#5cc3cc;--teal-l:#123236;--ink:#e6eeef;--mute:#9db0b4;--line:#2a3d41;--bg:#0f1b1d;--card:#152427;--bad:#ff6b6b;--good:#4cc46a;--best:#2b2414}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+nav{background:#174f56;font-size:14px}
+nav .wrap{display:flex;gap:18px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+nav a{color:#d9f0f2;text-decoration:none}nav a[aria-current]{color:#fff;font-weight:700}
+header{background:var(--teal);color:#fff;padding:26px 0 22px}
+header h1{margin:0;font-size:clamp(24px,5vw,34px);line-height:1.3}
+header p{margin:8px 0 0;opacity:.92}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0;margin:22px 0}
+.card h2{margin:0 0 12px;font-size:19px;color:var(--teal)}
+.card h3{margin:16px 0 4px;font-size:16px}
+label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:var(--bg);color:var(--ink)}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:760px){.row4{grid-template-columns:1fr 1fr}.cols{grid-template-columns:1fr}}
+.seg{display:flex;gap:8px;margin-top:4px}
+.seg label{flex:1;margin:0;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;cursor:pointer;color:var(--ink);font-size:14px}
+.seg input{display:none}
+.seg label:has(input:checked){border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:700}
+.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:14px;margin:10px 0 0}
+.chk input{width:auto}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 6px;border-bottom:1px dashed var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+thead th{color:var(--teal);font-size:16px}
+tr.sum td{font-weight:800;border-top:2px solid var(--line)}
+td.best,th.best{background:var(--best)}
+.neg{color:var(--bad)!important}.pos{color:var(--good)!important}
+.verdict{margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);font-size:15px}
+.cta{background:linear-gradient(135deg,var(--teal),#2a8f8a);color:#fff;border-radius:16px;padding:22px;margin:8px 0 26px}
+.cta h2{margin:0 0 6px;font-size:21px}
+.cta a{display:inline-block;margin-top:12px;background:#fff;color:#1f6f78;font-weight:800;padding:11px 20px;border-radius:99px;text-decoration:none}
+article h2{font-size:22px;color:var(--teal);margin:30px 0 8px}
+article h3{font-size:17px;margin:18px 0 4px}
+article table td,article table th{border:1px solid var(--line);padding:8px;text-align:left}
+article table th{background:var(--teal-l)}
+.note{font-size:13px;color:var(--mute)}
+footer{border-top:1px solid var(--line);margin-top:30px;padding:18px 0 30px;font-size:14px;color:var(--mute)}
+a{color:var(--teal)}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"蝦皮和露天哪個手續費比較低？","acceptedAnswer":{"@type":"Answer","text":"以一般賣家來說，露天的費用通常較低：交易服務費 3%（單件最多 400 元，運費不計）加金流服務費 1.5%（含運費計算），合計約 4.5%。蝦皮 2026 年一般賣家常見合計約 15%（成交手續費多數 6%、金流 2.5%、免運方案 6% 或每單 60 元、發票 2.5 元）。但兩個平台的流量差很多，費用低不代表賺得多。"}},
+{"@type":"Question","name":"露天 2026 年手續費怎麼算？","acceptedAnswer":{"@type":"Answer","text":"露天收兩種費用：交易服務費 = 商品成交單價 × 3% × 數量，元以下四捨五入，單件最多 400 元，運費不列入；金流服務費 = 賣家實收金額（含運費）× 1.5%，信用卡 12 期分期為 3%。兩者都在買家下單後第 15 天計入計費中心。新註冊或一年內沒有交易的賣家可申請 90 天交易服務費 0 元。"}},
+{"@type":"Question","name":"momo 摩天商城的手續費是多少？","acceptedAnswer":{"@type":"Answer","text":"momo 依商品分類收成交手續費，非檔期約 3% 到 12%，檔期再高 0.5% 到 1.5%，例如服裝內著非檔期 5.5%、檔期 6.5%，彩妝保養 12%／13.5%。計算方式是單件售出金額 × 數量 × 費率，元以下四捨五入。金流等其他費用 momo 未在費率頁公開，請依你的合約為準。"}}
+]}
+</script>
+</head>
+<body>
+<nav><div class="wrap">
+<a href="../">手續費計算機</a>
+<a href="../pricing/">定價與折扣計算機</a>
+<a href="../ads-roas/">廣告 ROAS 計算機</a>
+<a href="./" aria-current="page">平台手續費比較</a>
+</div></nav>
+<header><div class="wrap">
+<h1>蝦皮 vs 露天 vs momo 手續費比較（2026）</h1>
+<p>同一個商品，放在不同平台各被收多少？輸入售價和成本，一次比較三個平台的費用和每件淨利。</p>
+</div></header>
+
+<main class="wrap">
+<section class="card" aria-label="商品資料">
+<h2>① 商品資料</h2>
+<div class="row4">
+<div><label for="price">售價（元）</label><input id="price" type="number" inputmode="decimal" min="0" value="390"></div>
+<div><label for="ship">買家付的運費</label><input id="ship" type="number" inputmode="decimal" min="0" value="60"></div>
+<div><label for="cost">進貨成本</label><input id="cost" type="number" inputmode="decimal" min="0" value="160"></div>
+<div><label for="pack">包材／其他成本</label><input id="pack" type="number" inputmode="decimal" min="0" value="15"></div>
+</div>
+<label class="chk"><input id="event" type="checkbox">促銷檔期（蝦皮成交手續費 +2%、momo 用檔期費率）</label>
+</section>
+
+<section class="card" aria-label="各平台設定">
+<h2>② 各平台設定</h2>
+<div class="cols">
+<div>
+<h3>蝦皮（一般賣家）</h3>
+<label for="sCat">商品分類</label>
+<select id="sCat">
+<option value="0.06" selected>一般／多數分類 6%</option>
+<option value="0.055">美食伴手禮、寵物食品／保健 5.5%</option>
+<option value="0.05">筆記型電腦 5%</option>
+<option value="0.075">手機周邊配件 7.5%</option>
+</select>
+<label>免運及進階賣家專案</label>
+<div class="seg">
+<label><input type="radio" name="plan" value="1" checked>方案一 6%</label>
+<label><input type="radio" name="plan" value="2">方案二 60 元</label>
+</div>
+<label class="chk"><input id="coin" type="checkbox">有參加蝦幣回饋（免促銷加收）</label>
+<label class="chk"><input id="sInv" type="checkbox" checked>開立代收轉付發票 2.5 元</label>
+</div>
+<div>
+<h3>露天市集</h3>
+<label>交易服務費</label>
+<input value="3%（單件上限 400 元）" disabled>
+<label for="rPay">付款方式（金流服務費）</label>
+<select id="rPay">
+<option value="0.015" selected>一般付款、信用卡一次付清 1.5%</option>
+<option value="0.03">信用卡 12 期分期 3%</option>
+</select>
+<label class="chk"><input id="rNew" type="checkbox">新賣家 90 天交易服務費 0 元優惠</label>
+</div>
+<div>
+<h3>momo 摩天商城</h3>
+<label for="mCat">商品分類（非檔期／檔期）</label>
+<select id="mCat">
+<option value="0.055,0.065" selected>服裝內著 5.5%／6.5%</option>
+<option value="0.075,0.085">鞋包、飾品、寵物、寢具、餐廚 7.5%／8.5%</option>
+<option value="0.06,0.065">文具樂器、圖書影音 6%／6.5%</option>
+<option value="0.04,0.045">零食、飲料、米麵 4%／4.5%</option>
+<option value="0.05,0.055">沖調、烘焙、甜點、生鮮 5%／5.5%</option>
+<option value="0.08,0.09">手機週邊配件 8%／9%</option>
+<option value="0.12,0.135">彩妝保養、個人清潔 12%／13.5%</option>
+<option value="0.12,0.13">維他命、機能保健 12%／13%</option>
+<option value="0.04,0.045">手機、平板 4%／4.5%</option>
+</select>
+<label for="mOther">其他費用（%，依你的合約）</label>
+<input id="mOther" type="number" inputmode="decimal" min="0" step="0.1" value="0">
+<p class="note">momo 費率頁只公開成交手續費，金流等其他費用請依合約填入。</p>
+</div>
+</div>
+</section>
+
+<section class="card" aria-live="polite" aria-label="比較結果">
+<h2>③ 比較結果（每件）</h2>
+<div class="scroll">
+<table>
+<thead><tr><th>費用項目</th><th id="h0">蝦皮</th><th id="h1">露天</th><th id="h2">momo</th></tr></thead>
+<tbody id="tb"></tbody>
+</table>
+</div>
+<div class="verdict" id="verdict"></div>
+<p class="note">費率依 2026 年 11 月各平台公開資料：蝦皮為第三方整理（以賣家中心公告為準）、露天與 momo 為官方幫助中心。各項費用分別四捨五入。未計入廣告、物流處理費與各平台活動費用。</p>
+</section>
+
+<section class="cta">
+<h2>決定好平台後，整間店一起健檢</h2>
+<p>在蝦皮賣的話，<b>「蝦皮賣場利潤健檢表」</b>把 200 個商品一次放進去，標出虧錢商品、算出每個商品的保本價，並比較方案一、方案二每月差多少。</p>
+<a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">看健檢表（早鳥 NT$390）→</a>
+</section>
+
+<article>
+<h2>三個平台的費用怎麼算？</h2>
+<table>
+<tr><th>平台</th><th>主要費用</th><th>計算基礎</th></tr>
+<tr><td>蝦皮（一般賣家）</td><td>成交手續費依分類（多數 6%）＋金流與系統處理費 2.5%＋免運方案（方案一 6% 或方案二每單 60 元）＋發票 2.5 元；促銷檔期成交手續費加收 2%</td><td>金流費含運費</td></tr>
+<tr><td>露天市集</td><td>交易服務費 3%（單件上限 400 元）＋金流服務費 1.5%（信用卡 12 期 3%）</td><td>交易服務費不含運費；金流服務費含運費</td></tr>
+<tr><td>momo 摩天商城</td><td>成交手續費依分類，非檔期約 3%～12%，檔期再高 0.5%～1.5%</td><td>單件售出金額 × 數量</td></tr>
+</table>
+
+<h2>以 390 元商品為例</h2>
+<p>售價 390 元、買家付運費 60 元、非檔期（蝦皮方案一、一般分類；momo 服裝內著）：</p>
+<table>
+<tr><th>平台</th><th>平台費用</th><th>佔售價</th></tr>
+<tr><td>蝦皮</td><td>59.5 元</td><td>15.3%</td></tr>
+<tr><td>露天</td><td>19 元</td><td>4.9%</td></tr>
+<tr><td>momo（僅成交手續費）</td><td>21 元</td><td>5.4%</td></tr>
+</table>
+<p>露天的費用最低，但蝦皮的流量和買家數量大很多。比較平台時，除了手續費，也要考慮<b>能賣出幾件</b>：同一個商品在蝦皮一個月賣 100 件、在露天賣 10 件，蝦皮的總利潤還是比較高。</p>
+
+<h2>常見問題</h2>
+<h3>露天的交易服務費 0 元優惠是什麼？</h3>
+<p>依露天幫助中心說明，2026 年 6 月 1 日起新註冊的賣家，或一年內沒有銷售紀錄的舊賣家，可以申請 90 天交易服務費 0 元。金流服務費仍照收。勾選上方「新賣家 90 天交易服務費 0 元優惠」可以看優惠期間的費用。</p>
+<h3>momo 為什麼只算成交手續費？</h3>
+<p>momo 商店規則中心公開的是各分類的成交手續費率，金流費、年費等其他費用沒有在同一頁列出，可能依開店方案與合約不同。如果你的合約有其他百分比費用，填在「其他費用」欄位即可。</p>
+<h3>費率資料從哪來？</h3>
+<p>露天：露天市集幫助中心「交易服務費說明」「金流服務費說明」。momo：momo 商店規則中心「成交手續費說明」。蝦皮：2026 年第三方整理資料，詳見 <a href="../">蝦皮手續費計算機</a>。各平台費率可能調整，以官方公告為準。</p>
+<p class="note">最後更新：2026 年 11 月</p>
+</article>
+</main>
+
+<footer><div class="wrap">
+由 <a href="https://portaly.cc/potatocancode" rel="noopener">Potato 賣家工具箱</a> 製作。本站與蝦皮、露天、momo 皆無任何關係，試算結果僅供參考。
+</div></footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const R = x => Math.round(x + 1e-9);
+const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
+const money = x => (x < 0 ? "-" : "") + "$" + Math.abs(x).toLocaleString("zh-TW", {maximumFractionDigits: 1});
+const pct = x => (x * 100).toFixed(1) + "%";
+
+function shopee(p, s, ev) {
+  const rate = parseFloat($("sCat").value) + (ev && !$("coin").checked ? 0.02 : 0);
+  const plan = document.querySelector("input[name=plan]:checked").value;
+  const comm = R(Math.min(p, 35000) * rate);
+  const pay = R((p + s) * 0.025);
+  const prog = plan === "1" || p <= 99 ? R(p * 0.06) : 60;
+  const inv = $("sInv").checked ? 2.5 : 0;
+  return [comm, pay, prog, inv, null];
+}
+function ruten(p, s) {
+  const trade = $("rNew").checked || p <= 0 ? 0 : Math.min(400, Math.max(1, R(Math.min(p, 20000) * 0.03)));
+  const pay = p + s > 0 ? Math.max(1, R((p + s) * parseFloat($("rPay").value))) : 0;
+  return [trade, pay, null, null, null];
+}
+function momo(p, ev) {
+  const [a, b] = $("mCat").value.split(",").map(parseFloat);
+  const comm = R(p * (ev ? b : a));
+  const other = R(p * num("mOther") / 100);
+  return [comm, null, null, null, other];
+}
+
+function calc() {
+  const p = num("price"), s = num("ship"), ev = $("event").checked;
+  const cost = num("cost") + num("pack");
+  const plats = [shopee(p, s, ev), ruten(p, s), momo(p, ev)];
+  const tot = plats.map(f => f.reduce((t, x) => t + (x || 0), 0));
+  const net = tot.map(t => p - t - cost);
+  const best = net.indexOf(Math.max(...net));
+  const rows = [];
+  const labels = ["蝦皮", "露天", "momo"];
+  const cell = (i, v, cls = "") => "<td class='" + cls + (i === best ? " best" : "") + "'>" + v + "</td>";
+  const names = ["成交手續費（露天：交易服務費）", "金流服務費", "蝦皮免運方案", "發票", "其他費用（momo 合約）"];
+  names.forEach((nm, r) => {
+    if (plats.every(f => f[r] === null)) return;
+    rows.push("<tr><td>" + nm + "</td>" + plats.map((f, i) => cell(i, f[r] === null ? "-" : money(f[r]))).join("") + "</tr>");
+  });
+  rows.push("<tr class='sum'><td>平台費用合計</td>" + tot.map((t, i) => cell(i, money(t))).join("") + "</tr>");
+  rows.push("<tr><td>佔售價</td>" + tot.map((t, i) => cell(i, p ? pct(t / p) : "-")).join("") + "</tr>");
+  rows.push("<tr class='sum'><td>每件淨利</td>" + net.map((n, i) => cell(i, money(n), n < 0 ? "neg" : "pos")).join("") + "</tr>");
+  rows.push("<tr><td>淨利率</td>" + net.map((n, i) => cell(i, p ? pct(n / p) : "-", n < 0 ? "neg" : "")).join("") + "</tr>");
+  $("tb").innerHTML = rows.join("");
+  [0, 1, 2].forEach(i => $("h" + i).className = i === best ? "best" : "");
+  const sorted = [0, 1, 2].sort((a, b) => net[b] - net[a]);
+  $("verdict").innerHTML = !p ? "輸入售價開始比較。" :
+    "每件淨利最高：<b>" + labels[best] + "</b>（" + money(net[best]) + "），比最低的" + labels[sorted[2]] + "多 " + money(net[best] - net[sorted[2]]) + "。" +
+    "<br>提醒：手續費只是成本的一部分，各平台的流量和成交量差很多，也要一起考慮。";
+}
+document.querySelectorAll("input,select").forEach(el => el.addEventListener("input", calc));
+calc();
+</script>
+</body>
+</html>
