@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://potatocancode.github.io/shopee-fee-calculator/sitemap.xml
