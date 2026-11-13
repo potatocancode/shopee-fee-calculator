@@ -53,8 +53,8 @@ t("build 輸出和現有頁面一致（忘了跑 node _build.mjs 會失敗）", 
 });
 
 const page = p => { const x = load(join(ROOT, p, "index.html")); x.calc(); return x; };
-t("首頁預設：方案一，有淨利、有保本價", () => {
-  const x = page("");
+t("手續費頁預設：方案一，有淨利、有保本價", () => {
+  const x = page("fee/");
   assert.match(x.el("kFee").textContent, /^\$\d/);
   assert.match(x.el("fBE").textContent, /^\$\d/);
 });
@@ -154,8 +154,8 @@ t("文章：金流費 390+60 → 11；促銷 390 → 66.5", () => {
   assert.equal(Fees.shopee(390, o(1, {ship: 60})).pay, 11);
   assert.equal(fee(390, 1, {promo: true}), 66.5);
 });
-t("首頁和定價頁的保本價一致（成本 195 → 232，20% → 302）", () => {
-  const x = page("");
+t("手續費頁和定價頁的保本價一致（成本 195 → 232，20% → 302）", () => {
+  const x = page("fee/");
   x.set("cost", 195); x.set("pack", 0); x.set("sship", 0); x.set("ads", 0); x.set("ship", 0); x.set("target", 20); x.calc();
   assert.equal(x.el("fBE").textContent, "$232");
   assert.equal(x.el("fTP").textContent, "$302");

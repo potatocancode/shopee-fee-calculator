@@ -12,51 +12,177 @@
 <meta property="og:url" content="https://sellerpotato.com/compare/">
 <meta property="og:image" content="https://sellerpotato.com/compare/og.png">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--teal:#1f6f78;--teal-l:#e3f1f2;--ink:#1d2a2e;--mute:#5b6b70;--line:#d6e2e4;--bg:#f7fafa;--card:#fff;--bad:#c62828;--good:#1a7f37;--best:#fff6e5}
-@media (prefers-color-scheme:dark){:root{--teal:#5cc3cc;--teal-l:#123236;--ink:#e6eeef;--mute:#9db0b4;--line:#2a3d41;--bg:#0f1b1d;--card:#152427;--bad:#ff6b6b;--good:#4cc46a;--best:#2b2414}}
+/* 精算刊物：見 DESIGN.md。顏色一律用 token，數字一律用 .num 或 JetBrains Mono。 */
+:root{
+  --paper:#F6F7F4;--surface:#FFFFFF;--ink:#16282B;--muted:#5C6B6E;--line:#DCE3E1;--line-strong:#B9C6C4;
+  --primary:#174F56;--primary-hover:#0F3B41;--primary-tint:#E3EEEC;--on-primary:#FFFFFF;
+  --accent:#F4A259;--accent-tint:#FDEAD3;--success:#2E7A4F;--error:#B8322A;--error-tint:#F8E3E0;--warn:#8A4B00;--warn-tint:#FFF1D6;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;--sans:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --r-sm:4px;--r-md:6px;--r-lg:10px;--max:1180px;
+  /* 舊頁面用的名稱，對到新 token */
+  --teal:var(--primary);--teal-l:var(--primary-tint);--bg:var(--paper);--card:var(--surface);--bad:var(--error);--good:var(--success);
+}
+@media (prefers-color-scheme:dark){:root{
+  --paper:#0F1A1C;--surface:#152427;--ink:#E6EEEC;--muted:#9AAEAE;--line:#243A3D;--line-strong:#33504F;
+  --primary:#7CC6C9;--primary-hover:#A4DADC;--primary-tint:#18363A;--on-primary:#0F1A1C;
+  --accent-tint:#3A2A17;--success:#5DBE84;--error:#F07A6E;--error-tint:#3A1D1A;--warn:#FFB74D;--warn-tint:#3A2C12;color-scheme:dark}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif}
-.wrap{max-width:980px;margin:0 auto;padding:0 16px}
-nav{background:#174f56;font-size:14px}
-nav .wrap{display:flex;gap:18px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
-nav a{color:#d9f0f2;text-decoration:none}nav a[aria-current]{color:#fff;font-weight:700}
-header{background:var(--teal);color:#fff;padding:26px 0 22px}
-header h1{margin:0;font-size:clamp(24px,5vw,34px);line-height:1.3}
-header p{margin:8px 0 0;opacity:.92}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0;margin:22px 0}
-.card h2{margin:0 0 12px;font-size:19px;color:var(--teal)}
-.card h3{margin:16px 0 4px;font-size:16px}
-label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
-input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:var(--bg);color:var(--ink)}
-.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.8 var(--sans)}
+a{color:var(--primary)}
+img{max-width:100%}
+.num,.v,input[type=number]{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"zero" 1}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.hl{background:linear-gradient(transparent 58%,var(--accent) 58%,var(--accent) 92%,transparent 92%);padding:0 .08em}
+
+/* ---------- 頁首 ---------- */
+.site-head{background:var(--surface);border-bottom:1px solid var(--line);position:relative;z-index:20}
+.site-head>.wrap{display:flex;align-items:center;gap:24px;height:66px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);flex:none}
+.brand img{width:36px;height:36px;border-radius:50%}
+.brand b{display:block;font:900 19px/1 var(--serif);letter-spacing:.02em}
+.brand small{display:block;font:500 11px/1 var(--sans);color:var(--muted);letter-spacing:.14em;margin-top:5px}
+.mainnav{display:flex;gap:2px;flex:1;align-items:center}
+.mainnav>a,.dd>summary{font:500 15px/1 var(--sans);color:var(--ink);text-decoration:none;padding:10px 12px;border-radius:var(--r-md);cursor:pointer;list-style:none;display:block}
+.dd>summary::-webkit-details-marker{display:none}
+.dd>summary::after{content:"▾";font-size:10px;color:var(--muted);margin-left:5px}
+.mainnav>a:hover,.dd>summary:hover,.dd[open]>summary,.mainnav .on{background:var(--primary-tint);color:var(--primary)}
+.dd-panel{position:absolute;left:0;right:0;top:66px;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 12px 24px -16px rgba(22,40,43,.35)}
+.dd-panel .wrap{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;padding-top:14px;padding-bottom:20px}
+.dd-panel a{display:grid;grid-template-columns:34px 1fr;gap:0 10px;text-decoration:none;padding:11px 0;border-top:1px solid var(--line);color:var(--ink)}
+.dd-panel a .i{grid-row:span 2;font:700 14px/1.6 var(--mono);color:var(--muted)}
+.dd-panel a b{font:700 16px/1.5 var(--sans)}
+.dd-panel a span{font-size:14px;color:var(--muted);line-height:1.5}
+.dd-panel a:hover b{color:var(--primary)}
+.dd-panel .all{grid-column:1/-1;display:block;border-top:1px solid var(--line);padding:12px 0 0;font-weight:700;color:var(--primary)}
+.line-btn{flex:none;font:700 14px/1 var(--sans);text-decoration:none;color:var(--primary);border:1.5px solid var(--primary);border-radius:var(--r-md);padding:9px 14px}
+.line-btn:hover{background:var(--primary);color:var(--on-primary)}
+.mnav{display:none;margin-left:auto}
+.mnav>summary{list-style:none;font:700 15px/1 var(--sans);border:1.5px solid var(--line-strong);border-radius:var(--r-md);padding:9px 14px;cursor:pointer;color:var(--ink)}
+.mnav>summary::-webkit-details-marker{display:none}
+.mnav-panel{position:absolute;left:0;right:0;top:66px;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 12px 24px -16px rgba(22,40,43,.35);max-height:calc(100vh - 66px);overflow:auto}
+.mnav-panel .wrap{padding-top:6px;padding-bottom:18px}
+.mnav-panel h4{font:700 13px/1 var(--sans);letter-spacing:.12em;color:var(--muted);margin:16px 0 4px}
+.mnav-panel a{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink);font-weight:500}
+.mnav-panel a .i{font:700 13px var(--mono);color:var(--muted);width:24px}
+.mnav-panel .line-btn{display:block;text-align:center;margin-top:16px;padding:12px}
+@media (max-width:900px){.mainnav,.site-head>.wrap>.line-btn{display:none}.mnav{display:block}}
+
+/* ---------- 共用：標題、按鈕、連結 ---------- */
+.crumb{font-size:14px;color:var(--muted)}
+.crumb a{color:var(--muted);text-decoration:none}.crumb a:hover{color:var(--primary)}
+.btn{display:inline-block;font:700 16px/1.2 var(--sans);text-decoration:none;background:var(--primary);color:var(--on-primary);border:0;border-radius:var(--r-md);padding:13px 20px;cursor:pointer}
+.btn:hover{background:var(--primary-hover)}
+.more{display:inline-block;font:700 15px var(--sans);color:var(--primary);text-decoration:none}
+.more:hover{text-decoration:underline;text-underline-offset:3px}
+.verified{display:inline-flex;align-items:center;gap:6px;color:var(--success);font-weight:700}
+.verified::before{content:"";width:16px;height:16px;flex:none;background:currentColor;-webkit-mask:var(--ok) center/contain no-repeat;mask:var(--ok) center/contain no-repeat;
+  --ok:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 100 16A8 8 0 008 0zm3.6 5.6l-4.4 5a.8.8 0 01-1.2 0L4.4 8.8a.8.8 0 111.2-1.1l1 1.1 3.8-4.3a.8.8 0 011.2 1.1z'/%3E%3C/svg%3E")}
+
+/* ---------- 工具頁 ---------- */
+.tool-head{padding-top:28px;padding-bottom:6px}
+.tool-head h1{font:900 clamp(28px,4.2vw,38px)/1.3 var(--serif);margin:8px 0 6px;text-wrap:balance}
+.tool-head p{font-size:18px;color:var(--muted);margin:0;max-width:760px}
+.grid{display:grid;grid-template-columns:1fr 1fr;margin:22px 0 30px;border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+.grid>.card{border:0;border-radius:0;padding:22px;min-width:0}
+.grid>.card+.card{border-left:1px solid var(--line);background:var(--paper)}
+@media (max-width:820px){.grid{grid-template-columns:1fr}.grid>.card+.card{border-left:0;border-top:1px solid var(--line)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;min-width:0}
+.card h2{font:700 19px/1.4 var(--serif);color:var(--ink);margin:0 0 6px}
+.card h2+label,.card h2+.row{margin-top:4px}
+.card h3{font:700 14px var(--sans);color:var(--muted);margin:18px 0 6px;letter-spacing:.04em}
+label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:12px 0 6px}
+input,select{width:100%;font:500 17px var(--sans);color:var(--ink);background:var(--paper);border:1.5px solid var(--line-strong);border-radius:var(--r-sm);padding:10px 12px}
+input[type=number]{font-weight:700;font-size:20px}
+input:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-tint)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:0 12px}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media (max-width:760px){.row4{grid-template-columns:1fr 1fr}.cols{grid-template-columns:1fr}}
-.seg{display:flex;gap:8px;margin-top:4px}
-.seg label{flex:1;margin:0;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;cursor:pointer;color:var(--ink);font-size:14px}
-.seg input{display:none}
-.seg label:has(input:checked){border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:700}
-.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:14px;margin:10px 0 0}
-.chk input{width:auto}
-.scroll{overflow-x:auto}
+.hint{font-size:13px;color:var(--muted);margin:6px 0 0;line-height:1.6}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--line-strong);border-radius:var(--r-sm);overflow:hidden;margin-top:2px}
+.seg label{margin:0;padding:10px 6px;text-align:center;cursor:pointer;font:700 14px/1.3 var(--sans);color:var(--muted);background:var(--surface)}
+.seg label+label{border-left:1.5px solid var(--line-strong)}
+.seg input{position:absolute;opacity:0;pointer-events:none;width:1px}
+.seg label:has(input:checked){background:var(--primary);color:var(--on-primary)}
+.seg label:has(input:focus-visible){outline:2px solid var(--primary);outline-offset:-4px}
+.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:15px;font-weight:500;margin:12px 0 0}
+.chk input{width:18px;height:18px;accent-color:var(--primary)}
 table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
-th,td{padding:8px 6px;border-bottom:1px dashed var(--line);text-align:right}
-th:first-child,td:first-child{text-align:left}
-thead th{color:var(--teal);font-size:16px}
-tr.sum td{font-weight:800;border-top:2px solid var(--line)}
-td.best,th.best{background:var(--best)}
-.neg{color:var(--bad)!important}.pos{color:var(--good)!important}
-.verdict{margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);font-size:15px}
-.cta{background:linear-gradient(135deg,var(--teal),#2a8f8a);color:#fff;border-radius:16px;padding:22px;margin:8px 0 26px}
-.cta h2{margin:0 0 6px;font-size:21px}
-.cta a{display:inline-block;margin-top:12px;background:#fff;color:#1f6f78;font-weight:800;padding:11px 20px;border-radius:99px;text-decoration:none}
-article h2{font-size:22px;color:var(--teal);margin:30px 0 8px}
-article h3{font-size:17px;margin:18px 0 4px}
-article table td,article table th{border:1px solid var(--line);padding:8px;text-align:left}
-article table th{background:var(--teal-l)}
-.note{font-size:13px;color:var(--mute)}
-footer{border-top:1px solid var(--line);margin-top:30px;padding:18px 0 30px;font-size:14px;color:var(--mute)}
-a{color:var(--teal)}
+td,th{padding:8px 4px;border-bottom:1px dashed var(--line);text-align:left}
+th{font-size:13px;color:var(--muted);font-weight:700}
+td.v,th.v{text-align:right;font-weight:700}
+tr.sum td{font-weight:700;border-bottom:1.5px solid var(--ink)}
+.scroll{overflow-x:auto}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;min-width:0}
+.kpi small{display:block;font-size:13px;font-weight:700;color:var(--muted)}
+.big{font:700 clamp(26px,3.4vw,34px)/1.25 var(--mono);font-variant-numeric:tabular-nums;color:var(--primary);overflow-wrap:anywhere}
+.neg{color:var(--error)!important}.pos{color:var(--success)!important}.warn{color:var(--warn)!important}
+.badge{display:inline-block;padding:4px 12px;border-radius:var(--r-sm);font-size:14px;font-weight:700}
+.badge.neg{background:var(--error-tint)}.badge.pos{background:var(--primary-tint)}.badge.warn{background:var(--warn-tint)}
+.verdict,.compare{margin-top:14px;padding:12px 14px;border-radius:var(--r-md);font-size:15px;background:var(--surface);border:1px solid var(--line)}
+.note{font-size:13px;color:var(--muted)}
+td.best,th.best{background:var(--accent-tint)}
+.disc th{text-align:right}.disc th:first-child,.disc td:first-child{text-align:left}.disc td{text-align:right}
+#status{margin-top:10px}
+/* 工具頁上的說明文章 */
+main>article{max-width:760px;font-size:17px}
+main>article h2{font:900 26px/1.4 var(--serif);color:var(--ink);margin:40px 0 10px}
+main>article h3{font:700 18px/1.5 var(--sans);margin:22px 0 4px}
+main>article table td,main>article table th{border:1px solid var(--line);padding:8px 10px}
+main>article table th{background:var(--primary-tint);color:var(--ink)}
+/* 健檢表導流 */
+.cta{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 32px;align-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;margin:10px 0 20px}
+.cta h2{font:900 24px/1.4 var(--serif);margin:0;grid-column:1}
+.cta p,.cta ul{grid-column:1;margin:0;color:var(--muted)}
+.cta ul{padding-left:1.2em;color:var(--ink)}
+.cta a{grid-column:2;grid-row:1/span 3;display:inline-block;font:700 16px var(--sans);text-decoration:none;background:var(--primary);color:var(--on-primary);border-radius:var(--r-md);padding:13px 20px;white-space:nowrap}
+.cta a:hover{background:var(--primary-hover)}
+@media (max-width:700px){.cta{grid-template-columns:1fr}.cta a{grid-column:1;grid-row:auto;justify-self:start}}
+
+/* ---------- 內嵌計算機（首頁、文章） ---------- */
+.w-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;margin:8px 0 24px;font-size:16px;line-height:1.6}
+.w-box .w-title{font:700 17px/1.4 var(--serif);margin:0 0 4px;color:var(--ink)}
+.w-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media (max-width:560px){.w-grid{grid-template-columns:1fr}}
+.w-full{grid-column:1/-1}
+.w-seg{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--line-strong);border-radius:var(--r-sm);overflow:hidden;margin-top:12px}
+.w-seg label{margin:0;padding:10px 6px;text-align:center;cursor:pointer;font:700 14px/1.3 var(--sans);color:var(--muted);background:var(--surface)}
+.w-seg label+label{border-left:1.5px solid var(--line-strong)}
+.w-seg input{position:absolute;opacity:0;pointer-events:none;width:1px}
+.w-seg label:has(input:checked){background:var(--primary);color:var(--on-primary)}
+.w-chk{display:flex!important;align-items:center;gap:8px;color:var(--ink)!important;font-weight:500!important;font-size:15px!important}
+.w-chk input{width:18px;height:18px;accent-color:var(--primary)}
+.w-out table{margin-top:12px}
+.w-out td{padding:7px 2px}
+.w-out td:last-child{text-align:right;font-family:var(--mono);font-weight:500}
+.w-out .w-sum td{font-size:16px;font-weight:700;border-bottom:1.5px solid var(--line)}
+.w-out .w-sum td:last-child{font-size:22px;color:var(--primary)}
+.w-note{font-size:14px;color:var(--muted);margin:8px 0 0}
+
+/* ---------- 頁尾 ---------- */
+.foot{background:var(--surface);border-top:1px solid var(--line);margin-top:56px;padding-top:40px;padding-bottom:32px;font-size:14px;color:var(--muted)}
+.foot-line{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+.foot-line p{margin:0;font-size:16px;color:var(--ink);max-width:620px}
+.foot-line a{font:700 15px var(--sans);text-decoration:none;color:var(--on-primary);background:var(--primary);border-radius:var(--r-md);padding:11px 18px}
+.foot-line a:hover{background:var(--primary-hover)}
+.foot-cols{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:28px}
+@media (max-width:760px){.foot-cols{grid-template-columns:1fr 1fr}.foot-cols>div:first-child{grid-column:1/-1}}
+.foot h4{font:700 13px var(--sans);letter-spacing:.1em;color:var(--ink);margin:0 0 10px}
+.foot-cols a{display:block;text-decoration:none;color:var(--muted);padding:3px 0}
+.foot-cols a:hover{color:var(--primary)}
+.foot .brand{margin-bottom:10px}
+.foot .fine{border-top:1px solid var(--line);margin-top:28px;padding-top:16px;margin-bottom:0}
+.btn-sec{display:block;width:100%;font:700 15px/1.3 var(--sans);color:var(--primary);background:var(--surface);border:1.5px solid var(--primary);border-radius:var(--r-sm);padding:11px 10px;cursor:pointer}
+.btn-sec:hover{background:var(--primary-tint)}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -67,20 +193,61 @@ a{color:var(--teal)}
 </script>
 </head>
 <body>
-<nav><div class="wrap">
-<a href="../">手續費計算機</a>
-<a href="../pricing/">定價與折扣</a>
-<a href="../ads-roas/">廣告 ROAS</a>
-<a href="./" aria-current="page">平台比較</a>
-<a href="../import-cost/">1688 進貨成本</a>
-<a href="../returns/">退貨成本</a>
-<a href="../monthly-goal/">月目標</a>
-<a href="../learn/">賣家算數</a>
-</div></nav>
-<header><div class="wrap">
+<header class="site-head"><div class="wrap">
+<a class="brand" href="../"><img src="../assets/potato-96.png" alt="" width="36" height="36"><span><b>Potato 賣家工具箱</b><small>SELLER MATH</small></span></a>
+<nav class="mainnav" aria-label="主選單">
+<details class="dd"><summary>賣家算數</summary><div class="dd-panel"><div class="wrap">
+<a href="../learn/#c1"><span class="i">05</span><b>手續費與方案</b><span>5 篇</span></a>
+<a href="../learn/#c2"><span class="i">02</span><b>定價與利潤</b><span>2 篇</span></a>
+<a href="../learn/#c3"><span class="i">01</span><b>廣告</b><span>1 篇</span></a>
+<a href="../learn/#c4"><span class="i">01</span><b>進貨與經營</b><span>1 篇</span></a>
+<a href="../learn/#c5"><span class="i">01</span><b>平台比較</b><span>1 篇</span></a>
+<a class="all" href="../learn/">全部文章 →</a>
+</div></div></details>
+<details class="dd"><summary class="on">計算工具</summary><div class="dd-panel"><div class="wrap">
+<a href="../fee/"><span class="i">01</span><b>手續費計算機</b><span>這件商品，蝦皮會收我多少？</span></a>
+<a href="../pricing/"><span class="i">02</span><b>定價與折扣</b><span>要賣多少才賺得到我想要的？最多打幾折？</span></a>
+<a href="../ads-roas/"><span class="i">03</span><b>廣告 ROAS</b><span>廣告打到多少開始虧？每次點擊最多出多少？</span></a>
+<a href="../compare/" aria-current="page"><span class="i">04</span><b>平台比較</b><span>蝦皮、露天、momo，同一件商品哪裡賺最多？</span></a>
+<a href="../import-cost/"><span class="i">05</span><b>1688 進貨成本</b><span>進一件貨，到我手上實際多少錢？</span></a>
+<a href="../returns/"><span class="i">06</span><b>退貨成本</b><span>退貨率多少，這個月就白做？</span></a>
+<a href="../monthly-goal/"><span class="i">07</span><b>月目標</b><span>想月賺 3 萬，每天要賣幾單？</span></a>
+</div></div></details>
+<a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">利潤健檢表</a>
+</nav>
+<a class="line-btn" href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">加 LINE 收費率通知</a>
+<details class="mnav"><summary>選單</summary><div class="mnav-panel"><div class="wrap">
+<h4>賣家算數</h4>
+<a href="../learn/">全部文章</a>
+<a href="../learn/#c1">手續費與方案</a>
+<a href="../learn/#c2">定價與利潤</a>
+<a href="../learn/#c3">廣告</a>
+<a href="../learn/#c4">進貨與經營</a>
+<a href="../learn/#c5">平台比較</a>
+<h4>計算工具</h4>
+<a href="../fee/"><span class="i">01</span>手續費計算機</a>
+<a href="../pricing/"><span class="i">02</span>定價與折扣</a>
+<a href="../ads-roas/"><span class="i">03</span>廣告 ROAS</a>
+<a href="../compare/" aria-current="page"><span class="i">04</span>平台比較</a>
+<a href="../import-cost/"><span class="i">05</span>1688 進貨成本</a>
+<a href="../returns/"><span class="i">06</span>退貨成本</a>
+<a href="../monthly-goal/"><span class="i">07</span>月目標</a>
+<h4>更多</h4>
+<a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">蝦皮賣場利潤健檢表（Excel）</a>
+<a class="line-btn" href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">加 LINE 收費率通知</a>
+</div></div></details>
+</div></header>
+<script>
+// 下拉選單：點外面或按 Esc 收起，一次只開一個
+document.addEventListener("click",e=>{document.querySelectorAll("details.dd[open],details.mnav[open]").forEach(d=>{if(!d.contains(e.target))d.open=false})});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll("details.dd[open],details.mnav[open]").forEach(d=>d.open=false)});
+document.querySelectorAll("details.dd").forEach(d=>d.addEventListener("toggle",()=>{if(d.open)document.querySelectorAll("details.dd[open]").forEach(o=>{if(o!==d)o.open=false})}));
+</script>
+<div class="wrap tool-head">
+<div class="crumb"><a href="../#tools">計算工具</a> › <span class="num">04</span></div>
 <h1>蝦皮 vs 露天 vs momo 手續費比較（2026）</h1>
 <p>同一個商品，放在不同平台各被收多少？輸入售價和成本，一次比較三個平台的費用和每件淨利。</p>
-</div></header>
+</div>
 
 <main class="wrap">
 <section class="card" aria-label="商品資料">
@@ -193,19 +360,20 @@ a{color:var(--teal)}
 <h3>momo 為什麼只算成交手續費？</h3>
 <p>momo 商店規則中心公開的是各分類的成交手續費率，金流費、年費等其他費用沒有在同一頁列出，可能依開店方案與合約不同。如果你的合約有其他百分比費用，填在「其他費用」欄位即可。</p>
 <h3>費率資料從哪來？</h3>
-<p>露天：露天市集幫助中心「交易服務費說明」「金流服務費說明」。momo：momo 商店規則中心「成交手續費說明」。蝦皮：2026 年第三方整理資料，詳見 <a href="../">蝦皮手續費計算機</a>。各平台費率可能調整，以官方公告為準。</p>
+<p>露天：露天市集幫助中心「交易服務費說明」「金流服務費說明」。momo：momo 商店規則中心「成交手續費說明」。蝦皮：2026 年第三方整理資料，詳見 <a href="../fee/">蝦皮手續費計算機</a>。各平台費率可能調整，以官方公告為準。</p>
 <p class="note">最後更新：2026 年 11 月</p>
 </article>
 </main>
 
-<aside class="wrap" aria-label="LINE 通知" style="margin-top:30px">
-<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;justify-content:space-between;border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--card)">
-<p style="margin:0;flex:1 1 280px">蝦皮費率一改，我會在 LINE 上跟你說，順便算好你每件少賺多少。一個月頂多幾則。</p>
-<a href="https://line.me/R/ti/p/@127ulmyu" rel="noopener" style="flex:none;background:#06C755;color:#fff;font-weight:700;padding:10px 20px;border-radius:99px;text-decoration:none">加 LINE 好友</a>
+<footer class="foot"><div class="wrap">
+<div class="foot-line"><p>蝦皮費率一改，我會在 LINE 上跟你說，順便算好你每件少賺多少。一個月頂多幾則。</p><a href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">加 LINE 好友</a></div>
+<div class="foot-cols">
+<div><a class="brand" href="../"><img src="../assets/potato-96.png" alt="" width="36" height="36"><span><b>Potato 賣家工具箱</b><small>SELLER MATH</small></span></a><p>把蝦皮賣家的數字算清楚。每個數字都用公開的費率逐項算過，費率一改就更新，算錯的地方會留下更正紀錄。</p></div>
+<div><h4>計算工具</h4><a href="../fee/">手續費計算機</a><a href="../pricing/">定價與折扣</a><a href="../ads-roas/">廣告 ROAS</a><a href="../compare/">平台比較</a><a href="../import-cost/">1688 進貨成本</a><a href="../returns/">退貨成本</a><a href="../monthly-goal/">月目標</a></div>
+<div><h4>賣家算數</h4><a href="../learn/">全部文章</a><a href="../learn/#c1">手續費與方案</a><a href="../learn/#c2">定價與利潤</a><a href="../learn/#c3">廣告</a><a href="../learn/#c4">進貨與經營</a><a href="../learn/#c5">平台比較</a></div>
+<div><h4>追蹤 Potato</h4><a href="https://www.threads.com/@potato.sellertools" rel="noopener">Threads</a><a href="https://www.instagram.com/potato.sellertools/" rel="noopener">Instagram</a><a href="https://www.facebook.com/profile.php?id=61596286809788" rel="noopener">Facebook</a><a href="https://www.youtube.com/channel/UC6uLUp_2xdJTXaXAtpPehzA" rel="noopener">YouTube</a><a href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">LINE 官方帳號</a><a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">利潤健檢表</a></div>
 </div>
-</aside>
-<footer><div class="wrap">
-由 <a href="https://portaly.cc/potatocancode" rel="noopener">Potato 賣家工具箱</a> 製作。本站與蝦皮、露天、momo 皆無任何關係，試算結果僅供參考。
+<p class="fine">本站與蝦皮、露天、momo 皆無任何關係。試算結果僅供參考，費率以各平台公告為準。</p>
 </div></footer>
 
 <script src="../lib/fees.js"></script>

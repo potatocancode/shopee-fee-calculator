@@ -6,8 +6,9 @@
   "category": "手續費與方案",
   "date": "2026-11-13",
   "weight": 10,
+  "fig": "58.5 元",
   "summary": "一筆 390 元的訂單（一般分類、方案一、有開發票），蝦皮收 <b>58.5 元</b>，大約是售價的 15%。四項費用分開算、各自四捨五入：成交手續費 23、金流與系統處理費 10、免運方案一 23、發票 2.5。",
-  "tool": {"href": "", "label": "打開蝦皮手續費計算機", "why": "換成你的售價、分類和方案，四項費用一次算好，還會告訴你方案一、方案二哪個省。"},
+  "tool": {"href": "fee/", "label": "打開蝦皮手續費計算機", "why": "換成你的售價、分類和方案，四項費用一次算好，還會告訴你方案一、方案二哪個省。"},
   "related": ["sell-100-take-home", "plan-1-vs-plan-2", "payment-fee-shipping"],
   "faq": [
     ["蝦皮手續費是用售價還是含運費算？", "成交手續費用商品售出金額算，不含運費；金流與系統處理費用商品金額加上買家付的運費算。所以同一件商品，買家付的運費越高，金流費越高。"],
@@ -30,14 +31,15 @@
 
 <h2>一筆 390 元的訂單，實際算一次</h2>
 <p>條件：一般分類 6%、方案一、有開發票、買家運費 0。</p>
-<table>
-<tr><th>費用</th><th>算式</th><th class="n">金額</th></tr>
-<tr><td>成交手續費</td><td>390 × 6% = 23.4</td><td class="n">23</td></tr>
-<tr><td>金流與系統處理費</td><td>390 × 2.5% = 9.75</td><td class="n">10</td></tr>
-<tr><td>免運方案一</td><td>390 × 6% = 23.4</td><td class="n">23</td></tr>
-<tr><td>發票</td><td>每張</td><td class="n">2.5</td></tr>
-<tr><td><b>合計</b></td><td></td><td class="n"><b>58.5</b></td></tr>
-</table>
+<div class="ledger">
+<div class="cap">售價 390 元・一般分類・方案一・有開發票</div>
+<div class="ln"><span>售價</span><span class="f"></span><span class="v">390</span></div>
+<div class="ln minus"><span>成交手續費</span><span class="f">390 × 6% = 23.4</span><span class="v">23</span></div>
+<div class="ln minus"><span>金流與系統處理費<span class="tape">9.75 四捨五入</span></span><span class="f">390 × 2.5%</span><span class="v">10</span></div>
+<div class="ln minus"><span>免運方案一</span><span class="f">390 × 6% = 23.4</span><span class="v">23</span></div>
+<div class="ln minus"><span>發票</span><span class="f">每張</span><span class="v">2.5</span></div>
+<div class="sum"><b>到手（蝦皮收走 58.5）</b><span class="v">331.5</span></div>
+</div>
 <p>58.5 ÷ 390 = 15%。注意每一項都是<b>先四捨五入再加總</b>，所以直接拿 390 乘 14.5% 會差一點點。</p>
 
 <div data-widget="shopee-fee" data-price="390"><p class="w-title">換你的售價算算看</p></div>

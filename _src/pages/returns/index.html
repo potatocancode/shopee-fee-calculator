@@ -22,10 +22,11 @@
 </head>
 <body>
 <!--@nav-->
-<header><div class="wrap">
+<div class="wrap tool-head">
+<!--@toolhead-->
 <h1>蝦皮退貨成本計算機</h1>
 <p>退貨不只是少一筆訂單。運費、退回來不能再賣的貨，每個月都在吃你的利潤。算算看你被吃掉多少。</p>
-</div></header>
+</div>
 
 <main class="wrap">
 <div class="grid">
@@ -143,15 +144,15 @@ function calc() {
   if (!o.price) { ["kMax", "tMore"].forEach(i => $(i).textContent = "-"); v.textContent = "輸入售價開始計算。"; return; }
   if (m.n <= 0) {
     $("kMax").textContent = "0%"; $("tMore").textContent = "補不回來";
-    v.innerHTML = "❌ <b>還沒算退貨就已經在虧</b>：每筆正常訂單淨利是 " + money(r1(m.n)) + "，先調整售價或成本。";
+    v.innerHTML = "<b>還沒算退貨就已經在虧</b>：每筆正常訂單淨利是 " + money(r1(m.n)) + "，先調整售價或成本。";
     return;
   }
   $("kMax").textContent = (m.max * 100).toFixed(1) + "%";
   $("tMore").textContent = m.more + " 單";
   const share = m.ideal > 0 ? m.eaten / m.ideal : 0;
-  if (o.r >= m.max) v.innerHTML = "❌ <b>退貨率 " + (o.r * 100) + "% 已經超過上限 " + (m.max * 100).toFixed(1) + "%</b>，這個商品整個月是賠錢的。";
-  else if (share > 0.15) v.innerHTML = "⚠️ 退貨吃掉了 <b>" + (share * 100).toFixed(0) + "%</b> 的利潤。退貨率每降 1%，每月多賺 " + money(r1(m.step)) + "。";
-  else v.innerHTML = "✅ 退貨吃掉 " + (share * 100).toFixed(0) + "% 的利潤，還在可以接受的範圍。退貨率超過 <b>" + (m.max * 100).toFixed(1) + "%</b> 才會整個賠錢。";
+  if (o.r >= m.max) v.innerHTML = "<b>退貨率 " + (o.r * 100) + "% 已經超過上限 " + (m.max * 100).toFixed(1) + "%</b>，這個商品整個月是賠錢的。";
+  else if (share > 0.15) v.innerHTML = "退貨吃掉了 <b>" + (share * 100).toFixed(0) + "%</b> 的利潤。退貨率每降 1%，每月多賺 " + money(r1(m.step)) + "。";
+  else v.innerHTML = "退貨吃掉 " + (share * 100).toFixed(0) + "% 的利潤，還在可以接受的範圍。退貨率超過 <b>" + (m.max * 100).toFixed(1) + "%</b> 才會整個賠錢。";
 }
 document.querySelectorAll("input,select").forEach(el => el.addEventListener("input", calc));
 calc();

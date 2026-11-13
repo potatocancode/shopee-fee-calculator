@@ -54,8 +54,11 @@ export function load(htmlPath, {search} = {}) {
     },
     querySelectorAll(sel) {
       if (sel === "input,select") return inputs;
+      // 頁首下拉選單的腳本（details）：測試裡沒有選單，回傳空的
+      if (/details/.test(sel)) return [];
       throw new Error("假 DOM 不支援 querySelectorAll: " + sel);
     },
+    addEventListener() {},
   };
   // search 有給才放 location，模擬從別的工具帶參數過來
   const ctx = vm.createContext({document, console, Math, isFinite, parseFloat, Number, String, Set, URLSearchParams,

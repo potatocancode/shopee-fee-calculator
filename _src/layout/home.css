@@ -1,0 +1,37 @@
+/* 首頁：刊物頭版。頭條的數字比標題大，右邊「先算一筆」。 */
+.front{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:48px;padding-top:40px;padding-bottom:40px;border-bottom:1px solid var(--line)}
+@media (max-width:980px){.front{grid-template-columns:1fr;gap:28px;padding-top:28px}}
+.lead .cat{font:700 14px var(--sans);color:var(--primary);text-decoration:none}
+.lead h1{font:900 clamp(30px,4.4vw,46px)/1.28 var(--serif);margin:10px 0 0;letter-spacing:.01em;text-wrap:balance}
+.lead h1 a{color:inherit;text-decoration:none}
+.lead h1 a:hover{color:var(--primary)}
+.lead .fig{display:flex;align-items:baseline;gap:14px;margin:4px 0}
+.lead .fig .num{font-size:clamp(78px,11vw,128px);font-weight:700;line-height:1;color:var(--primary);letter-spacing:-.02em}
+.lead .fig em{font:700 22px var(--sans);font-style:normal;color:var(--muted)}
+.lead .deck{font-size:19px;color:var(--muted);margin:14px 0 16px;max-width:640px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted);align-items:center}
+.quick .w-box{margin:0;padding:20px}
+.quick .w-out .w-sum:last-child td:last-child{font-size:30px}
+.quick .more{margin-top:12px}
+.home-sec{padding-top:36px;padding-bottom:34px;border-bottom:1px solid var(--line)}
+.sec-h a{font:700 14px var(--sans);text-decoration:none}
+.stories .story.feat h3{font-size:25px;line-height:1.4}
+.stories .story.feat .fig{display:block;font:700 52px/1 var(--mono);color:var(--primary);margin:12px 0 8px}
+.tools{margin-top:4px}
+.tool{display:grid;grid-template-columns:52px minmax(150px,220px) minmax(0,1fr) 24px;align-items:center;gap:6px 16px;text-decoration:none;color:var(--ink);padding:16px 0;border-top:1px solid var(--line)}
+.tool .i{font:700 17px var(--mono);color:var(--muted)}
+.tool b{font:700 18px var(--sans)}
+.tool .q{color:var(--muted);font-size:15px}
+.tool .arr{color:var(--muted);font-weight:700}
+.tool:hover b,.tool:hover .arr{color:var(--primary)}
+@media (max-width:700px){.tool{grid-template-columns:40px minmax(0,1fr) 18px}.tool .q{grid-column:2;grid-row:2}.tool .arr{grid-column:3;grid-row:1}}
+.sheet{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:44px;align-items:center;padding-top:44px;padding-bottom:44px;border-bottom:1px solid var(--line)}
+@media (max-width:860px){.sheet{grid-template-columns:1fr;gap:28px}}
+.sheet h2{font:900 30px/1.35 var(--serif);margin:0 0 12px;text-wrap:balance}
+.sheet ul{margin:0 0 20px;padding-left:1.15em}
+.sheet li{margin:5px 0}
+.sheet figure{margin:0;position:relative}
+.sheet img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r-md);box-shadow:0 18px 30px -22px rgba(22,40,43,.45)}
+.sheet .tape-strip{position:absolute;width:110px;height:28px;background:var(--accent);opacity:.82;top:-12px;left:28px;transform:rotate(-4deg)}
+.sheet .price{font-family:var(--mono)}
+.sheet .sub{margin-left:14px}

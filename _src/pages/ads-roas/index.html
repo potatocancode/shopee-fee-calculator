@@ -12,52 +12,7 @@
 <meta property="og:url" content="{{site}}ads-roas/">
 <meta property="og:image" content="{{site}}ads-roas/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<style>
-:root{--teal:#1f6f78;--teal-l:#e3f1f2;--ink:#1d2a2e;--mute:#5b6b70;--line:#d6e2e4;--bg:#f7fafa;--card:#fff;--bad:#c62828;--good:#1a7f37}
-@media (prefers-color-scheme:dark){:root{--teal:#5cc3cc;--teal-l:#123236;--ink:#e6eeef;--mute:#9db0b4;--line:#2a3d41;--bg:#0f1b1d;--card:#152427;--bad:#ff6b6b;--good:#4cc46a}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif}
-.wrap{max-width:980px;margin:0 auto;padding:0 16px}
-nav{background:#174f56;font-size:14px}
-nav .wrap{display:flex;gap:18px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
-nav a{color:#d9f0f2;text-decoration:none}nav a[aria-current]{color:#fff;font-weight:700}
-header{background:var(--teal);color:#fff;padding:26px 0 22px}
-header h1{margin:0;font-size:clamp(24px,5vw,34px);line-height:1.3}
-header p{margin:8px 0 0;opacity:.92}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:22px 0}
-@media (max-width:760px){.grid{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
-.card h2{margin:0 0 12px;font-size:19px;color:var(--teal)}
-label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
-input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:var(--bg);color:var(--ink)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.seg{display:flex;gap:8px;margin-top:4px}
-.seg label{flex:1;margin:0;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;cursor:pointer;color:var(--ink);font-size:15px}
-.seg input{display:none}
-.seg label:has(input:checked){border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:700}
-.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:15px;margin:10px 0 0}
-.chk input{width:auto}
-table{width:100%;border-collapse:collapse;font-size:15px}
-td{padding:7px 4px;border-bottom:1px dashed var(--line)}
-td.v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
-.big{font-size:30px;font-weight:800;color:var(--teal);font-variant-numeric:tabular-nums}
-.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 14px}
-.kpi{background:var(--teal-l);border-radius:12px;padding:10px 12px}
-.kpi small{display:block;color:var(--mute);font-size:13px}
-.neg{color:var(--bad)!important}.pos{color:var(--good)!important}
-.verdict{margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);font-size:15px}
-.cta{background:linear-gradient(135deg,var(--teal),#2a8f8a);color:#fff;border-radius:16px;padding:22px;margin:8px 0 26px}
-.cta h2{margin:0 0 6px;font-size:21px}
-.cta a{display:inline-block;margin-top:12px;background:#fff;color:#1f6f78;font-weight:800;padding:11px 20px;border-radius:99px;text-decoration:none}
-.cta ul{margin:8px 0 0;padding-left:20px}
-article h2{font-size:22px;color:var(--teal);margin:30px 0 8px}
-article h3{font-size:17px;margin:18px 0 4px}
-article table td,article table th{border:1px solid var(--line);padding:8px;text-align:left}
-article table th{background:var(--teal-l)}
-.note{font-size:13px;color:var(--mute)}
-footer{border-top:1px solid var(--line);margin-top:30px;padding:18px 0 30px;font-size:14px;color:var(--mute)}
-a{color:var(--teal)}
-</style>
+<!--@css-->
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"蝦皮廣告 ROAS 多少才不會虧？","acceptedAnswer":{"@type":"Answer","text":"保本 ROAS = 售價 ÷ 每件廣告前淨利（售價扣掉蝦皮手續費、進貨成本、包材與運費後剩下的錢）。例如售價 390 元、廣告前每件賺 156.5 元，保本 ROAS 約 2.49，低於這個數字每筆廣告訂單都在虧錢。"}},
@@ -68,10 +23,11 @@ a{color:var(--teal)}
 </head>
 <body>
 <!--@nav-->
-<header><div class="wrap">
+<div class="wrap tool-head">
+<!--@toolhead-->
 <h1>蝦皮廣告 ROAS 計算機（2026 新制）</h1>
 <p>ROAS 看起來很高，卻還是在虧錢？扣掉手續費和成本，算出你的保本 ROAS、目標 ROAS 和最高可出價 CPC。</p>
-</div></header>
+</div>
 
 <main class="wrap">
 <div class="grid">
@@ -163,7 +119,7 @@ a{color:var(--teal)}
 <h3>為什麼要考慮方案一和方案二？</h3>
 <p>方案二每單固定收 60 元，低價商品的手續費比例會大幅提高，保本 ROAS 也跟著變高。可以切換方案比較看看。</p>
 <h3>手續費是怎麼算的？</h3>
-<p>和 <a href="../">蝦皮手續費計算機</a>、<a href="../pricing/">定價計算機</a> 相同：依 2026 年公開的第三方整理資料，各項費用分別四捨五入後加總。正式費率以蝦皮賣家中心公告為準。</p>
+<p>和 <a href="../fee/">蝦皮手續費計算機</a>、<a href="../pricing/">定價計算機</a> 相同：依 2026 年公開的第三方整理資料，各項費用分別四捨五入後加總。正式費率以蝦皮賣家中心公告為準。</p>
 <p class="note">最後更新：2026 年 11 月</p>
 </article>
 </main>
@@ -194,7 +150,7 @@ function calc() {
     const net = roas > 0 ? pre - price / roas : pre;
     $("tNet").textContent = money(net); $("kNow").textContent = money(net);
     $("kNow").classList.toggle("neg", net < 0); $("kNow").classList.toggle("pos", net >= 0);
-    v.innerHTML = price ? "❌ <b>還沒打廣告就已經在虧錢</b>：售價扣掉手續費和成本後是負的，先調整售價或成本，再考慮投廣告。" : "";
+    v.innerHTML = price ? "<b>還沒打廣告就已經在虧錢</b>：售價扣掉手續費和成本後是負的，先調整售價或成本，再考慮投廣告。" : "";
     return;
   }
   const be = price / pre;
@@ -211,9 +167,9 @@ function calc() {
   $("kNow").textContent = roas > 0 ? money(Math.round(net * 10) / 10) : "-";
   $("kNow").classList.toggle("neg", roas > 0 && net < 0); $("kNow").classList.toggle("pos", roas > 0 && net >= 0);
   if (!roas) v.innerHTML = "填入目前的廣告 ROAS，看每筆廣告訂單是賺還是虧。";
-  else if (roas < be) v.innerHTML = "❌ <b>目前 ROAS " + roas + " 低於保本 " + be.toFixed(2) + "</b>，每筆廣告訂單虧 " + money(Math.round(-net * 10) / 10) + "。建議降低出價、暫停低成效關鍵字，或提高售價。";
-  else if (tgt !== null && roas < tgt) v.innerHTML = "⚠️ <b>有賺但沒達標</b>：每筆廣告訂單賺 " + money(Math.round(net * 10) / 10) + "，要達到目標淨利率需要 ROAS " + tgt.toFixed(2) + "。";
-  else v.innerHTML = "✅ <b>廣告成效健康</b>：每筆廣告訂單賺 " + money(Math.round(net * 10) / 10) + "，可以考慮加碼預算。";
+  else if (roas < be) v.innerHTML = "<b>目前 ROAS " + roas + " 低於保本 " + be.toFixed(2) + "</b>，每筆廣告訂單虧 " + money(Math.round(-net * 10) / 10) + "。建議降低出價、暫停低成效關鍵字，或提高售價。";
+  else if (tgt !== null && roas < tgt) v.innerHTML = "<b>有賺但沒達標</b>：每筆廣告訂單賺 " + money(Math.round(net * 10) / 10) + "，要達到目標淨利率需要 ROAS " + tgt.toFixed(2) + "。";
+  else v.innerHTML = "<b>廣告成效健康</b>：每筆廣告訂單賺 " + money(Math.round(net * 10) / 10) + "，可以考慮加碼預算。";
 }
 document.querySelectorAll("input,select").forEach(el => el.addEventListener("input", calc));
 calc();

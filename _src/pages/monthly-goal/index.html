@@ -22,10 +22,11 @@
 </head>
 <body>
 <!--@nav-->
-<header><div class="wrap">
+<div class="wrap tool-head">
+<!--@toolhead-->
 <h1>蝦皮月目標計算機</h1>
 <p>每月想賺多少，倒推回去要賣幾單、每天幾單。手續費、廣告費和固定支出都先扣掉。</p>
-</div></header>
+</div>
 
 <main class="wrap">
 <div class="grid">
@@ -137,7 +138,7 @@ function calc() {
   if (n === null) {
     ["kOrders", "kDay", "tRev", "tMargin"].forEach(i => $(i).textContent = "-");
     $("tOther").textContent = na === null ? "-" : na.toLocaleString("zh-TW") + " 單";
-    v.innerHTML = "❌ <b>每單是虧錢的</b>，賣越多虧越多。先用定價計算機調整售價。";
+    v.innerHTML = "<b>每單是虧錢的</b>，賣越多虧越多。先用定價計算機調整售價。";
     return;
   }
   const rev = n * o.price * o.qty;
@@ -147,7 +148,7 @@ function calc() {
   $("tMargin").textContent = (p.net / (o.price * o.qty) * 100).toFixed(1) + "%";
   $("tOther").textContent = (plan === 1 ? "方案二 " : "方案一 ") + (na === null ? "無法達成" : na.toLocaleString("zh-TW") + " 單");
   v.innerHTML = "每月營業額要做到 <b>" + money(Math.round(rev)) + "</b>，其中只有 " + money(o.goal) + " 是你的。" +
-    (na !== null && na < n ? "<br>⚠️ 換" + (plan === 1 ? "方案二" : "方案一") + "只要賣 " + na.toLocaleString("zh-TW") + " 單，少 " + (n - na).toLocaleString("zh-TW") + " 單。" : "");
+    (na !== null && na < n ? "<br>換" + (plan === 1 ? "方案二" : "方案一") + "只要賣 " + na.toLocaleString("zh-TW") + " 單，少 " + (n - na).toLocaleString("zh-TW") + " 單。" : "");
   for (const g of [10000, 30000, 50000, 100000]) {
     const k = ordersFor(p.net, g + o.fixed);
     ladder.insertAdjacentHTML("beforeend", "<tr><td>" + money(g) + "</td><td class='v'>" + k.toLocaleString("zh-TW") +
