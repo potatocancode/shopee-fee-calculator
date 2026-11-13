@@ -91,7 +91,11 @@ a{color:var(--teal)}
 <label for="cat">商品分類（成交手續費率）</label>
 <select id="cat">
 <option value="0.06" selected>一般／多數分類 6%</option>
-<option value="0.055">美食伴手禮、寵物食品／保健 5.5%</option>
+<option value="0.06">女生衣著 6%</option>
+<option value="0.06">美妝保養 6%</option>
+<option value="0.055">美食伴手禮 5.5%</option>
+<option value="0.055">寵物食品／保健 5.5%</option>
+<option value="0.06">寵物用品 6%</option>
 <option value="0.05">筆記型電腦 5%</option>
 <option value="0.075">手機周邊配件 7.5%</option>
 <option value="custom">自訂費率…</option>
@@ -180,22 +184,18 @@ a{color:var(--teal)}
 由 <a href="https://portaly.cc/potatocancode" rel="noopener">Potato 賣家工具箱</a> 製作。本站與蝦皮（Shopee）無任何關係，試算結果僅供參考。
 </div></footer>
 
+<script src="../lib/fees.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-const R = x => Math.round(x + 1e-9);
 const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
 const money = x => (x < 0 ? "-" : "") + "$" + Math.abs(x).toLocaleString("zh-TW", {maximumFractionDigits: 1});
-const C = {pay: 0.025, p1: 0.06, p2: 60, low: 99, cap: 35000, inv: 2.5};
 function calc() {
   const sel = $("cat").value;
   $("customWrap").hidden = sel !== "custom";
   const rate = sel === "custom" ? num("custom") / 100 : parseFloat(sel);
   const price = num("price");
   const plan = document.querySelector("input[name=plan]:checked").value === "2" ? 2 : 1;
-  const comm = R(Math.min(price, C.cap) * rate);
-  const pay = R(price * C.pay);
-  const ship = plan === 1 ? R(price * C.p1) : (price <= C.low ? R(price * C.p1) : C.p2);
-  const fee = comm + pay + ship + ($("inv").checked ? C.inv : 0);
+  const fee = Fees.shopee(price, {rate, plan, inv: $("inv").checked}).total;
   const pre = price - fee - num("cost") - num("pack") - num("sship");
   const roas = num("roas"), cvr = num("cvr") / 100, t = num("target") / 100;
   $("tFee").textContent = money(fee);

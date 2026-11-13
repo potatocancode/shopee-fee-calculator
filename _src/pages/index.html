@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蝦皮手續費計算機 2026｜方案一方案二比較、保本價試算（一般賣家）</title>
+<meta name="description" content="免費蝦皮手續費計算機，依 2026 新制試算成交手續費、金流與系統處理費 2.5%、免運方案一 6% / 方案二 60 元、促銷檔期加收，算出每件到手金額、淨利、保本售價，並比較方案一和方案二哪個較省。">
+<meta name="google-site-verification" content="003mGMukAt2Ns65EG37p9fSFpZjn2PS-7sOTOdWtYhY" />
+<link rel="canonical" href="{{site}}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="蝦皮手續費計算機 2026｜方案一方案二比較、保本價試算">
+<meta property="og:description" content="輸入售價和成本，馬上算出蝦皮抽多少、你賺多少、該選方案一還是方案二。">
+<meta property="og:url" content="{{site}}">
+<meta property="og:image" content="{{site}}og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--teal:#1f6f78;--teal-l:#e3f1f2;--ink:#1d2a2e;--mute:#5b6b70;--line:#d6e2e4;--bg:#f7fafa;--card:#fff;--warn:#b35c00;--bad:#c62828;--good:#1a7f37;--accent:#f4a259}
+@media (prefers-color-scheme:dark){:root{--teal:#5cc3cc;--teal-l:#123236;--ink:#e6eeef;--mute:#9db0b4;--line:#2a3d41;--bg:#0f1b1d;--card:#152427;--warn:#f0a24a;--bad:#ff6b6b;--good:#4cc46a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+nav{background:#174f56;font-size:14px}
+nav .wrap{display:flex;gap:18px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+nav a{color:#d9f0f2;text-decoration:none}nav a[aria-current]{color:#fff;font-weight:700}
+header{background:var(--teal);color:#fff;padding:28px 0 22px}
+header h1{margin:0;font-size:clamp(24px,5vw,34px);line-height:1.3}
+header p{margin:8px 0 0;opacity:.92}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:22px 0}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h2{margin:0 0 12px;font-size:19px;color:var(--teal)}
+label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:var(--bg);color:var(--ink)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:flex;gap:8px;margin-top:4px}
+.seg label{flex:1;margin:0;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;cursor:pointer;color:var(--ink);font-size:15px}
+.seg input{display:none}
+.seg input:checked+span{color:var(--teal);font-weight:700}
+.seg label:has(input:checked){border-color:var(--teal);background:var(--teal-l)}
+.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:15px;margin:10px 0 0}
+.chk input{width:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:7px 4px;border-bottom:1px dashed var(--line)}
+td.v{text-align:right;font-variant-numeric:tabular-nums}
+tr.sum td{font-weight:700;border-bottom:2px solid var(--line)}
+.big{font-size:30px;font-weight:800;color:var(--teal);font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 14px}
+.kpi{background:var(--teal-l);border-radius:12px;padding:10px 12px}
+.kpi small{display:block;color:var(--mute);font-size:13px}
+.neg{color:var(--bad)!important}.pos{color:var(--good)}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:14px;font-weight:700}
+.compare{margin-top:14px;padding:12px;border-radius:12px;border:1px solid var(--line)}
+.cta{background:linear-gradient(135deg,var(--teal),#2a8f8a);color:#fff;border-radius:16px;padding:22px;margin:8px 0 26px}
+.cta h2{margin:0 0 6px;font-size:21px}
+.cta a{display:inline-block;margin-top:12px;background:#fff;color:#1f6f78;font-weight:800;padding:11px 20px;border-radius:99px;text-decoration:none}
+.cta ul{margin:8px 0 0;padding-left:20px}
+article h2{font-size:22px;color:var(--teal);margin:30px 0 8px}
+article h3{font-size:17px;margin:18px 0 4px}
+article table td,article table th{border:1px solid var(--line);padding:8px;text-align:left}
+article table th{background:var(--teal-l)}
+.note{font-size:13px;color:var(--mute)}
+footer{border-top:1px solid var(--line);margin-top:30px;padding:18px 0 30px;font-size:14px;color:var(--mute)}
+a{color:var(--teal)}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"2026 蝦皮手續費怎麼算？","acceptedAnswer":{"@type":"Answer","text":"一般賣家每筆訂單主要被收：成交手續費（依商品分類約 4.5%～7.5%，多數 6%）、金流與系統處理費 2.5%（含運費計算）、免運及進階賣家專案（方案一 6% 或方案二每單 60 元），促銷檔期另加 2%，開立發票每張 2.5 元。各項分別四捨五入到整數後加總。"}},
+{"@type":"Question","name":"蝦皮方案一和方案二要選哪個？","acceptedAnswer":{"@type":"Answer","text":"方案一收商品金額 6%，方案二每單固定 60 元，兩者在訂單金額 1,000 元時打平。平均客單價低於 1,000 元通常選方案一較省，高於 1,000 元選方案二較省。沒報名的賣家會被自動編入方案二。"}},
+{"@type":"Question","name":"賣多少錢才不會虧？","acceptedAnswer":{"@type":"Answer","text":"保本售價 =（進貨成本 + 包材 + 賣家負擔運費 + 廣告費 + 固定費用）÷（1 − 各項百分比費率）。用本頁計算機輸入成本即可直接算出保本售價與達到目標淨利率的建議售價。"}}
+]}
+</script>
+</head>
+<body>
+<!--@nav-->
+<header><div class="wrap">
+<h1>蝦皮手續費計算機（2026 新制）</h1>
+<p>輸入售價和成本，馬上算出蝦皮抽多少、你實際賺多少、保本要賣多少，以及方案一、方案二哪個比較省。</p>
+</div></header>
+
+<main class="wrap">
+<div class="grid">
+<section class="card" aria-label="輸入">
+<h2>① 商品資料</h2>
+<div class="row">
+<div><label for="price">售價（元）</label><input id="price" type="number" inputmode="decimal" min="0" value="390"></div>
+<div><label for="ship">買家付的運費（元）</label><input id="ship" type="number" inputmode="decimal" min="0" value="0"></div>
+</div>
+<label for="cat">商品分類（成交手續費率）</label>
+<select id="cat">
+<!--@opts:shopee-cats-->
+<option value="custom">自訂費率…</option>
+</select>
+<div id="customWrap" hidden><label for="custom">自訂成交手續費率（%）</label><input id="custom" type="number" step="0.1" value="6"></div>
+
+<label>免運及進階賣家專案</label>
+<div class="seg">
+<label><input type="radio" name="plan" value="1" checked><span>方案一（6%）</span></label>
+<label><input type="radio" name="plan" value="2"><span>方案二（每單 60 元）</span></label>
+</div>
+<label class="chk"><input id="promo" type="checkbox">今天是促銷檔期（加收 2%）</label>
+<label class="chk"><input id="coin" type="checkbox">有參加蝦幣回饋活動（免促銷加收）</label>
+<label class="chk"><input id="inv" type="checkbox" checked>開立代收轉付發票（每張 2.5 元）</label>
+
+<h2 style="margin-top:20px">② 你的成本（算淨利用）</h2>
+<div class="row">
+<div><label for="cost">進貨成本</label><input id="cost" type="number" inputmode="decimal" min="0" value="160"></div>
+<div><label for="pack">包材／其他成本</label><input id="pack" type="number" inputmode="decimal" min="0" value="15"></div>
+<div><label for="sship">賣家負擔運費</label><input id="sship" type="number" inputmode="decimal" min="0" value="0"></div>
+<div><label for="ads">廣告費（每件）</label><input id="ads" type="number" inputmode="decimal" min="0" value="20"></div>
+<div><label for="qty">平均每單件數</label><input id="qty" type="number" inputmode="decimal" min="1" step="1" value="1"></div>
+<div><label for="target">目標淨利率（%）</label><input id="target" type="number" inputmode="decimal" value="20"></div>
+</div>
+</section>
+
+<section class="card" aria-live="polite" aria-label="結果">
+<h2>③ 試算結果（每件）</h2>
+<div class="kpis">
+<div class="kpi"><small>蝦皮費用合計</small><div class="big" id="kFee">-</div></div>
+<div class="kpi"><small>每件淨利</small><div class="big" id="kNet">-</div></div>
+</div>
+<table>
+<tr><td>成交手續費 <span class="note" id="tRate"></span></td><td class="v" id="fC">-</td></tr>
+<tr><td>金流與系統處理費 2.5%</td><td class="v" id="fP">-</td></tr>
+<tr><td>免運方案費 <span class="note" id="tPlan"></span></td><td class="v" id="fS">-</td></tr>
+<tr><td>發票服務費</td><td class="v" id="fI">-</td></tr>
+<tr class="sum"><td>費用合計（佔售價 <span id="fPct">-</span>）</td><td class="v" id="fT">-</td></tr>
+<tr><td>扣掉蝦皮費用後到手</td><td class="v" id="fGet">-</td></tr>
+<tr><td>淨利率</td><td class="v" id="fM">-</td></tr>
+<tr><td>保本售價</td><td class="v" id="fBE">-</td></tr>
+<tr><td>達到目標淨利率的建議售價</td><td class="v" id="fTP">-</td></tr>
+</table>
+<div id="status" style="margin-top:10px"></div>
+<div class="compare" id="cmp"></div>
+<p class="note">各項費用依蝦皮做法分別四捨五入後加總，可能與實際帳單差幾元。預設費率依 2026 年第三方整理，請以蝦皮賣家中心公告為準。</p>
+</section>
+</div>
+
+<section class="cta">
+<h2>賣場不只一個商品？一次健檢整間店</h2>
+<p>這個計算機一次只能算一件。<b>「蝦皮賣場利潤健檢表」</b>Excel 讓你把最多 200 個商品一起放進去：</p>
+<ul>
+<li>自動標出<b>哪些商品其實在虧錢</b>，列出最該處理的 5 個</li>
+<li>用你真實的商品與銷量，算出<b>方案一、方案二每月差多少錢</b></li>
+<li>每個商品的保本售價、建議售價、促銷日利潤一次算好</li>
+<li>蝦皮調費率時，改一頁設定就全部更新</li>
+</ul>
+<a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">看健檢表（早鳥 NT$390）→</a>
+</section>
+
+<article>
+<h2>2026 蝦皮手續費有哪些？</h2>
+<p>2026 年 1 月 1 日起，蝦皮調整一般賣家的費用結構。一筆訂單主要會被收以下幾項，每一項分別計算、四捨五入到整數後再加總：</p>
+<table>
+<tr><th>費用</th><th>費率</th><th>怎麼算</th></tr>
+<tr><td>成交手續費</td><td>依分類約 4.5%～7.5%（多數 6%）</td><td>商品售出金額（扣掉賣家折扣、不含運費）× 分類費率，單件／單筆以 35,000 元為上限</td></tr>
+<tr><td>金流與系統處理費</td><td>2.5%（原 2%）</td><td>（商品金額 + 買家付的運費 + 蝦皮補貼的折扣）× 2.5%</td></tr>
+<tr><td>免運及進階賣家專案</td><td>方案一 6%／方案二每單 60 元</td><td>全體賣家強制擇一；沒報名自動編入方案二</td></tr>
+<tr><td>促銷檔期加收</td><td>+2%</td><td>促銷檔期日的訂單，成交手續費加收；參加蝦幣回饋活動可免</td></tr>
+<tr><td>代收轉付發票</td><td>每張 2.5 元</td><td>有開立發票時收取</td></tr>
+</table>
+
+<h2>方案一還是方案二比較省？</h2>
+<p>方案一收商品金額的 6%，方案二每單固定 60 元。60 ÷ 6% = <b>1,000 元</b>，所以：</p>
+<ul>
+<li>平均客單價 <b>低於 1,000 元</b>：方案一通常比較省</li>
+<li>平均客單價 <b>高於 1,000 元</b>：方案二通常比較省</li>
+</ul>
+<p>舉例：一筆 300 元的訂單，方案一收 18 元，方案二收 60 元，每單差 42 元；一個月 500 單就差 21,000 元。<b>如果你沒有報名，系統會自動把你編入方案二</b>，賣低價商品的賣家特別要確認。</p>
+<p>依部分整理，2026 年 7 月起方案二的訂單金額在 99 元（含）以下時改收 6%。本頁計算機已納入這條規則。</p>
+
+<h2>保本售價怎麼算？</h2>
+<p>保本售價就是「扣掉所有費用和成本後剛好不虧」的價格：</p>
+<p><b>保本售價 =（進貨成本 + 包材 + 賣家負擔運費 + 廣告費 + 固定費用）÷（1 − 各項百分比費率）</b></p>
+<p>固定費用包括方案二的 60 元、發票 2.5 元；百分比費率包括成交手續費、金流 2.5%、方案一 6%。本頁算出的保本價額外加了 2 元，抵銷四捨五入的誤差。</p>
+
+<h2>常見問題</h2>
+<h3>為什麼我的實際帳單和計算機差幾元？</h3>
+<p>蝦皮的每一項費用是分別四捨五入，另外蝦幣折抵、蝦皮優惠券會計入金流費的計算基礎，這些在單筆試算中無法完全反映。</p>
+<h3>有在打蝦皮廣告，要怎麼算才不虧？</h3>
+<p>用 <a href="ads-roas/">蝦皮廣告 ROAS 計算機</a>：扣掉手續費和成本後，算出你的保本 ROAS 和每次點擊最高可出價多少。</p>
+<h3>售價該怎麼定？最多可以打幾折？</h3>
+<p>用 <a href="pricing/">蝦皮定價與折扣計算機</a>：輸入成本和想賺多少，算出建議售價；再看原價打 95 折到 5 折，每件還賺多少。</p>
+<h3>蝦皮和露天、momo 哪個手續費比較低？</h3>
+<p>用 <a href="compare/">平台手續費比較</a>：輸入售價和成本，一次算出蝦皮、露天、momo 摩天商城各被收多少、每件賺多少。</p>
+<h3>商城賣家可以用嗎？</h3>
+<p>商城賣家成交手續費約 7.5%～9%、促銷加收 3%，請選「自訂費率」輸入你的分類費率。</p>
+<h3>費率資料從哪來？</h3>
+<p>依 2026 年公開的第三方整理文章（如 runningmatemarketing.com、mo-studio.org、goboss.tw），各家對細節說法略有出入。正式費率請以蝦皮賣家中心公告為準。</p>
+<p class="note">最後更新：2026 年 11 月</p>
+</article>
+</main>
+
+<!--@footer-->
+
+<script src="{{root}}lib/fees.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
+const fmt = x => (x < 0 ? "-" : "") + "$" + Math.abs(x).toLocaleString("zh-TW", {maximumFractionDigits: 1});
+const C = Fees.SHOPEE;
+
+function fees(price, o, plan) {
+  const f = Fees.shopee(price, {...o, plan});
+  return {comm: f.comm, pay: f.pay, ship: f.prog, inv: f.inv, total: f.total, net: price - f.total - o.cost};
+}
+function solve(o, plan, t) {
+  const rv = o.rate + (o.promo && !o.coin ? C.promo : 0) + C.pay;
+  const f0 = o.cost + o.ship * C.pay + (o.inv ? C.inv / o.qty : 0);
+  const d1 = 1 - rv - C.p1 - t, d2 = 1 - rv - t;
+  const c1 = d1 > 0 ? Math.ceil(f0 / d1) + 2 : null;
+  if (plan === 1) return c1;
+  if (c1 !== null && c1 * o.qty <= C.low) return c1;
+  return d2 > 0 ? Math.ceil((f0 + C.p2 / o.qty) / d2) + 2 : null;
+}
+function calc() {
+  const sel = $("cat").value;
+  $("customWrap").hidden = sel !== "custom";
+  const o = {
+    rate: sel === "custom" ? num("custom") / 100 : parseFloat(sel),
+    ship: num("ship"), promo: $("promo").checked, coin: $("coin").checked, inv: $("inv").checked,
+    qty: Math.max(1, num("qty")),
+    cost: num("cost") + num("pack") + num("sship") + num("ads"),
+  };
+  const price = num("price"), t = num("target") / 100;
+  const plan = document.querySelector("input[name=plan]:checked").value === "2" ? 2 : 1;
+  const r = fees(price, o, plan);
+  const effRate = o.rate + (o.promo && !o.coin ? C.promo : 0);
+  $("tRate").textContent = (effRate * 100).toFixed(1).replace(/\.0$/, "") + "%";
+  $("tPlan").textContent = plan === 1 ? "方案一 6%" : (price * o.qty <= C.low ? "方案二（≤99 元收 6%）" : "方案二 每單 60 元");
+  $("fC").textContent = fmt(r.comm); $("fP").textContent = fmt(r.pay); $("fS").textContent = fmt(r.ship);
+  $("fI").textContent = fmt(r.inv); $("fT").textContent = fmt(r.total);
+  $("fPct").textContent = price ? (r.total / price * 100).toFixed(1) + "%" : "-";
+  $("fGet").textContent = fmt(price - r.total);
+  $("fM").textContent = price ? (r.net / price * 100).toFixed(1) + "%" : "-";
+  $("kFee").textContent = fmt(r.total);
+  $("kNet").textContent = fmt(r.net); $("kNet").classList.toggle("neg", r.net < 0);
+  const be = solve(o, plan, 0), tp = solve(o, plan, t);
+  $("fBE").textContent = be === null ? "無法達成" : fmt(be);
+  $("fTP").textContent = tp === null ? "無法達成" : fmt(tp);
+  const st = $("status");
+  if (!price) st.innerHTML = "";
+  else if (r.net < 0) st.innerHTML = '<span class="badge neg" style="background:#fde2e1">❌ 每賣一件虧 ' + fmt(-r.net) + '</span>';
+  else if (r.net / price < t / 2) st.innerHTML = '<span class="badge" style="background:#fff1d6;color:#8a4b00">⚠️ 利潤偏低</span>';
+  else st.innerHTML = '<span class="badge pos" style="background:#dcf3e3">✅ 利潤健康</span>';
+  const a = fees(price, o, 1), b = fees(price, o, 2), diff = Math.abs(a.total - b.total);
+  $("cmp").innerHTML = "<b>同一件商品換方案：</b>方案一費用 " + fmt(a.total) + "，方案二費用 " + fmt(b.total) + "。" +
+    (diff < 0.01 ? "兩個方案一樣。" : "<b>" + (a.total < b.total ? "方案一" : "方案二") + "每件省 " + fmt(diff) + "</b>，每月賣 100 件就差 " + fmt(diff * 100) + "。");
+}
+document.querySelectorAll("input,select").forEach(el => el.addEventListener("input", calc));
+calc();
+</script>
+</body>
+</html>

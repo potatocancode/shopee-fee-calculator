@@ -206,21 +206,16 @@ a{color:var(--teal)}
 由 <a href="https://portaly.cc/potatocancode" rel="noopener">Potato 賣家工具箱</a> 製作。本站與蝦皮（Shopee）無任何關係，試算結果僅供參考。
 </div></footer>
 
+<script src="lib/fees.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-const R = x => Math.round(x + 1e-9);
 const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
 const fmt = x => (x < 0 ? "-" : "") + "$" + Math.abs(x).toLocaleString("zh-TW", {maximumFractionDigits: 1});
-const C = {pay: 0.025, p1: 0.06, p2: 60, low: 99, cap: 35000, promo: 0.02, inv: 2.5};
+const C = Fees.SHOPEE;
 
 function fees(price, o, plan) {
-  const rate = o.rate + (o.promo && !o.coin ? C.promo : 0);
-  const comm = R(Math.min(price, C.cap) * rate);
-  const pay = R((price + o.ship) * C.pay);
-  const ship = plan === 1 ? R(price * C.p1) : (price * o.qty <= C.low ? R(price * C.p1) : C.p2 / o.qty);
-  const inv = o.inv ? C.inv / o.qty : 0;
-  const total = comm + pay + ship + inv;
-  return {comm, pay, ship, inv, total, net: price - total - o.cost};
+  const f = Fees.shopee(price, {...o, plan});
+  return {comm: f.comm, pay: f.pay, ship: f.prog, inv: f.inv, total: f.total, net: price - f.total - o.cost};
 }
 function solve(o, plan, t) {
   const rv = o.rate + (o.promo && !o.coin ? C.promo : 0) + C.pay;

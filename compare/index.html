@@ -98,7 +98,11 @@ a{color:var(--teal)}
 <label for="sCat">商品分類</label>
 <select id="sCat">
 <option value="0.06" selected>一般／多數分類 6%</option>
-<option value="0.055">美食伴手禮、寵物食品／保健 5.5%</option>
+<option value="0.06">女生衣著 6%</option>
+<option value="0.06">美妝保養 6%</option>
+<option value="0.055">美食伴手禮 5.5%</option>
+<option value="0.055">寵物食品／保健 5.5%</option>
+<option value="0.06">寵物用品 6%</option>
 <option value="0.05">筆記型電腦 5%</option>
 <option value="0.075">手機周邊配件 7.5%</option>
 </select>
@@ -194,32 +198,28 @@ a{color:var(--teal)}
 由 <a href="https://portaly.cc/potatocancode" rel="noopener">Potato 賣家工具箱</a> 製作。本站與蝦皮、露天、momo 皆無任何關係，試算結果僅供參考。
 </div></footer>
 
+<script src="../lib/fees.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-const R = x => Math.round(x + 1e-9);
 const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
 const money = x => (x < 0 ? "-" : "") + "$" + Math.abs(x).toLocaleString("zh-TW", {maximumFractionDigits: 1});
 const pct = x => (x * 100).toFixed(1) + "%";
 
 function shopee(p, s, ev) {
-  const rate = parseFloat($("sCat").value) + (ev && !$("coin").checked ? 0.02 : 0);
-  const plan = document.querySelector("input[name=plan]:checked").value;
-  const comm = R(Math.min(p, 35000) * rate);
-  const pay = R((p + s) * 0.025);
-  const prog = plan === "1" || p <= 99 ? R(p * 0.06) : 60;
-  const inv = $("sInv").checked ? 2.5 : 0;
-  return [comm, pay, prog, inv, null];
+  const f = Fees.shopee(p, {
+    rate: parseFloat($("sCat").value), promo: ev, coin: $("coin").checked, ship: s, inv: $("sInv").checked,
+    plan: document.querySelector("input[name=plan]:checked").value === "2" ? 2 : 1,
+  });
+  return [f.comm, f.pay, f.prog, f.inv, null];
 }
 function ruten(p, s) {
-  const trade = $("rNew").checked || p <= 0 ? 0 : Math.min(400, Math.max(1, R(Math.min(p, 20000) * 0.03)));
-  const pay = p + s > 0 ? Math.max(1, R((p + s) * parseFloat($("rPay").value))) : 0;
-  return [trade, pay, null, null, null];
+  const f = Fees.ruten(p, s, {isNew: $("rNew").checked, payRate: parseFloat($("rPay").value)});
+  return [f.trade, f.pay, null, null, null];
 }
 function momo(p, ev) {
-  const [a, b] = $("mCat").value.split(",").map(parseFloat);
-  const comm = R(p * (ev ? b : a));
-  const other = R(p * num("mOther") / 100);
-  return [comm, null, null, null, other];
+  const [base, event] = $("mCat").value.split(",").map(parseFloat);
+  const f = Fees.momo(p, {cat: {base, event}, event: ev, otherPct: num("mOther")});
+  return [f.comm, null, null, null, f.other];
 }
 
 function calc() {

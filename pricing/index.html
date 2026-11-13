@@ -98,7 +98,11 @@ a{color:var(--teal)}
 <label for="cat">商品分類（成交手續費率）</label>
 <select id="cat">
 <option value="0.06" selected>一般／多數分類 6%</option>
-<option value="0.055">美食伴手禮、寵物食品／保健 5.5%</option>
+<option value="0.06">女生衣著 6%</option>
+<option value="0.06">美妝保養 6%</option>
+<option value="0.055">美食伴手禮 5.5%</option>
+<option value="0.055">寵物食品／保健 5.5%</option>
+<option value="0.06">寵物用品 6%</option>
 <option value="0.05">筆記型電腦 5%</option>
 <option value="0.075">手機周邊配件 7.5%</option>
 <option value="custom">自訂費率…</option>
@@ -210,12 +214,12 @@ a{color:var(--teal)}
 由 <a href="https://portaly.cc/potatocancode" rel="noopener">Potato 賣家工具箱</a> 製作。本站與蝦皮（Shopee）無任何關係，試算結果僅供參考。
 </div></footer>
 
+<script src="../lib/fees.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-const R = x => Math.round(x + 1e-9);
 const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
 const money = x => (x < 0 ? "-" : "") + "$" + Math.abs(x).toLocaleString("zh-TW", {maximumFractionDigits: 1});
-const C = {pay: 0.025, p1: 0.06, p2: 60, low: 99, cap: 35000, promo: 0.02, inv: 2.5};
+const C = Fees.SHOPEE;
 let rec = null;
 
 function opts() {
@@ -228,12 +232,8 @@ function opts() {
     cost: num("cost") + num("pack") + num("sship") + num("ads"),
   };
 }
-function fee(p, o) {
-  const comm = R(Math.min(p, C.cap) * o.rate);
-  const pay = R(p * C.pay);
-  const ship = o.plan === 1 || p <= C.low ? R(p * C.p1) : C.p2;
-  return comm + pay + ship + (o.inv ? C.inv : 0);
-}
+// o.rate 已含促銷加收，所以這裡不再傳 promo
+const fee = (p, o) => Fees.shopee(p, {rate: o.rate, plan: o.plan, inv: o.inv}).total;
 const net = (p, o) => p - fee(p, o) - o.cost;
 // lowest integer price whose net meets the goal (net >= amt + pct*price)
 function lowest(o, amt, pct) {
