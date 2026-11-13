@@ -74,9 +74,12 @@ a{color:var(--teal)}
 <body>
 <nav><div class="wrap">
 <a href="../">手續費計算機</a>
-<a href="./" aria-current="page">定價與折扣計算機</a>
-<a href="../ads-roas/">廣告 ROAS 計算機</a>
-<a href="../compare/">平台手續費比較</a>
+<a href="./" aria-current="page">定價與折扣</a>
+<a href="../ads-roas/">廣告 ROAS</a>
+<a href="../compare/">平台比較</a>
+<a href="../import-cost/">1688 進貨成本</a>
+<a href="../returns/">退貨成本</a>
+<a href="../monthly-goal/">月目標</a>
 </div></nav>
 <header><div class="wrap">
 <h1>蝦皮定價計算機（2026 新制）</h1>
@@ -235,11 +238,8 @@ function opts() {
 // o.rate 已含促銷加收，所以這裡不再傳 promo
 const fee = (p, o) => Fees.shopee(p, {rate: o.rate, plan: o.plan, inv: o.inv}).total;
 const net = (p, o) => p - fee(p, o) - o.cost;
-// lowest integer price whose net meets the goal (net >= amt + pct*price)
-function lowest(o, amt, pct) {
-  for (let p = 1; p <= 100000; p++) if (net(p, o) >= amt + pct * p - 1e-9) return p;
-  return null;
-}
+// 每件淨利 ≥ amt + pct × 售價 的最低整數售價
+const lowest = (o, amt, pct) => Fees.shopeeMinPrice({rate: o.rate, plan: o.plan, inv: o.inv}, o.cost, amt, pct);
 const pct = x => (x * 100).toFixed(1) + "%";
 
 function calc() {
@@ -290,6 +290,9 @@ function disc(o, be) {
   }
 }
 
+// 從其他工具帶過來的成本，例如 1688 進貨成本頁的「拿這個成本去定價」
+const q = new URLSearchParams(typeof location === "object" ? location.search : "");
+if (+q.get("cost") > 0) $("cost").value = q.get("cost");
 $("useRec").addEventListener("click", () => { if (rec) { $("list").value = rec; calc(); } });
 document.querySelectorAll("input,select").forEach(el => el.addEventListener("input", calc));
 calc();

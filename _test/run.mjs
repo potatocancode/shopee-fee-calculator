@@ -70,4 +70,49 @@ t("比較頁預設（390 + 運費 60）：蝦皮 59.5、露天 19、momo 21", ()
 });
 t("ROAS 頁預設有保本 ROAS", () => assert.match(page("ads-roas/").el("kBe").textContent, /^\d+\.\d\d$/));
 
+t("最低售價：成本 64.51、方案一 → 80（79 會虧 0.01）", () => {
+  assert.equal(Fees.shopeeMinPrice({rate: 0.06, plan: 1, inv: true}, 64.51), 80);
+});
+t("1688 進貨頁預設：每件 64.5、1.15 倍、帶成本 65 去定價頁", () => {
+  const x = page("import-cost/");
+  assert.equal(x.el("kUnit").textContent, "$64.5");
+  assert.equal(x.el("kMul").textContent, "1.15 倍");
+  assert.equal(x.el("toPricing").href, "../pricing/?cost=65");
+});
+t("1688 進貨頁：損耗 100% 不會除以 0", () => {
+  const x = page("import-cost/"); x.set("loss", 100); x.calc();
+  assert.doesNotMatch(x.el("kUnit").textContent, /Infinity|NaN/);
+});
+t("1688 進貨頁：沒包稅時加上稅費", () => {
+  const x = page("import-cost/"); x.check("taxin", false); x.set("tax", 5); x.calc();
+  assert.equal(x.el("tTax").textContent, "$309"); // (5692.5 + 480) × 5% = 308.6
+});
+t("退貨頁預設：每月吃掉 4,035、上限 58.2%、多賣 26 單", () => {
+  const x = page("returns/");
+  assert.equal(x.el("kLoss").textContent, "$4,035");
+  assert.equal(x.el("kMax").textContent, "58.2%");
+  assert.equal(x.el("tMore").textContent, "26 單");
+});
+t("退貨頁：99 元賺 10 元、退貨運費 60 → 上限 14.3%", () => {
+  // 99 元方案一費用 = 6 + 2 + 6 + 2.5 = 16.5，成本 72.5 讓淨利剛好 10
+  const x = page("returns/"); x.set("price", 99); x.set("cost", 72.5); x.set("resell", 100); x.calc();
+  assert.equal(x.el("tNet").textContent, "$10");
+  assert.equal(x.el("kMax").textContent, "14.3%");
+});
+t("月目標頁預設：241 單、每天 8 單、營業額 93,990、方案二 330 單", () => {
+  const x = page("monthly-goal/");
+  assert.equal(x.el("kOrders").textContent, "241 單");
+  assert.equal(x.el("kDay").textContent, "8.0 單");
+  assert.equal(x.el("tRev").textContent, "$93,990");
+  assert.equal(x.el("tOther").textContent, "方案二 330 單");
+});
+t("月目標頁：每單虧錢時不顯示單數", () => {
+  const x = page("monthly-goal/"); x.set("cost", 400); x.calc();
+  assert.equal(x.el("kOrders").textContent, "-");
+});
+t("定價頁讀網址的 ?cost=", () => {
+  const x = load(join(ROOT, "pricing/index.html"), {search: "?cost=65"}); x.calc();
+  assert.equal(x.el("cost").value, "65");
+});
+
 console.log(`\n全部 ${n} 項通過`);

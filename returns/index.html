@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蝦皮退貨成本計算機｜退貨率 5% 每月少賺多少、退貨率多高會虧</title>
+<meta name="description" content="退貨不只是少一筆訂單。輸入售價、成本、每月訂單數和退貨率，算出退貨每月吃掉多少利潤、退貨率每多 1% 少賺多少，以及退貨率超過多少會整個賠錢。">
+<link rel="canonical" href="https://sellerpotato.com/returns/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="蝦皮退貨成本計算機｜退貨率 5% 每月少賺多少">
+<meta property="og:description" content="退貨運費、拆封賣不掉的貨，每個月到底吃掉你多少利潤？">
+<meta property="og:url" content="https://sellerpotato.com/returns/">
+<meta property="og:image" content="https://sellerpotato.com/returns/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--teal:#1f6f78;--teal-l:#e3f1f2;--ink:#1d2a2e;--mute:#5b6b70;--line:#d6e2e4;--bg:#f7fafa;--card:#fff;--bad:#c62828;--good:#1a7f37;--warn:#8a4b00}
+@media (prefers-color-scheme:dark){:root{--teal:#5cc3cc;--teal-l:#123236;--ink:#e6eeef;--mute:#9db0b4;--line:#2a3d41;--bg:#0f1b1d;--card:#152427;--bad:#ff6b6b;--good:#4cc46a;--warn:#ffb74d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+nav{background:#174f56;font-size:14px}
+nav .wrap{display:flex;gap:6px 18px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+nav a{color:#d9f0f2;text-decoration:none}nav a[aria-current]{color:#fff;font-weight:700}
+header{background:var(--teal);color:#fff;padding:26px 0 22px}
+header h1{margin:0;font-size:clamp(24px,5vw,34px);line-height:1.3}
+header p{margin:8px 0 0;opacity:.92}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:22px 0}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.card h2{margin:0 0 12px;font-size:19px;color:var(--teal)}
+.card h3{margin:16px 0 0;font-size:15px;color:var(--mute);font-weight:600}
+label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:var(--bg);color:var(--ink)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:flex;gap:8px;margin-top:4px}
+.seg label{flex:1;margin:0;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;cursor:pointer;color:var(--ink);font-size:15px}
+.seg input{display:none}
+.seg label:has(input:checked){border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:700}
+.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:15px;margin:10px 0 0}
+.chk input{width:auto}
+.hint{font-size:13px;color:var(--mute);margin:4px 0 0}
+table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+td,th{padding:7px 4px;border-bottom:1px dashed var(--line)}
+td.v,th.v{text-align:right;font-weight:600}
+th{font-size:13px;color:var(--mute);font-weight:600;text-align:left}
+tr.sum td{font-weight:800;border-bottom:2px solid var(--line)}
+.big{font-size:30px;font-weight:800;color:var(--teal);font-variant-numeric:tabular-nums;line-height:1.3}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 14px}
+.kpi{background:var(--teal-l);border-radius:12px;padding:10px 12px}
+.kpi small{display:block;color:var(--mute);font-size:13px}
+.neg{color:var(--bad)!important}.pos{color:var(--good)!important}.warn{color:var(--warn)!important}
+.verdict{margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);font-size:15px}
+.btn{display:inline-block;margin-top:12px;padding:9px 16px;border-radius:99px;border:1px solid var(--teal);color:var(--teal);font-weight:700;text-decoration:none;font-size:15px}
+.cta{background:linear-gradient(135deg,var(--teal),#2a8f8a);color:#fff;border-radius:16px;padding:22px;margin:8px 0 26px}
+.cta h2{margin:0 0 6px;font-size:21px}
+.cta a{display:inline-block;margin-top:12px;background:#fff;color:#1f6f78;font-weight:800;padding:11px 20px;border-radius:99px;text-decoration:none}
+article h2{font-size:22px;color:var(--teal);margin:30px 0 8px}
+article h3{font-size:17px;margin:18px 0 4px}
+article table td,article table th{border:1px solid var(--line);padding:8px;text-align:left;color:var(--ink);font-size:15px}
+article table th{background:var(--teal-l)}
+.note{font-size:13px;color:var(--mute)}
+footer{border-top:1px solid var(--line);margin-top:30px;padding:18px 0 30px;font-size:14px;color:var(--mute)}
+a{color:var(--teal)}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"退貨會讓我損失多少？","acceptedAnswer":{"@type":"Answer","text":"每一筆退貨的損失 = 你要付的退貨運費 + 你原本負擔的出貨運費 + 退回來賣不掉的那部分商品成本。再加上這筆訂單本來能賺的利潤也沒了。"}},
+{"@type":"Question","name":"退貨率多少算正常？","acceptedAnswer":{"@type":"Answer","text":"依商品類型差很多，服飾鞋類通常比 3C 配件高。比起和別人比，更重要的是算出你自己的「退貨率上限」：超過這個比例，整個月就從賺錢變虧錢。"}}
+]}
+</script>
+</head>
+<body>
+<nav><div class="wrap">
+<a href="../">手續費計算機</a>
+<a href="../pricing/">定價與折扣</a>
+<a href="../ads-roas/">廣告 ROAS</a>
+<a href="../compare/">平台比較</a>
+<a href="../import-cost/">1688 進貨成本</a>
+<a href="./" aria-current="page">退貨成本</a>
+<a href="../monthly-goal/">月目標</a>
+</div></nav>
+<header><div class="wrap">
+<h1>蝦皮退貨成本計算機</h1>
+<p>退貨不只是少一筆訂單。運費、退回來不能再賣的貨，每個月都在吃你的利潤。算算看你被吃掉多少。</p>
+</div></header>
+
+<main class="wrap">
+<div class="grid">
+<section class="card" aria-label="輸入">
+<h2>① 商品</h2>
+<div class="row">
+<div><label for="price">售價（元）</label><input id="price" type="number" inputmode="decimal" min="0" value="390"></div>
+<div><label for="cost">成本（進貨 + 包材）</label><input id="cost" type="number" inputmode="decimal" min="0" value="175"></div>
+</div>
+<label for="cat">商品分類（成交手續費率）</label>
+<select id="cat">
+<option value="0.06" selected>一般／多數分類 6%</option>
+<option value="0.06">女生衣著 6%</option>
+<option value="0.06">美妝保養 6%</option>
+<option value="0.055">美食伴手禮 5.5%</option>
+<option value="0.055">寵物食品／保健 5.5%</option>
+<option value="0.06">寵物用品 6%</option>
+<option value="0.05">筆記型電腦 5%</option>
+<option value="0.075">手機周邊配件 7.5%</option>
+</select>
+<label>免運及進階賣家專案</label>
+<div class="seg">
+<label><input type="radio" name="plan" value="1" checked><span>方案一（6%）</span></label>
+<label><input type="radio" name="plan" value="2"><span>方案二（每單 60 元）</span></label>
+</div>
+<label class="chk"><input id="inv" type="checkbox" checked>開立代收轉付發票（每張 2.5 元）</label>
+<label for="sship">你負擔的出貨運費（每筆）</label>
+<input id="sship" type="number" inputmode="decimal" min="0" value="0">
+
+<h2 style="margin-top:20px">② 退貨</h2>
+<div class="row">
+<div><label for="orders">每月訂單數</label><input id="orders" type="number" inputmode="numeric" min="0" step="1" value="300"></div>
+<div><label for="rate">退貨率（%）</label><input id="rate" type="number" inputmode="decimal" min="0" max="100" step="0.5" value="5"></div>
+</div>
+<label for="retship">每筆退貨你要付的運費</label>
+<input id="retship" type="number" inputmode="decimal" min="0" value="60">
+<p class="hint">商品有瑕疵、寄錯時通常是你付。不用你付就填 0。</p>
+<label for="resell">退回來還能再賣的比例（%）</label>
+<input id="resell" type="number" inputmode="decimal" min="0" max="100" step="5" value="70">
+<p class="hint">拆封、弄髒、少配件的就賣不掉了，那部分的成本直接損失。</p>
+</section>
+
+<section class="card" aria-live="polite" aria-label="結果">
+<h2>③ 退貨吃掉多少</h2>
+<div class="kpis">
+<div class="kpi"><small>退貨每月吃掉</small><div class="big" id="kLoss">-</div></div>
+<div class="kpi"><small>退貨率上限</small><div class="big" id="kMax">-</div></div>
+</div>
+<table>
+<tr><td>每筆正常訂單淨利</td><td class="v" id="tNet">-</td></tr>
+<tr><td>每筆退貨的直接損失</td><td class="v" id="tLoss">-</td></tr>
+<tr><td>沒有退貨時，每月淨利</td><td class="v" id="tIdeal">-</td></tr>
+<tr class="sum"><td>算進退貨後，每月淨利</td><td class="v" id="tReal">-</td></tr>
+<tr><td>退貨率每多 1%，每月少賺</td><td class="v" id="tStep">-</td></tr>
+<tr><td>要多賣幾單才補得回來</td><td class="v" id="tMore">-</td></tr>
+</table>
+<div class="verdict" id="verdict"></div>
+<p class="note">假設退貨退款的訂單蝦皮不收成交手續費和金流費。實際以蝦皮帳單為準。</p>
+</section>
+</div>
+
+<section class="cta">
+<h2>想知道哪個商品退貨最傷？</h2>
+<p><b>「蝦皮賣場利潤健檢表」</b>Excel 把每個商品的成本、售價、銷量放在一起，找出淨利最薄的商品。這種商品只要退貨率一高，最先開始賠錢。</p>
+<a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">看健檢表 →</a>
+</section>
+
+<article>
+<h2>一筆退貨到底損失多少？</h2>
+<p>用預設的例子：390 元的商品，成本 175 元，方案一。正常賣出一筆淨利 156.5 元。</p>
+<p>退貨一筆，你付 60 元運費，退回來的貨有三成不能再賣（175 × 30% = 52.5 元），直接損失 <b>112.5 元</b>。再加上原本能賺的 156.5 元也沒了，一筆退貨前後差了 269 元。</p>
+<p>每月 300 單、退貨率 5%，就是 15 筆退貨，每月少賺 <b>4,035 元</b>。</p>
+
+<h2>退貨率上限怎麼算</h2>
+<p>退貨率上限是「整個月剛好不賺不賠」的退貨率：</p>
+<p><b>退貨率上限 = 每筆淨利 ÷（每筆淨利 + 每筆退貨損失）</b></p>
+<p>淨利越薄的商品，上限越低。賣 99 元、每件只賺 10 元的商品，只要退貨損失 60 元運費，退貨率超過 14% 整個月就白做。</p>
+
+<h2>常見問題</h2>
+<h3>退貨的訂單還要付手續費嗎？</h3>
+<p>這頁假設整筆退款的訂單不收成交手續費和金流費。部分退款、或是買家已完成訂單後才退的，可能會被收費，請以蝦皮帳單為準。</p>
+<h3>怎麼降低退貨率？</h3>
+<p>先看退貨原因。尺寸不合的，把尺寸表做清楚；跟圖片不符的，換實拍照；寄錯的，出貨前多一道檢查。改哪一項最划算，用這頁的「退貨率每多 1% 少賺多少」就能估。</p>
+<h3>售價還沒定好？</h3>
+<p>先用 <a href="../pricing/">定價與折扣計算機</a> 算出保本售價，再回來看退貨率上限。</p>
+<p class="note">最後更新：2026 年 11 月</p>
+</article>
+</main>
+
+<footer><div class="wrap">
+由 <a href="https://portaly.cc/potatocancode" rel="noopener">Potato 賣家工具箱</a> 製作。本站與蝦皮（Shopee）無任何關係，試算結果僅供參考。
+</div></footer>
+
+<script src="../lib/fees.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
+const money = x => (x < 0 ? "-" : "") + "$" + Math.abs(x).toLocaleString("zh-TW", {maximumFractionDigits: 1});
+const r1 = x => Math.round(x * 10) / 10;
+
+// n 每筆正常訂單淨利；loss 每筆退貨直接損失；r 退貨率（0~1）；N 每月訂單
+function returnsModel(o) {
+  const n = o.price - Fees.shopee(o.price, {rate: o.rate, plan: o.plan, inv: o.inv}).total - o.cost - o.sship;
+  const loss = o.retship + o.sship + o.cost * (1 - o.resell);
+  const ideal = o.orders * n;
+  const real = o.orders * (1 - o.r) * n - o.orders * o.r * loss;
+  return {n, loss, ideal, real, eaten: ideal - real, step: o.orders * 0.01 * (n + loss),
+    max: n > 0 ? n / (n + loss) : 0, more: n > 0 ? Math.ceil((ideal - real) / n - 1e-9) : null};
+}
+
+function calc() {
+  const o = {price: num("price"), cost: num("cost"), sship: num("sship"), rate: parseFloat($("cat").value),
+    plan: document.querySelector("input[name=plan]:checked").value === "2" ? 2 : 1, inv: $("inv").checked,
+    orders: Math.max(0, num("orders")), r: Math.min(100, Math.max(0, num("rate"))) / 100,
+    retship: num("retship"), resell: Math.min(100, Math.max(0, num("resell"))) / 100};
+  const m = returnsModel(o);
+  $("tNet").textContent = money(r1(m.n)); $("tNet").classList.toggle("neg", m.n < 0);
+  $("tLoss").textContent = money(r1(m.loss));
+  $("tIdeal").textContent = money(r1(m.ideal));
+  $("tReal").textContent = money(r1(m.real)); $("tReal").classList.toggle("neg", m.real < 0);
+  $("tStep").textContent = money(r1(m.step));
+  $("kLoss").textContent = money(r1(m.eaten));
+  const v = $("verdict");
+  if (!o.price) { ["kMax", "tMore"].forEach(i => $(i).textContent = "-"); v.textContent = "輸入售價開始計算。"; return; }
+  if (m.n <= 0) {
+    $("kMax").textContent = "0%"; $("tMore").textContent = "補不回來";
+    v.innerHTML = "❌ <b>還沒算退貨就已經在虧</b>：每筆正常訂單淨利是 " + money(r1(m.n)) + "，先調整售價或成本。";
+    return;
+  }
+  $("kMax").textContent = (m.max * 100).toFixed(1) + "%";
+  $("tMore").textContent = m.more + " 單";
+  const share = m.ideal > 0 ? m.eaten / m.ideal : 0;
+  if (o.r >= m.max) v.innerHTML = "❌ <b>退貨率 " + (o.r * 100) + "% 已經超過上限 " + (m.max * 100).toFixed(1) + "%</b>，這個商品整個月是賠錢的。";
+  else if (share > 0.15) v.innerHTML = "⚠️ 退貨吃掉了 <b>" + (share * 100).toFixed(0) + "%</b> 的利潤。退貨率每降 1%，每月多賺 " + money(r1(m.step)) + "。";
+  else v.innerHTML = "✅ 退貨吃掉 " + (share * 100).toFixed(0) + "% 的利潤，還在可以接受的範圍。退貨率超過 <b>" + (m.max * 100).toFixed(1) + "%</b> 才會整個賠錢。";
+}
+document.querySelectorAll("input,select").forEach(el => el.addEventListener("input", calc));
+calc();
+</script>
+</body>
+</html>

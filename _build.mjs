@@ -7,7 +7,7 @@
 //   lib/fees.js（費率選項）────────┘                                    └─► sitemap.xml
 //
 // 開頭是底線的檔案和資料夾，GitHub Pages（Jekyll）不會發布。
-import {readFileSync, writeFileSync, existsSync} from "node:fs";
+import {readFileSync, writeFileSync, existsSync, mkdirSync} from "node:fs";
 import {createRequire} from "node:module";
 import {dirname, join, resolve} from "node:path";
 import {fileURLToPath} from "node:url";
@@ -21,14 +21,17 @@ export const SITE = "https://sellerpotato.com/";
 // 選單順序就是這個陣列的順序。path 是相對網站根目錄的資料夾（首頁是空字串）。
 export const PAGES = [
   {path: "", nav: "手續費計算機"},
-  {path: "pricing/", nav: "定價與折扣計算機"},
-  {path: "ads-roas/", nav: "廣告 ROAS 計算機"},
-  {path: "compare/", nav: "平台手續費比較"},
+  {path: "pricing/", nav: "定價與折扣"},
+  {path: "ads-roas/", nav: "廣告 ROAS"},
+  {path: "compare/", nav: "平台比較"},
+  {path: "import-cost/", nav: "1688 進貨成本"},
+  {path: "returns/", nav: "退貨成本"},
+  {path: "monthly-goal/", nav: "月目標"},
 ];
 
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const rootOf = path => path ? "../".repeat(path.split("/").filter(Boolean).length) : "";
-const layout = name => readFileSync(join(ROOT, "_src/layout", name + ".html"), "utf8").replace(/\n$/, "");
+const layout = name => readFileSync(join(ROOT, "_src/layout", name.includes(".") ? name : name + ".html"), "utf8").replace(/\n$/, "");
 
 function nav(page) {
   const root = rootOf(page.path);
@@ -51,6 +54,7 @@ export function render(page, src) {
   const root = rootOf(page.path);
   let out = src
     .replace(/<!--@nav-->/g, () => nav(page))
+    .replace(/<!--@css-->/g, () => "<style>\n" + layout("base.css").replace(/\r\n/g, "\n") + "\n</style>")
     .replace(/<!--@footer(?::([^>]*?))?-->/g, (_, who) =>
       layout("footer").replace("{{who}}", who ? esc(who) : "蝦皮（Shopee）"))
     .replace(/<!--@opts:([\w-]+)-->/g, (m, k) => {
@@ -105,7 +109,7 @@ export function build({write = true} = {}) {
     const dest = join(ROOT, page.path, "index.html");
     if (!existsSync(dest) || readFileSync(dest, "utf8") !== out) {
       changed.add(page);
-      if (write) writeFileSync(dest, out);
+      if (write) { mkdirSync(dirname(dest), {recursive: true}); writeFileSync(dest, out); }
     }
   }
   // 跟網址有關的檔案都從 SITE 產生，換網址只改 SITE

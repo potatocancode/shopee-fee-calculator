@@ -25,7 +25,7 @@ function makeEl(id, tag, attrs) {
 
 const attr = (raw, name) => (raw.match(new RegExp(`\\b${name}="([^"]*)"`)) || [])[1];
 
-export function load(htmlPath) {
+export function load(htmlPath, {search} = {}) {
   const html = readFileSync(htmlPath, "utf8");
   const byId = {}, radios = [], inputs = [], selects = {};
   for (const m of html.matchAll(/<(input|select|textarea|button)\b([^>]*)>/g)) {
@@ -57,7 +57,9 @@ export function load(htmlPath) {
       throw new Error("假 DOM 不支援 querySelectorAll: " + sel);
     },
   };
-  const ctx = vm.createContext({document, console, Math, isFinite, parseFloat, Number, String, Set});
+  // search 有給才放 location，模擬從別的工具帶參數過來
+  const ctx = vm.createContext({document, console, Math, isFinite, parseFloat, Number, String, Set, URLSearchParams,
+    ...(search === undefined ? {} : {location: {search}})});
   const dir = dirname(htmlPath);
   // 依照頁面順序執行外部與內嵌 script（跳過 JSON-LD）
   for (const m of html.matchAll(/<script(?: src="([^"]+)")?>([\s\S]*?)<\/script>/g)) {

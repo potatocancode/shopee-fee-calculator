@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蝦皮月目標計算機｜每月想賺 3 萬，要賣幾單？扣完手續費、廣告、固定支出</title>
+<meta name="description" content="每月想在蝦皮賺多少？輸入售價、成本、廣告費比例和每月固定支出，扣掉 2026 蝦皮手續費後，算出每月要賣幾單、每天幾單、營業額要做到多少。">
+<link rel="canonical" href="{{site}}monthly-goal/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="蝦皮月目標計算機｜每月想賺 3 萬，要賣幾單？">
+<meta property="og:description" content="扣掉手續費、廣告和固定支出，倒推每天要出幾單。">
+<meta property="og:url" content="{{site}}monthly-goal/">
+<meta property="og:image" content="{{site}}monthly-goal/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<!--@css-->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"在蝦皮每月想賺 3 萬要賣幾單？","acceptedAnswer":{"@type":"Answer","text":"每月要賣的單數 =（目標月淨利 + 每月固定支出）÷ 每單淨利。每單淨利要先扣掉蝦皮手續費、成本和廣告費。以 390 元商品、成本 175 元、廣告費 5%、固定支出 3,000 元為例，每單淨利 137 元，要賣 241 單，大約每天 8 單。"}},
+{"@type":"Question","name":"營業額和淨利差多少？","acceptedAnswer":{"@type":"Answer","text":"差很多。上面的例子每月營業額要做到約 9.4 萬，才剩 3 萬淨利。用營業額估自己賺多少，通常會高估兩到三倍。"}}
+]}
+</script>
+</head>
+<body>
+<!--@nav-->
+<header><div class="wrap">
+<h1>蝦皮月目標計算機</h1>
+<p>每月想賺多少，倒推回去要賣幾單、每天幾單。手續費、廣告費和固定支出都先扣掉。</p>
+</div></header>
+
+<main class="wrap">
+<div class="grid">
+<section class="card" aria-label="輸入">
+<h2>① 主力商品</h2>
+<div class="row">
+<div><label for="price">售價（元）</label><input id="price" type="number" inputmode="decimal" min="0" value="390"></div>
+<div><label for="cost">每件成本（進貨 + 包材）</label><input id="cost" type="number" inputmode="decimal" min="0" value="175"></div>
+</div>
+<label for="cat">商品分類（成交手續費率）</label>
+<select id="cat">
+<!--@opts:shopee-cats-->
+</select>
+<label>免運及進階賣家專案</label>
+<div class="seg">
+<label><input type="radio" name="plan" value="1" checked><span>方案一（6%）</span></label>
+<label><input type="radio" name="plan" value="2"><span>方案二（每單 60 元）</span></label>
+</div>
+<label class="chk"><input id="inv" type="checkbox" checked>開立代收轉付發票（每張 2.5 元）</label>
+<div class="row">
+<div><label for="qty">平均每單幾件</label><input id="qty" type="number" inputmode="decimal" min="1" step="0.1" value="1"></div>
+<div><label for="ad">廣告費佔營業額（%）</label><input id="ad" type="number" inputmode="decimal" min="0" step="0.5" value="5"></div>
+</div>
+
+<h2 style="margin-top:20px">② 每月</h2>
+<div class="row">
+<div><label for="fixed">固定支出（元）</label><input id="fixed" type="number" inputmode="decimal" min="0" value="3000"></div>
+<div><label for="goal">想賺多少（元）</label><input id="goal" type="number" inputmode="decimal" min="0" value="30000"></div>
+</div>
+<p class="hint">固定支出：倉庫或房租分攤、軟體、手機門號、記帳費這類不管賣幾單都要付的錢。</p>
+</section>
+
+<section class="card" aria-live="polite" aria-label="結果">
+<h2>③ 要賣多少</h2>
+<div class="kpis">
+<div class="kpi"><small>每月要賣</small><div class="big" id="kOrders">-</div></div>
+<div class="kpi"><small>平均每天</small><div class="big" id="kDay">-</div></div>
+</div>
+<table>
+<tr><td>每單蝦皮費用</td><td class="v" id="tFee">-</td></tr>
+<tr><td>每單廣告費</td><td class="v" id="tAd">-</td></tr>
+<tr class="sum"><td>每單淨利</td><td class="v" id="tNet">-</td></tr>
+<tr><td>每月營業額要做到</td><td class="v" id="tRev">-</td></tr>
+<tr><td>淨利率</td><td class="v" id="tMargin">-</td></tr>
+<tr><td>換另一個方案要賣</td><td class="v" id="tOther">-</td></tr>
+</table>
+<div class="verdict" id="verdict"></div>
+<h3>不同目標要賣幾單</h3>
+<table>
+<thead><tr><th>每月想賺</th><th class="v">每月單數</th><th class="v">每天</th><th class="v">營業額</th></tr></thead>
+<tbody id="ladder"></tbody>
+</table>
+</section>
+</div>
+
+<section class="cta">
+<h2>不只一個商品？</h2>
+<p>這頁用一個主力商品估算。<b>「蝦皮賣場利潤健檢表」</b>Excel 用你所有商品的真實銷量，算出整間店每月實際賺多少、哪些商品在拖累。</p>
+<a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">看健檢表 →</a>
+</section>
+
+<article>
+<h2>營業額 9 萬，只剩 3 萬</h2>
+<p>預設的例子：390 元的商品，成本 175 元，方案一、一般分類，廣告費抓營業額的 5%。</p>
+<p>每單被蝦皮收 58.5 元、廣告費 19.5 元，剩下 <b>137 元</b>。想每月賺 3 萬，加上 3,000 元固定支出，要賣 241 單，每天 8 單，營業額大約 9.4 萬。</p>
+<p>很多人看到營業額 9 萬會以為自己賺很多，其實只有三成是自己的。</p>
+
+<h2>怎麼算</h2>
+<p><b>每月要賣的單數 =（想賺多少 + 固定支出）÷ 每單淨利</b></p>
+<p>每單淨利 =（售價 − 每件蝦皮費用 − 成本 − 售價 × 廣告費比例）× 每單件數。方案二的 60 元和發票 2.5 元是每單收一次，所以一單買越多件，攤到每件越少。</p>
+
+<h2>常見問題</h2>
+<h3>廣告費比例要填多少？</h3>
+<p>拿上個月的廣告花費除以營業額。沒打廣告就填 0。不知道廣告有沒有賺，可以用 <a href="../ads-roas/">廣告 ROAS 計算機</a> 檢查。</p>
+<h3>算出來單數太多，怎麼辦？</h3>
+<p>先看每單淨利。淨利太薄的話，用 <a href="../pricing/">定價與折扣計算機</a> 重新定價，或用 <a href="../import-cost/">1688 進貨成本計算機</a> 檢查成本有沒有算漏。每單多賺 20 元，需要的單數就少一大截。</p>
+<p class="note">最後更新：2026 年 11 月</p>
+</article>
+</main>
+
+<!--@footer-->
+
+<script src="{{root}}lib/fees.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
+const money = x => (x < 0 ? "-" : "") + "$" + Math.abs(x).toLocaleString("zh-TW", {maximumFractionDigits: 1});
+const r1 = x => Math.round(x * 10) / 10;
+
+// 每單淨利（一單 qty 件）與達成目標要的單數
+function perOrder(o, plan) {
+  const f = Fees.shopee(o.price, {rate: o.rate, plan, inv: o.inv, qty: o.qty});
+  const ad = o.price * o.ad;
+  return {fee: f.total * o.qty, ad: ad * o.qty, net: (o.price - f.total - o.cost - ad) * o.qty};
+}
+const ordersFor = (net, need) => net > 0 ? Math.ceil(need / net - 1e-9) : null;
+
+function calc() {
+  const o = {price: num("price"), cost: num("cost"), rate: parseFloat($("cat").value), inv: $("inv").checked,
+    qty: Math.max(1, num("qty")), ad: Math.max(0, num("ad")) / 100, fixed: Math.max(0, num("fixed")), goal: Math.max(0, num("goal"))};
+  const plan = document.querySelector("input[name=plan]:checked").value === "2" ? 2 : 1;
+  const p = perOrder(o, plan), alt = perOrder(o, 3 - plan);
+  const n = ordersFor(p.net, o.goal + o.fixed), na = ordersFor(alt.net, o.goal + o.fixed);
+  $("tFee").textContent = money(r1(p.fee)); $("tAd").textContent = money(r1(p.ad));
+  $("tNet").textContent = money(r1(p.net)); $("tNet").classList.toggle("neg", p.net <= 0);
+  const v = $("verdict"), ladder = $("ladder");
+  ladder.innerHTML = "";
+  if (!o.price) { ["kOrders", "kDay", "tRev", "tMargin", "tOther"].forEach(i => $(i).textContent = "-"); v.textContent = "輸入售價開始計算。"; return; }
+  if (n === null) {
+    ["kOrders", "kDay", "tRev", "tMargin"].forEach(i => $(i).textContent = "-");
+    $("tOther").textContent = na === null ? "-" : na.toLocaleString("zh-TW") + " 單";
+    v.innerHTML = "❌ <b>每單是虧錢的</b>，賣越多虧越多。先用定價計算機調整售價。";
+    return;
+  }
+  const rev = n * o.price * o.qty;
+  $("kOrders").textContent = n.toLocaleString("zh-TW") + " 單";
+  $("kDay").textContent = (n / 30).toFixed(1) + " 單";
+  $("tRev").textContent = money(Math.round(rev));
+  $("tMargin").textContent = (p.net / (o.price * o.qty) * 100).toFixed(1) + "%";
+  $("tOther").textContent = (plan === 1 ? "方案二 " : "方案一 ") + (na === null ? "無法達成" : na.toLocaleString("zh-TW") + " 單");
+  v.innerHTML = "每月營業額要做到 <b>" + money(Math.round(rev)) + "</b>，其中只有 " + money(o.goal) + " 是你的。" +
+    (na !== null && na < n ? "<br>⚠️ 換" + (plan === 1 ? "方案二" : "方案一") + "只要賣 " + na.toLocaleString("zh-TW") + " 單，少 " + (n - na).toLocaleString("zh-TW") + " 單。" : "");
+  for (const g of [10000, 30000, 50000, 100000]) {
+    const k = ordersFor(p.net, g + o.fixed);
+    ladder.insertAdjacentHTML("beforeend", "<tr><td>" + money(g) + "</td><td class='v'>" + k.toLocaleString("zh-TW") +
+      "</td><td class='v'>" + (k / 30).toFixed(1) + "</td><td class='v'>" + money(Math.round(k * o.price * o.qty)) + "</td></tr>");
+  }
+}
+document.querySelectorAll("input,select").forEach(el => el.addEventListener("input", calc));
+calc();
+</script>
+</body>
+</html>

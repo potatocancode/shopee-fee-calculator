@@ -221,11 +221,8 @@ function opts() {
 // o.rate 已含促銷加收，所以這裡不再傳 promo
 const fee = (p, o) => Fees.shopee(p, {rate: o.rate, plan: o.plan, inv: o.inv}).total;
 const net = (p, o) => p - fee(p, o) - o.cost;
-// lowest integer price whose net meets the goal (net >= amt + pct*price)
-function lowest(o, amt, pct) {
-  for (let p = 1; p <= 100000; p++) if (net(p, o) >= amt + pct * p - 1e-9) return p;
-  return null;
-}
+// 每件淨利 ≥ amt + pct × 售價 的最低整數售價
+const lowest = (o, amt, pct) => Fees.shopeeMinPrice({rate: o.rate, plan: o.plan, inv: o.inv}, o.cost, amt, pct);
 const pct = x => (x * 100).toFixed(1) + "%";
 
 function calc() {
@@ -276,6 +273,9 @@ function disc(o, be) {
   }
 }
 
+// 從其他工具帶過來的成本，例如 1688 進貨成本頁的「拿這個成本去定價」
+const q = new URLSearchParams(typeof location === "object" ? location.search : "");
+if (+q.get("cost") > 0) $("cost").value = q.get("cost");
 $("useRec").addEventListener("click", () => { if (rec) { $("list").value = rec; calc(); } });
 document.querySelectorAll("input,select").forEach(el => el.addEventListener("input", calc));
 calc();
