@@ -48,7 +48,7 @@ t("momo 服裝 390 元：非活動 21、活動 25", () => {
 
 t("build 輸出和現有頁面一致（忘了跑 node _build.mjs 會失敗）", () => {
   const r = build({write: false});
-  assert.deepEqual(r.changed, []); assert.equal(r.sitemap, false);
+  assert.deepEqual(r.changed, []); assert.deepEqual(r.extra, []);
 });
 
 const page = p => { const x = load(join(ROOT, p, "index.html")); x.calc(); return x; };

@@ -16,7 +16,7 @@ const ROOT = dirname(fileURLToPath(import.meta.url));
 const Fees = createRequire(import.meta.url)("./lib/fees.js");
 
 // 換網址時只改這一行
-export const SITE = "https://potatocancode.github.io/shopee-fee-calculator/";
+export const SITE = "https://sellerpotato.com/";
 
 // 選單順序就是這個陣列的順序。path 是相對網站根目錄的資料夾（首頁是空字串）。
 export const PAGES = [
@@ -108,18 +108,31 @@ export function build({write = true} = {}) {
       if (write) writeFileSync(dest, out);
     }
   }
-  const sm = sitemap(changed);
-  const smChanged = !existsSync(join(ROOT, "sitemap.xml")) || readFileSync(join(ROOT, "sitemap.xml"), "utf8") !== sm;
-  if (write && smChanged) writeFileSync(join(ROOT, "sitemap.xml"), sm);
-  return {changed: [...changed].map(p => p.path || "/"), sitemap: smChanged};
+  // 跟網址有關的檔案都從 SITE 產生，換網址只改 SITE
+  const extra = {
+    "sitemap.xml": sitemap(changed),
+    "robots.txt": `User-agent: *\nAllow: /\nSitemap: ${SITE}sitemap.xml\n`,
+    "CNAME": new URL(SITE).hostname.endsWith("github.io") ? null : new URL(SITE).hostname + "\n",
+  };
+  const extraChanged = [];
+  for (const [name, body] of Object.entries(extra)) {
+    if (body === null) continue;
+    const p = join(ROOT, name);
+    if (!existsSync(p) || readFileSync(p, "utf8") !== body) {
+      extraChanged.push(name);
+      if (write) writeFileSync(p, body);
+    }
+  }
+  return {changed: [...changed].map(p => p.path || "/"), extra: extraChanged};
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const checkOnly = process.argv.includes("--check");
   const r = build({write: !checkOnly});
-  if (checkOnly && (r.changed.length || r.sitemap)) {
-    console.error("輸出和現有檔案不同，請先執行 node _build.mjs：", r.changed.join(", "), r.sitemap ? "sitemap.xml" : "");
+  const all = [...r.changed, ...r.extra];
+  if (checkOnly && all.length) {
+    console.error("輸出和現有檔案不同，請先執行 node _build.mjs：", all.join(", "));
     process.exit(1);
   }
-  console.log(r.changed.length ? "已更新：" + r.changed.join(", ") : "沒有頁面需要更新", r.sitemap ? "(sitemap.xml 已更新)" : "");
+  console.log(all.length ? "已更新：" + all.join(", ") : "沒有檔案需要更新");
 }
