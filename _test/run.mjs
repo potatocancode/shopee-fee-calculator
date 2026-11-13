@@ -8,6 +8,7 @@ import {join, dirname} from "node:path";
 import {fileURLToPath} from "node:url";
 import {build} from "../_build.mjs";
 import {load} from "./dom.mjs";
+import {readFileSync} from "node:fs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const Fees = createRequire(import.meta.url)("../lib/fees.js");
@@ -113,6 +114,60 @@ t("月目標頁：每單虧錢時不顯示單數", () => {
 t("定價頁讀網址的 ?cost=", () => {
   const x = load(join(ROOT, "pricing/index.html"), {search: "?cost=65"}); x.calc();
   assert.equal(x.el("cost").value, "65");
+});
+
+// ---- 文章裡寫死的數字（改了公式或費率，這裡會失敗，提醒你去改文章）----
+const o = (plan, x = {}) => ({rate: 0.06, plan, inv: true, ...x});
+const fee = (p, plan, x) => Fees.shopee(p, o(plan, x)).total;
+t("文章：方案一二比較表（100/300/500/1000/1500/3000）", () => {
+  const rows = [[100, 17.5, 71.5], [300, 46.5, 88.5], [500, 75.5, 105.5], [1000, 147.5, 147.5], [1500, 220.5, 190.5], [3000, 437.5, 317.5]];
+  for (const [p, a, b] of rows) { assert.equal(fee(p, 1), a, `${p} 方案一`); assert.equal(fee(p, 2), b, `${p} 方案二`); }
+});
+t("文章：150 元進貨 80，方案一賺 45.5、方案二虧 5.5", () => {
+  assert.equal(150 - fee(150, 1) - 80, 45.5);
+  assert.equal(150 - fee(150, 2) - 80, -5.5);
+});
+t("文章：保本價 100→120/178、195→232/282、20% 目標 302", () => {
+  assert.equal(Fees.shopeeMinPrice(o(1), 100), 120);
+  assert.equal(Fees.shopeeMinPrice(o(2), 100), 178);
+  assert.equal(Fees.shopeeMinPrice(o(1), 195), 232);
+  assert.equal(Fees.shopeeMinPrice(o(2), 195), 282);
+  assert.equal(Fees.shopeeMinPrice(o(1), 195, 0, 0.2), 302);
+  assert.equal(Fees.shopeeMinPrice(o(1), 64.51), 80);
+});
+t("文章：成本 × 1.5 → 293 元淨利 52.5（17.9%）", () => {
+  const net = 293 - fee(293, 1) - 195;
+  assert.equal(net, 52.5);
+  assert.equal((net / 293 * 100).toFixed(1), "17.9");
+});
+t("文章：ROAS 390/175 → 淨利 156.5、保本 2.49；9 折 351 → 2.87", () => {
+  const pre = 390 - fee(390, 1) - 175;
+  assert.equal(pre, 156.5);
+  assert.equal((390 / pre).toFixed(2), "2.49");
+  assert.equal(pre - 390 / 4, 59);
+  assert.equal(pre - 390 / 2, -38.5);
+  const pre9 = 351 - fee(351, 1) - 175;
+  assert.equal(pre9, 122.5);
+  assert.equal((351 / pre9).toFixed(2), "2.87");
+});
+t("文章：金流費 390+60 → 11；促銷 390 → 66.5", () => {
+  assert.equal(Fees.shopee(390, o(1, {ship: 60})).pay, 11);
+  assert.equal(fee(390, 1, {promo: true}), 66.5);
+});
+t("首頁和定價頁的保本價一致（成本 195 → 232，20% → 302）", () => {
+  const x = page("");
+  x.set("cost", 195); x.set("pack", 0); x.set("sship", 0); x.set("ads", 0); x.set("ship", 0); x.set("target", 20); x.calc();
+  assert.equal(x.el("fBE").textContent, "$232");
+  assert.equal(x.el("fTP").textContent, "$302");
+});
+t("文章頁：每篇都有麵包屑、先講答案、作者框、canonical", () => {
+  for (const a of build({write: false}).articles) {
+    const html = readFileSync(join(ROOT, a.path, "index.html"), "utf8");
+    for (const s of ['class="crumb"', 'class="answer"', 'class="author"', `href="https://sellerpotato.com/${a.path}"`, '"@type":"Article"']) {
+      assert.ok(html.includes(s), `${a.path} 缺 ${s}`);
+    }
+    assert.doesNotMatch(html, /——/, `${a.path} 有破折號`);
+  }
 });
 
 console.log(`\n全部 ${n} 項通過`);

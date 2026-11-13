@@ -61,6 +61,15 @@ article table th{background:var(--teal-l)}
 .note{font-size:13px;color:var(--mute)}
 footer{border-top:1px solid var(--line);margin-top:30px;padding:18px 0 30px;font-size:14px;color:var(--mute)}
 a{color:var(--teal)}
+.latest h2{font-size:22px;color:var(--teal);margin:30px 0 10px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:620px){.cards{grid-template-columns:1fr}}
+.card-a{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink)}
+.card-a:hover{border-color:var(--teal)}
+.card-a h3{font-size:18px;line-height:1.45;margin:8px 0 6px}
+.card-a p{font-size:14px;color:var(--mute);margin:0}
+.card-a .meta{font-size:13px;color:var(--mute);margin-top:8px}
+.chip{display:inline-block;font-size:13px;font-weight:700;color:var(--teal);background:var(--teal-l);border-radius:99px;padding:2px 12px}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -79,6 +88,7 @@ a{color:var(--teal)}
 <a href="import-cost/">1688 進貨成本</a>
 <a href="returns/">退貨成本</a>
 <a href="monthly-goal/">月目標</a>
+<a href="learn/">賣家算數</a>
 </div></nav>
 <header><div class="wrap">
 <h1>蝦皮手續費計算機（2026 新制）</h1>
@@ -162,6 +172,17 @@ a{color:var(--teal)}
 <a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">看健檢表（早鳥 NT$390）→</a>
 </section>
 
+<section class="latest" aria-label="賣家算數">
+<h2>賣家算數：把數字攤開給你看</h2>
+<div class="cards">
+<a class="card-a" href="learn/shopee-fee-2026/"><span class="chip">手續費與方案</span><h3>2026 蝦皮手續費怎麼算？一筆 390 元的訂單拆給你看</h3><p>2026 蝦皮一般賣家一筆訂單被收哪些錢：成交手續費、金流與系統處理費 2.5%、免運方案、發票。用一筆 390 元的訂單逐項算給你看，附計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+<a class="card-a" href="learn/sell-100-take-home/"><span class="chip">手續費與方案</span><h3>蝦皮賣 100 元實拿多少？方案一 82.5，方案二只剩 28.5</h3><p>一件 100 元的商品，蝦皮方案一收 17.5 元、方案二收 71.5 元。同一件商品差 54 元，只差在報了哪個方案。附計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+<a class="card-a" href="learn/plan-1-vs-plan-2/"><span class="chip">手續費與方案</span><h3>蝦皮方案一還是方案二？客單價 1,000 元是分水嶺</h3><p>方案一收 6%、方案二每單 60 元，兩者在訂單金額 1,000 元打平。從 100 元到 3,000 元，兩個方案各被收多少，一張表看完，附計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+<a class="card-a" href="learn/breakeven-price/"><span class="chip">定價與利潤</span><h3>蝦皮保本價怎麼算？成本 100 元，方案一要賣 120、方案二要 178</h3><p>保本售價 =（成本 + 固定費用）÷（1 − 百分比費率），再照蝦皮的四捨五入往上找。成本 100 元，方案一保本 120、方案二保本 178。附計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+</div>
+<p><a href="learn/">看全部文章 →</a></p>
+</section>
+
 <article>
 <h2>2026 蝦皮手續費有哪些？</h2>
 <p>2026 年 1 月 1 日起，蝦皮調整一般賣家的費用結構。一筆訂單主要會被收以下幾項，每一項分別計算、四捨五入到整數後再加總：</p>
@@ -186,7 +207,7 @@ a{color:var(--teal)}
 <h2>保本售價怎麼算？</h2>
 <p>保本售價就是「扣掉所有費用和成本後剛好不虧」的價格：</p>
 <p><b>保本售價 =（進貨成本 + 包材 + 賣家負擔運費 + 廣告費 + 固定費用）÷（1 − 各項百分比費率）</b></p>
-<p>固定費用包括方案二的 60 元、發票 2.5 元；百分比費率包括成交手續費、金流 2.5%、方案一 6%。本頁算出的保本價額外加了 2 元，抵銷四捨五入的誤差。</p>
+<p>固定費用包括方案二的 60 元、發票 2.5 元；百分比費率包括成交手續費、金流 2.5%、方案一 6%。本頁照蝦皮的做法把每一項分別四捨五入，再找出剛好不虧的最低整數售價。</p>
 
 <h2>常見問題</h2>
 <h3>為什麼我的實際帳單和計算機差幾元？</h3>
@@ -226,14 +247,9 @@ function fees(price, o, plan) {
   const f = Fees.shopee(price, {...o, plan});
   return {comm: f.comm, pay: f.pay, ship: f.prog, inv: f.inv, total: f.total, net: price - f.total - o.cost};
 }
+// 每件淨利 ≥ 售價 × t 的最低整數售價（和定價頁、文章裡的計算機同一套算法：每一項分別四捨五入）
 function solve(o, plan, t) {
-  const rv = o.rate + (o.promo && !o.coin ? C.promo : 0) + C.pay;
-  const f0 = o.cost + o.ship * C.pay + (o.inv ? C.inv / o.qty : 0);
-  const d1 = 1 - rv - C.p1 - t, d2 = 1 - rv - t;
-  const c1 = d1 > 0 ? Math.ceil(f0 / d1) + 2 : null;
-  if (plan === 1) return c1;
-  if (c1 !== null && c1 * o.qty <= C.low) return c1;
-  return d2 > 0 ? Math.ceil((f0 + C.p2 / o.qty) / d2) + 2 : null;
+  return Fees.shopeeMinPrice({...o, plan}, o.cost, 0, t);
 }
 function calc() {
   const sel = $("cat").value;

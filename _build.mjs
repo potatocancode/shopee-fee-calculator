@@ -1,13 +1,14 @@
-// 把 _src/pages 的原始頁面套上共用選單、頁尾、費率選項，輸出成正式頁面。
+// 把 _src 的原始檔套上共用選單、頁尾、費率選項，輸出成正式頁面。
 // 用法：node _build.mjs        （不需要安裝任何套件）
 //       node _build.mjs --check（只檢查，不寫檔；輸出和現有檔案不同就失敗）
 //
 //   _src/pages/<path>/index.html ──┐
-//   _src/layout/*.html ────────────┼─► 取代 <!--@...--> 與 {{...}} ─► 檢查 ─► <path>/index.html
-//   lib/fees.js（費率選項）────────┘                                    └─► sitemap.xml
+//   _src/learn/<slug>.html ────────┤（文章：開頭一段 <!--meta {...} --> + 內文）
+//   _src/layout/* ─────────────────┼─► 取代 <!--@...--> 與 {{...}} ─► 檢查 ─► <path>/index.html
+//   lib/fees.js（費率選項）────────┘                                    └─► sitemap.xml、robots.txt、CNAME
 //
 // 開頭是底線的檔案和資料夾，GitHub Pages（Jekyll）不會發布。
-import {readFileSync, writeFileSync, existsSync, mkdirSync} from "node:fs";
+import {readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync} from "node:fs";
 import {createRequire} from "node:module";
 import {dirname, join, resolve} from "node:path";
 import {fileURLToPath} from "node:url";
@@ -17,6 +18,7 @@ const Fees = createRequire(import.meta.url)("./lib/fees.js");
 
 // 換網址時只改這一行
 export const SITE = "https://sellerpotato.com/";
+const BRAND = "Potato 賣家工具箱";
 
 // 選單順序就是這個陣列的順序。path 是相對網站根目錄的資料夾（首頁是空字串）。
 export const PAGES = [
@@ -27,16 +29,113 @@ export const PAGES = [
   {path: "import-cost/", nav: "1688 進貨成本"},
   {path: "returns/", nav: "退貨成本"},
   {path: "monthly-goal/", nav: "月目標"},
+  {path: "learn/", nav: "賣家算數"},
 ];
+/** 文章分類，列表頁照這個順序。 */
+export const CATEGORIES = ["手續費與方案", "定價與利潤", "廣告", "進貨與經營", "平台比較"];
 
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const rootOf = path => path ? "../".repeat(path.split("/").filter(Boolean).length) : "";
-const layout = name => readFileSync(join(ROOT, "_src/layout", name.includes(".") ? name : name + ".html"), "utf8").replace(/\n$/, "");
+const layout = name => readFileSync(join(ROOT, "_src/layout", name.includes(".") ? name : name + ".html"), "utf8").replace(/\r\n/g, "\n").replace(/\n$/, "");
+const read = p => readFileSync(p, "utf8").replace(/\r\n/g, "\n");
+
+// ---------- 文章 ----------
+export function loadArticles() {
+  const dir = join(ROOT, "_src/learn");
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir).filter(f => f.endsWith(".html")).map(f => {
+    const src = read(join(dir, f));
+    const m = src.match(/^<!--meta\s*([\s\S]*?)-->\n?/);
+    if (!m) throw new Error(`_src/learn/${f}: 開頭要有 <!--meta {...} -->`);
+    let meta;
+    try { meta = JSON.parse(m[1]); } catch (e) { throw new Error(`_src/learn/${f}: meta 不是合法 JSON：${e.message}`); }
+    for (const k of ["title", "h1", "description", "category", "date", "summary"]) {
+      if (!meta[k]) throw new Error(`_src/learn/${f}: meta 缺少 ${k}`);
+    }
+    if (!CATEGORIES.includes(meta.category)) throw new Error(`_src/learn/${f}: 不認得的分類 ${meta.category}`);
+    const slug = f.replace(/\.html$/, "");
+    const body = src.slice(m[0].length);
+    const text = body.replace(/<[^>]+>/g, "").replace(/\s+/g, "");
+    return {...meta, slug, path: `learn/${slug}/`, navPath: "learn/", body, minutes: Math.max(2, Math.ceil(text.length / 450))};
+  }).sort((a, b) => (b.weight || 0) - (a.weight || 0) || (b.updated || b.date).localeCompare(a.updated || a.date) || a.slug.localeCompare(b.slug));
+}
+
+const fmtDate = d => d.replace(/^(\d{4})-(\d{2})-(\d{2})$/, (_, y, m, dd) => `${y} 年 ${+m} 月 ${+dd} 日`);
+
+function card(a, root) {
+  return `<a class="card-a" href="${root}${a.path}"><span class="chip">${esc(a.category)}</span><h3>${esc(a.h1)}</h3><p>${esc(a.description)}</p><div class="meta">${fmtDate(a.updated || a.date)}・閱讀 ${a.minutes} 分鐘</div></a>`;
+}
+
+function renderArticle(a, all) {
+  const root = rootOf(a.path);
+  const url = SITE + a.path;
+  const related = (a.related || []).map(s => all.find(x => x.slug === s)).filter(Boolean);
+  for (const s of a.related || []) if (!all.some(x => x.slug === s)) throw new Error(`${a.path}: 相關文章 ${s} 不存在`);
+  const more = related.length >= 2 ? related : [...related, ...all.filter(x => x !== a && x.category === a.category && !related.includes(x))].slice(0, 4);
+  const faq = a.faq || [];
+  const ld = [
+    {"@context": "https://schema.org", "@type": "Article", headline: a.h1, description: a.description, datePublished: a.date,
+      dateModified: a.updated || a.date, image: url + "og.png", author: {"@type": "Organization", name: BRAND, url: SITE},
+      publisher: {"@type": "Organization", name: BRAND, logo: {"@type": "ImageObject", url: SITE + "assets/potato-96.png"}}, mainEntityOfPage: url},
+    {"@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+      {"@type": "ListItem", position: 1, name: "首頁", item: SITE},
+      {"@type": "ListItem", position: 2, name: "賣家算數", item: SITE + "learn/"},
+      {"@type": "ListItem", position: 3, name: a.h1, item: url}]},
+    ...(faq.length ? [{"@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map(([q, ans]) => ({"@type": "Question", name: q, acceptedAnswer: {"@type": "Answer", text: ans}}))}] : []),
+  ];
+  const usesWidget = /data-widget=/.test(a.body);
+  const html = `<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(a.title)}</title>
+<meta name="description" content="${esc(a.description)}">
+<link rel="canonical" href="{{site}}${a.path}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="${esc(a.h1)}">
+<meta property="og:description" content="${esc(a.description)}">
+<meta property="og:url" content="{{site}}${a.path}">
+<meta property="og:image" content="{{site}}${a.path}og.png">
+<meta property="article:published_time" content="${a.date}">
+<meta name="twitter:card" content="summary_large_image">
+<!--@css:article-->
+${ld.map(x => `<script type="application/ld+json">${JSON.stringify(x)}</script>`).join("\n")}
+</head>
+<body>
+<!--@nav-->
+<main class="post">
+<div class="crumb"><a href="{{root}}">首頁</a> › <a href="{{root}}learn/">賣家算數</a> › <a href="{{root}}learn/#${encodeURIComponent(a.category)}">${esc(a.category)}</a></div>
+<article>
+<header class="post-head">
+<a class="chip" href="{{root}}learn/#${encodeURIComponent(a.category)}">${esc(a.category)}</a>
+<h1>${esc(a.h1)}</h1>
+<div class="byline"><img src="{{root}}assets/potato-96.png" alt="" width="32" height="32"><span>Potato・${a.updated ? "更新於 " + fmtDate(a.updated) : fmtDate(a.date)}・閱讀 ${a.minutes} 分鐘</span></div>
+</header>
+<aside class="answer"><b class="k">先講答案</b>${a.summary}</aside>
+<div class="prose">
+${a.body.trim()}
+${faq.length ? `<h2>常見問題</h2>\n${faq.map(([q, ans]) => `<h3>${esc(q)}</h3>\n<p>${esc(ans)}</p>`).join("\n")}` : ""}
+</div>
+<div class="author"><img src="{{root}}assets/potato-96.png" alt="Potato" width="56" height="56"><p><b>Potato</b>｜${BRAND}。把蝦皮賣家的數字算清楚：每件賺多少、該選哪個方案、廣告打到多少會虧。這篇的數字都用本站計算機的公式算過，費率以蝦皮賣家中心公告為準。</p></div>
+</article>
+${more.length ? `<h2 class="sec-title">接著看</h2>\n<div class="cards">\n${more.map(x => card(x, root)).join("\n")}\n</div>` : ""}
+${a.tool ? `<section class="cta"><h2>自己的商品，直接算</h2><p>${esc(a.tool.why || "換成你的售價和成本，馬上算出結果。免費，不用註冊。")}</p><a href="{{root}}${a.tool.href}">${esc(a.tool.label)} →</a></section>` : ""}
+</main>
+
+<!--@footer-->
+${usesWidget ? `<script src="{{root}}lib/fees.js"></script>\n<script src="{{root}}lib/widgets.js"></script>` : ""}
+</body>
+</html>
+`;
+  return render(a, html, all);
+}
 
 function nav(page) {
   const root = rootOf(page.path);
-  const links = PAGES.map(p => p === page
-    ? `<a href="./" aria-current="page">${esc(p.nav)}</a>`
+  const current = page.navPath ?? page.path;
+  const links = PAGES.map(p => p.path === current
+    ? `<a href="${p.path === page.path ? "./" : root + p.path}" aria-current="page">${esc(p.nav)}</a>`
     : `<a href="${root + p.path || "./"}">${esc(p.nav)}</a>`);
   return `<nav><div class="wrap">\n${links.join("\n")}\n</div></nav>`;
 }
@@ -50,25 +149,34 @@ const options = {
     `<option value="${c.base},${c.event}"${i ? "" : " selected"}>${esc(c.label)}</option>`),
 };
 
-export function render(page, src) {
+export function render(page, src, all = []) {
   const root = rootOf(page.path);
   let out = src
     .replace(/<!--@nav-->/g, () => nav(page))
-    .replace(/<!--@css-->/g, () => "<style>\n" + layout("base.css").replace(/\r\n/g, "\n") + "\n</style>")
+    .replace(/<!--@css(:article)?-->/g, (_, art) => "<style>\n" + layout("base.css") + (art ? "\n" + layout("article.css") : "") + "\n</style>")
     .replace(/<!--@footer(?::([^>]*?))?-->/g, (_, who) =>
       layout("footer").replace("{{who}}", who ? esc(who) : "蝦皮（Shopee）"))
     .replace(/<!--@opts:([\w-]+)-->/g, (m, k) => {
       if (!options[k]) throw new Error(`${page.path || "/"}: 不認得的選項清單 ${k}`);
       return options[k]().join("\n");
     })
+    // 文章列表（分類分組）與最新文章
+    .replace(/<!--@articles-->/g, () => {
+      const chips = CATEGORIES.filter(c => all.some(a => a.category === c))
+        .map(c => `<a class="chip" href="#${encodeURIComponent(c)}">${esc(c)}</a>`).join("\n");
+      const groups = CATEGORIES.filter(c => all.some(a => a.category === c)).map(c =>
+        `<h2 class="sec-title" id="${esc(c)}">${esc(c)}</h2>\n<div class="cards">\n${all.filter(a => a.category === c).map(a => card(a, root)).join("\n")}\n</div>`);
+      return `<div class="cat-nav">\n${chips}\n</div>\n${groups.join("\n")}`;
+    })
+    .replace(/<!--@latest:(\d+)-->/g, (_, n) => all.slice(0, +n).map(a => card(a, root)).join("\n"))
     .replace(/\{\{site\}\}/g, SITE)
     .replace(/\{\{root\}\}/g, root);
-  check(page, out);
+  check(page, out, all);
   return out;
 }
 
 // 任何一項不通過就丟錯，整個 build 停下來，不會寫出壞頁面
-export function check(page, html) {
+export function check(page, html, all = []) {
   const where = page.path || "/";
   const need = [
     [/<title>[^<]+<\/title>/, "<title>"],
@@ -81,22 +189,23 @@ export function check(page, html) {
   if (left) throw new Error(`${where}: 沒有被取代的標記 ${left[0]}`);
   // 站內相對連結必須指向存在的頁面或檔案
   const dir = join(ROOT, page.path);
-  for (const [, href] of html.matchAll(/(?:href|src)="([^"#]+)"/g)) {
+  const pages = [...PAGES, ...all];
+  for (const [, href] of html.matchAll(/(?:href|src)="([^"#?]+)/g)) {
     if (/^(https?:|mailto:|data:|\/\/)/.test(href)) continue;
     const target = resolve(dir, href);
     const file = href.endsWith("/") ? join(target, "index.html") : target;
-    const isPage = PAGES.some(p => resolve(ROOT, p.path) === resolve(target));
+    const isPage = pages.some(p => resolve(ROOT, p.path) === resolve(target));
     if (!isPage && !existsSync(file)) throw new Error(`${where}: 連結 ${href} 找不到檔案`);
   }
 }
 
-function sitemap(changed) {
+function sitemap(entries, changed) {
   const old = existsSync(join(ROOT, "sitemap.xml")) ? readFileSync(join(ROOT, "sitemap.xml"), "utf8") : "";
   const today = new Date().toISOString().slice(0, 10);
-  const urls = PAGES.map(p => {
+  const urls = entries.map(p => {
     const loc = SITE + p.path;
     const prev = old.match(new RegExp(`<loc>${loc.replace(/[.?*+^$()[\]\\|{}]/g, "\\$&")}</loc><lastmod>([\\d-]+)</lastmod>`));
-    const lastmod = changed.has(p) || !prev ? today : prev[1];
+    const lastmod = changed.has(p.path) || !prev ? today : prev[1];
     return `<url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`;
   });
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`;
@@ -104,17 +213,22 @@ function sitemap(changed) {
 
 export function build({write = true} = {}) {
   const changed = new Set();
-  for (const page of PAGES) {
-    const out = render(page, readFileSync(join(ROOT, "_src/pages", page.path, "index.html"), "utf8").replace(/\r\n/g, "\n"));
+  const articles = loadArticles();
+  const outputs = [
+    ...PAGES.map(page => [page, () => render(page, read(join(ROOT, "_src/pages", page.path, "index.html")), articles)]),
+    ...articles.map(a => [a, () => renderArticle(a, articles)]),
+  ];
+  for (const [page, make] of outputs) {
+    const out = make();
     const dest = join(ROOT, page.path, "index.html");
     if (!existsSync(dest) || readFileSync(dest, "utf8") !== out) {
-      changed.add(page);
+      changed.add(page.path);
       if (write) { mkdirSync(dirname(dest), {recursive: true}); writeFileSync(dest, out); }
     }
   }
   // 跟網址有關的檔案都從 SITE 產生，換網址只改 SITE
   const extra = {
-    "sitemap.xml": sitemap(changed),
+    "sitemap.xml": sitemap([...PAGES, ...articles], changed),
     "robots.txt": `User-agent: *\nAllow: /\nSitemap: ${SITE}sitemap.xml\n`,
     "CNAME": new URL(SITE).hostname.endsWith("github.io") ? null : new URL(SITE).hostname + "\n",
   };
@@ -127,7 +241,7 @@ export function build({write = true} = {}) {
       if (write) writeFileSync(p, body);
     }
   }
-  return {changed: [...changed].map(p => p.path || "/"), extra: extraChanged};
+  return {changed: [...changed].map(p => p || "/"), extra: extraChanged, articles};
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -138,5 +252,5 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     console.error("輸出和現有檔案不同，請先執行 node _build.mjs：", all.join(", "));
     process.exit(1);
   }
-  console.log(all.length ? "已更新：" + all.join(", ") : "沒有檔案需要更新");
+  console.log(all.length ? "已更新：" + all.join(", ") : "沒有檔案需要更新", `（${r.articles.length} 篇文章）`);
 }

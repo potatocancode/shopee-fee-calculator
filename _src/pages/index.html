@@ -61,6 +61,15 @@ article table th{background:var(--teal-l)}
 .note{font-size:13px;color:var(--mute)}
 footer{border-top:1px solid var(--line);margin-top:30px;padding:18px 0 30px;font-size:14px;color:var(--mute)}
 a{color:var(--teal)}
+.latest h2{font-size:22px;color:var(--teal);margin:30px 0 10px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:620px){.cards{grid-template-columns:1fr}}
+.card-a{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink)}
+.card-a:hover{border-color:var(--teal)}
+.card-a h3{font-size:18px;line-height:1.45;margin:8px 0 6px}
+.card-a p{font-size:14px;color:var(--mute);margin:0}
+.card-a .meta{font-size:13px;color:var(--mute);margin-top:8px}
+.chip{display:inline-block;font-size:13px;font-weight:700;color:var(--teal);background:var(--teal-l);border-radius:99px;padding:2px 12px}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -147,6 +156,14 @@ a{color:var(--teal)}
 <a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">看健檢表（早鳥 NT$390）→</a>
 </section>
 
+<section class="latest" aria-label="賣家算數">
+<h2>賣家算數：把數字攤開給你看</h2>
+<div class="cards">
+<!--@latest:4-->
+</div>
+<p><a href="learn/">看全部文章 →</a></p>
+</section>
+
 <article>
 <h2>2026 蝦皮手續費有哪些？</h2>
 <p>2026 年 1 月 1 日起，蝦皮調整一般賣家的費用結構。一筆訂單主要會被收以下幾項，每一項分別計算、四捨五入到整數後再加總：</p>
@@ -171,7 +188,7 @@ a{color:var(--teal)}
 <h2>保本售價怎麼算？</h2>
 <p>保本售價就是「扣掉所有費用和成本後剛好不虧」的價格：</p>
 <p><b>保本售價 =（進貨成本 + 包材 + 賣家負擔運費 + 廣告費 + 固定費用）÷（1 − 各項百分比費率）</b></p>
-<p>固定費用包括方案二的 60 元、發票 2.5 元；百分比費率包括成交手續費、金流 2.5%、方案一 6%。本頁算出的保本價額外加了 2 元，抵銷四捨五入的誤差。</p>
+<p>固定費用包括方案二的 60 元、發票 2.5 元；百分比費率包括成交手續費、金流 2.5%、方案一 6%。本頁照蝦皮的做法把每一項分別四捨五入，再找出剛好不虧的最低整數售價。</p>
 
 <h2>常見問題</h2>
 <h3>為什麼我的實際帳單和計算機差幾元？</h3>
@@ -203,14 +220,9 @@ function fees(price, o, plan) {
   const f = Fees.shopee(price, {...o, plan});
   return {comm: f.comm, pay: f.pay, ship: f.prog, inv: f.inv, total: f.total, net: price - f.total - o.cost};
 }
+// 每件淨利 ≥ 售價 × t 的最低整數售價（和定價頁、文章裡的計算機同一套算法：每一項分別四捨五入）
 function solve(o, plan, t) {
-  const rv = o.rate + (o.promo && !o.coin ? C.promo : 0) + C.pay;
-  const f0 = o.cost + o.ship * C.pay + (o.inv ? C.inv / o.qty : 0);
-  const d1 = 1 - rv - C.p1 - t, d2 = 1 - rv - t;
-  const c1 = d1 > 0 ? Math.ceil(f0 / d1) + 2 : null;
-  if (plan === 1) return c1;
-  if (c1 !== null && c1 * o.qty <= C.low) return c1;
-  return d2 > 0 ? Math.ceil((f0 + C.p2 / o.qty) / d2) + 2 : null;
+  return Fees.shopeeMinPrice({...o, plan}, o.cost, 0, t);
 }
 function calc() {
   const sel = $("cat").value;

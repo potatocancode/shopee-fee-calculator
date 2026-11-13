@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>賣家算數｜蝦皮手續費、定價、廣告、進貨成本的實際算法</title>
+<meta name="description" content="每篇回答一個蝦皮賣家真的會遇到的數字問題：賣 100 元實拿多少、方案一還是方案二、保本價怎麼算、ROAS 多少才不虧。每篇都附可以直接用的計算機。">
+<link rel="canonical" href="https://sellerpotato.com/learn/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="賣家算數｜Potato 賣家工具箱">
+<meta property="og:description" content="每篇回答一個蝦皮賣家真的會遇到的數字問題，附計算機。">
+<meta property="og:url" content="https://sellerpotato.com/learn/">
+<meta property="og:image" content="https://sellerpotato.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--teal:#1f6f78;--teal-l:#e3f1f2;--ink:#1d2a2e;--mute:#5b6b70;--line:#d6e2e4;--bg:#f7fafa;--card:#fff;--bad:#c62828;--good:#1a7f37;--warn:#8a4b00}
+@media (prefers-color-scheme:dark){:root{--teal:#5cc3cc;--teal-l:#123236;--ink:#e6eeef;--mute:#9db0b4;--line:#2a3d41;--bg:#0f1b1d;--card:#152427;--bad:#ff6b6b;--good:#4cc46a;--warn:#ffb74d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+nav{background:#174f56;font-size:14px}
+nav .wrap{display:flex;gap:6px 18px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+nav a{color:#d9f0f2;text-decoration:none}nav a[aria-current]{color:#fff;font-weight:700}
+header{background:var(--teal);color:#fff;padding:26px 0 22px}
+header h1{margin:0;font-size:clamp(24px,5vw,34px);line-height:1.3}
+header p{margin:8px 0 0;opacity:.92}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:22px 0}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.card h2{margin:0 0 12px;font-size:19px;color:var(--teal)}
+.card h3{margin:16px 0 0;font-size:15px;color:var(--mute);font-weight:600}
+label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:var(--bg);color:var(--ink)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:flex;gap:8px;margin-top:4px}
+.seg label{flex:1;margin:0;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;cursor:pointer;color:var(--ink);font-size:15px}
+.seg input{display:none}
+.seg label:has(input:checked){border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:700}
+.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:15px;margin:10px 0 0}
+.chk input{width:auto}
+.hint{font-size:13px;color:var(--mute);margin:4px 0 0}
+table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+td,th{padding:7px 4px;border-bottom:1px dashed var(--line)}
+td.v,th.v{text-align:right;font-weight:600}
+th{font-size:13px;color:var(--mute);font-weight:600;text-align:left}
+tr.sum td{font-weight:800;border-bottom:2px solid var(--line)}
+.big{font-size:30px;font-weight:800;color:var(--teal);font-variant-numeric:tabular-nums;line-height:1.3}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 14px}
+.kpi{background:var(--teal-l);border-radius:12px;padding:10px 12px}
+.kpi small{display:block;color:var(--mute);font-size:13px}
+.neg{color:var(--bad)!important}.pos{color:var(--good)!important}.warn{color:var(--warn)!important}
+.verdict{margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);font-size:15px}
+.btn{display:inline-block;margin-top:12px;padding:9px 16px;border-radius:99px;border:1px solid var(--teal);color:var(--teal);font-weight:700;text-decoration:none;font-size:15px}
+.cta{background:linear-gradient(135deg,var(--teal),#2a8f8a);color:#fff;border-radius:16px;padding:22px;margin:8px 0 26px}
+.cta h2{margin:0 0 6px;font-size:21px}
+.cta a{display:inline-block;margin-top:12px;background:#fff;color:#1f6f78;font-weight:800;padding:11px 20px;border-radius:99px;text-decoration:none}
+article h2{font-size:22px;color:var(--teal);margin:30px 0 8px}
+article h3{font-size:17px;margin:18px 0 4px}
+article table td,article table th{border:1px solid var(--line);padding:8px;text-align:left;color:var(--ink);font-size:15px}
+article table th{background:var(--teal-l)}
+.note{font-size:13px;color:var(--mute)}
+footer{border-top:1px solid var(--line);margin-top:30px;padding:18px 0 30px;font-size:14px;color:var(--mute)}
+a{color:var(--teal)}
+/* 文章頁：讀起來舒服優先。內文欄寬約 34 個中文字，字級 18。 */
+.post{max-width:760px;margin:0 auto;padding:0 16px}
+.crumb{font-size:14px;color:var(--mute);margin:18px 0 0}
+.crumb a{color:var(--mute);text-decoration:none}.crumb a:hover{color:var(--teal)}
+.post-head{margin:14px 0 18px;background:none;color:inherit;padding:0}
+.chip{display:inline-block;font-size:13px;font-weight:700;color:var(--teal);background:var(--teal-l);border-radius:99px;padding:2px 12px;text-decoration:none}
+.post-head h1{font-size:clamp(28px,6vw,40px);line-height:1.3;margin:12px 0 10px;letter-spacing:.01em}
+.byline{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mute)}
+.byline img{width:32px;height:32px;border-radius:50%}
+.answer{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:12px;padding:16px 18px;margin:18px 0 26px;font-size:17px}
+.answer b.k{display:block;font-size:13px;color:var(--teal);letter-spacing:.08em;margin-bottom:4px}
+.prose{font-size:18px;line-height:1.9}
+.prose p{margin:0 0 1.1em}
+.prose h2{font-size:24px;color:var(--ink);margin:2em 0 .6em;padding-left:12px;border-left:5px solid #f4a259;line-height:1.4}
+.prose h3{font-size:19px;margin:1.6em 0 .4em}
+.prose ul,.prose ol{padding-left:1.3em;margin:0 0 1.1em}
+.prose li{margin:.3em 0}
+.prose table{width:100%;border-collapse:collapse;margin:0 0 1.3em;font-size:16px;font-variant-numeric:tabular-nums}
+.prose th,.prose td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+.prose th{background:var(--teal-l)}
+.prose td.n,.prose th.n{text-align:right}
+.prose .formula{background:var(--teal-l);border-radius:10px;padding:12px 16px;font-weight:700;margin:0 0 1.1em}
+.prose .tip{background:#fff6e8;border-radius:10px;padding:12px 16px;margin:0 0 1.2em;font-size:16px}
+@media (prefers-color-scheme:dark){.prose .tip{background:#2b2414}}
+.w-box{background:var(--card);border:2px solid var(--teal);border-radius:14px;padding:16px;margin:8px 0 22px;font-size:16px;line-height:1.6}
+.w-box .w-title{font-weight:800;color:var(--teal);margin:0 0 6px}
+.w-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+@media (max-width:560px){.w-grid{grid-template-columns:1fr}}
+.w-full{grid-column:1/-1}
+.w-box label{display:block;font-size:14px;color:var(--mute);margin:8px 0 4px}
+.w-seg{display:flex;gap:8px;margin-top:8px}
+.w-seg label{flex:1;margin:0;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;cursor:pointer;color:var(--ink)}
+.w-seg input{display:none}
+.w-seg label:has(input:checked){border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:700}
+.w-chk{display:flex!important;align-items:center;gap:8px;color:var(--ink)!important}
+.w-chk input{width:auto}
+.w-out table{width:100%;border-collapse:collapse;margin-top:12px;font-variant-numeric:tabular-nums}
+.w-out td{padding:6px 2px;border-bottom:1px dashed var(--line)}
+.w-out td:last-child{text-align:right;font-weight:700}
+.w-out .w-sum td{font-size:18px;color:var(--teal);border-bottom:2px solid var(--line)}
+.w-note{font-size:14px;color:var(--mute);margin:8px 0 0}
+.w-more{display:inline-block;margin-top:10px;font-weight:700;font-size:15px}
+.author{display:flex;gap:14px;align-items:flex-start;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;margin:30px 0}
+.author img{width:56px;height:56px;border-radius:50%;flex:none}
+.author p{margin:0;font-size:15px;color:var(--mute)}.author b{color:var(--ink)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0 26px}
+@media (max-width:620px){.cards{grid-template-columns:1fr}}
+.card-a{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink);transition:border-color .15s,transform .15s}
+.card-a:hover{border-color:var(--teal);transform:translateY(-2px)}
+.card-a h3{font-size:18px;line-height:1.45;margin:8px 0 6px}
+.card-a p{font-size:14px;color:var(--mute);margin:0}
+.card-a .meta{font-size:13px;color:var(--mute);margin-top:8px}
+.sec-title{font-size:20px;margin:30px 0 4px}
+.list-hero{padding:30px 0 10px}
+.list-hero h1{font-size:clamp(30px,6vw,42px);margin:0 0 8px}
+.list-hero p{font-size:17px;color:var(--mute);margin:0}
+.cat-nav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+<a href="../">手續費計算機</a>
+<a href="../pricing/">定價與折扣</a>
+<a href="../ads-roas/">廣告 ROAS</a>
+<a href="../compare/">平台比較</a>
+<a href="../import-cost/">1688 進貨成本</a>
+<a href="../returns/">退貨成本</a>
+<a href="../monthly-goal/">月目標</a>
+<a href="./" aria-current="page">賣家算數</a>
+</div></nav>
+<main class="wrap">
+<section class="list-hero">
+<h1>賣家算數</h1>
+<p>每篇只回答一個問題，先講答案，再把算式攤開給你看。文章裡的計算機可以直接換成你自己的數字。</p>
+</section>
+<div class="cat-nav">
+<a class="chip" href="#%E6%89%8B%E7%BA%8C%E8%B2%BB%E8%88%87%E6%96%B9%E6%A1%88">手續費與方案</a>
+<a class="chip" href="#%E5%AE%9A%E5%83%B9%E8%88%87%E5%88%A9%E6%BD%A4">定價與利潤</a>
+<a class="chip" href="#%E5%BB%A3%E5%91%8A">廣告</a>
+<a class="chip" href="#%E9%80%B2%E8%B2%A8%E8%88%87%E7%B6%93%E7%87%9F">進貨與經營</a>
+<a class="chip" href="#%E5%B9%B3%E5%8F%B0%E6%AF%94%E8%BC%83">平台比較</a>
+</div>
+<h2 class="sec-title" id="手續費與方案">手續費與方案</h2>
+<div class="cards">
+<a class="card-a" href="../learn/shopee-fee-2026/"><span class="chip">手續費與方案</span><h3>2026 蝦皮手續費怎麼算？一筆 390 元的訂單拆給你看</h3><p>2026 蝦皮一般賣家一筆訂單被收哪些錢：成交手續費、金流與系統處理費 2.5%、免運方案、發票。用一筆 390 元的訂單逐項算給你看，附計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+<a class="card-a" href="../learn/sell-100-take-home/"><span class="chip">手續費與方案</span><h3>蝦皮賣 100 元實拿多少？方案一 82.5，方案二只剩 28.5</h3><p>一件 100 元的商品，蝦皮方案一收 17.5 元、方案二收 71.5 元。同一件商品差 54 元，只差在報了哪個方案。附計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+<a class="card-a" href="../learn/plan-1-vs-plan-2/"><span class="chip">手續費與方案</span><h3>蝦皮方案一還是方案二？客單價 1,000 元是分水嶺</h3><p>方案一收 6%、方案二每單 60 元，兩者在訂單金額 1,000 元打平。從 100 元到 3,000 元，兩個方案各被收多少，一張表看完，附計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+<a class="card-a" href="../learn/auto-plan-2/"><span class="chip">手續費與方案</span><h3>沒報名免運方案會怎樣？被自動編進方案二，150 元的小物直接變虧錢</h3><p>2026 年蝦皮沒報名免運方案的賣家會被編進方案二。一件 150 元、進貨 80 元的小物，方案一每件賺 45.5，方案二每件虧 5.5。教你怎麼確認自己的方案。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+<a class="card-a" href="../learn/payment-fee-shipping/"><span class="chip">手續費與方案</span><h3>蝦皮金流與系統處理費 2.5% 怎麼算？運費也要算進去</h3><p>蝦皮金流與系統處理費是用商品金額加買家付的運費去算 2.5%。390 元商品加 60 元運費，金流費是 11 元不是 10 元。附四捨五入的規則和計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+</div>
+<h2 class="sec-title" id="定價與利潤">定價與利潤</h2>
+<div class="cards">
+<a class="card-a" href="../learn/breakeven-price/"><span class="chip">定價與利潤</span><h3>蝦皮保本價怎麼算？成本 100 元，方案一要賣 120、方案二要 178</h3><p>保本售價 =（成本 + 固定費用）÷（1 − 百分比費率），再照蝦皮的四捨五入往上找。成本 100 元，方案一保本 120、方案二保本 178。附計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+<a class="card-a" href="../learn/cost-times-1-5/"><span class="chip">定價與利潤</span><h3>定價用「成本 × 1.5」夠嗎？成本 195 元，淨利只有 17.9%</h3><p>成本 195 元的商品用成本 × 1.5 定價賣 293 元，扣掉蝦皮費用後淨利率只有 17.9%。想要 20% 淨利要賣 302 元。附定價計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+</div>
+<h2 class="sec-title" id="廣告">廣告</h2>
+<div class="cards">
+<a class="card-a" href="../learn/ads-breakeven-roas/"><span class="chip">廣告</span><h3>蝦皮廣告 ROAS 多少才不虧？390 元的商品，保本 ROAS 是 2.49</h3><p>ROAS 算的是營業額不是利潤。390 元、成本 175 元的商品，廣告前每件淨利 156.5，保本 ROAS 是 2.49。ROAS 4 有賺，ROAS 2 在虧。附計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+</div>
+<h2 class="sec-title" id="進貨與經營">進貨與經營</h2>
+<div class="cards">
+<a class="card-a" href="../learn/import-cost-1688/"><span class="chip">進貨與經營</span><h3>1688 進貨成本怎麼算？標價 12.5 人民幣，到你手上是 64.5 元</h3><p>1688、淘寶進貨不能只看標價乘匯率。把 1688 運費、刷卡手續費、集運費、稅、損耗都算進去，標價 12.5 人民幣的商品實際成本 64.5 元，多了約 15%。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+</div>
+<h2 class="sec-title" id="平台比較">平台比較</h2>
+<div class="cards">
+<a class="card-a" href="../learn/shopee-ruten-momo-fees/"><span class="chip">平台比較</span><h3>蝦皮、露天、momo 手續費比較：390 元的商品，蝦皮收 59.5、露天 19、momo 21</h3><p>同一件 390 元、運費 60 元的商品，2026 年蝦皮被收 59.5 元、露天 19 元、momo 摩天商城 21 元。每一項怎麼算、手續費以外還要看什麼，附比較計算機。</p><div class="meta">2026 年 11 月 13 日・閱讀 2 分鐘</div></a>
+</div>
+</main>
+
+<aside class="wrap" aria-label="LINE 通知" style="margin-top:30px">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;justify-content:space-between;border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--card)">
+<p style="margin:0;flex:1 1 280px">蝦皮費率一改，我會在 LINE 上跟你說，順便算好你每件少賺多少。一個月頂多幾則。</p>
+<a href="https://line.me/R/ti/p/@127ulmyu" rel="noopener" style="flex:none;background:#06C755;color:#fff;font-weight:700;padding:10px 20px;border-radius:99px;text-decoration:none">加 LINE 好友</a>
+</div>
+</aside>
+<footer><div class="wrap">
+由 <a href="https://portaly.cc/potatocancode" rel="noopener">Potato 賣家工具箱</a> 製作。本站與蝦皮（Shopee）無任何關係，試算結果僅供參考。
+</div></footer>
+</body>
+</html>
