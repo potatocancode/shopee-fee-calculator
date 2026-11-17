@@ -78,7 +78,7 @@ export function loadArticles() {
 function story(a, root, feat = false) {
   return `<a class="story${feat ? " feat" : ""}" href="${root}${a.path}"><span class="c">${esc(a.category)}</span><h3>${esc(a.h1)}</h3>` +
     (feat && a.fig ? `<span class="fig">${esc(a.fig)}</span>` : "") +
-    `<p>${esc(a.description)}</p><div class="m">${fmtDate(a.updated || a.date)}・閱讀 ${a.minutes} 分鐘</div></a>`;
+    `<p>${esc(a.description)}</p><div class="m"><span>${fmtDate(a.updated || a.date)}</span><span>閱讀 ${a.minutes} 分鐘</span></div></a>`;
 }
 
 function renderArticle(a, all) {
@@ -130,7 +130,7 @@ ${ld.map(x => `<script type="application/ld+json">${JSON.stringify(x)}</script>`
 <article>
 <div class="crumb"><a href="{{root}}learn/">賣家算數</a> › <a href="{{root}}learn/#${catId(a.category)}">${esc(a.category)}</a></div>
 <h1>${esc(a.h1)}</h1>
-<div class="byline"><img src="{{root}}assets/potato-96.png" alt="" width="34" height="34"><span><b>Potato</b>・${a.updated ? "更新於 " + fmtDate(a.updated) : fmtDate(a.date)}・閱讀 ${a.minutes} 分鐘</span><span class="verified" title="這篇的數字在 ${checked} 用本站計算機的公式重算過">數字已驗算</span></div>
+<div class="byline"><img src="{{root}}assets/potato-96.png" alt="" width="34" height="34"><b>Potato</b><span>${a.updated ? "更新於 " + fmtDate(a.updated) : fmtDate(a.date)}</span><span>閱讀 ${a.minutes} 分鐘</span><span class="verified" title="這篇的數字在 ${checked} 用本站計算機的公式重算過">數字已驗算</span></div>
 <aside class="answer"><b class="k">先講答案</b>${a.summary}</aside>
 <div class="prose">
 ${body}
@@ -142,11 +142,11 @@ ${a.fixes && a.fixes.length ? `<section class="fix"><h2>更正紀錄</h2>\n${a.f
 <aside class="rail">
 <h4>本文重點</h4>
 <nav>${toc.map(([id, t]) => `<a href="#${id}">${esc(t)}</a>`).join("")}</nav>
-${a.tool ? `<div class="mini"><b>${esc(a.tool.label)}</b><a class="more" href="{{root}}${a.tool.href}">打開工具 →</a></div>` : ""}
+${a.tool ? `<div class="mini"><b>${esc(a.tool.label)}</b><a class="more" href="{{root}}${a.tool.href}">打開工具</a></div>` : ""}
 </aside>
 </div>
-${more.length ? `<section class="next"><div class="sec-h"><h2>接著看</h2><a class="more" href="{{root}}learn/">全部文章 →</a></div>\n<div class="stories">\n${more.map(x => story(x, root)).join("\n")}\n</div></section>` : ""}
-${a.tool ? `<section class="cta"><h2>自己的商品，直接算</h2><p>${esc(a.tool.why || "換成你的售價和成本，馬上算出結果。免費，不用註冊。")}</p><a href="{{root}}${a.tool.href}">${esc(a.tool.label)} →</a></section>` : ""}
+${more.length ? `<section class="next"><div class="sec-h"><h2>接著看</h2><a class="more" href="{{root}}learn/">全部文章</a></div>\n<div class="stories">\n${more.map(x => story(x, root)).join("\n")}\n</div></section>` : ""}
+${a.tool ? `<section class="cta"><h2>自己的商品，直接算</h2><p>${esc(a.tool.why || "換成你的售價和成本，馬上算出結果。免費，不用註冊。")}</p><a href="{{root}}${a.tool.href}">${esc(a.tool.label)}</a></section>` : ""}
 </main>
 <!--@footer-->
 ${usesWidget ? `<script src="{{root}}lib/fees.js"></script>\n<script src="{{root}}lib/widgets.js"></script>` : ""}
@@ -168,11 +168,11 @@ function header(page, all) {
   }).join("\n");
   const on = s => page.section === s ? ` class="on"` : "";
   return `<header class="site-head"><div class="wrap">
-<a class="brand" href="${root || "./"}"${cur("")}><img src="${root}assets/potato-96.png" alt="" width="36" height="36"><span><b>${BRAND}</b><small>SELLER MATH</small></span></a>
+<a class="brand" href="${root || "./"}"${cur("")}><img src="${root}assets/potato-96.png" alt="" width="36" height="36"><span><b>${BRAND}</b></span></a>
 <nav class="mainnav" aria-label="主選單">
 <details class="dd"><summary${on("learn")}>賣家算數</summary><div class="dd-panel"><div class="wrap">
 ${catLinks}
-<a class="all" href="${root}learn/"${cur("learn/")}>全部文章 →</a>
+<a class="all" href="${root}learn/"${cur("learn/")}>全部文章</a>
 </div></div></details>
 <details class="dd"><summary${on("tools")}>計算工具</summary><div class="dd-panel"><div class="wrap">
 ${toolLinks}
@@ -205,7 +205,7 @@ function footer(page, all, who) {
   return `<footer class="foot"><div class="wrap">
 <div class="foot-line"><p>蝦皮費率一改，我會在 LINE 上跟你說，順便算好你每件少賺多少。一個月頂多幾則。</p><a href="${LINE}" rel="noopener">加 LINE 好友</a></div>
 <div class="foot-cols">
-<div><a class="brand" href="${root || "./"}"><img src="${root}assets/potato-96.png" alt="" width="36" height="36"><span><b>${BRAND}</b><small>SELLER MATH</small></span></a><p>把蝦皮賣家的數字算清楚。每個數字都用公開的費率逐項算過，費率一改就更新，算錯的地方會留下更正紀錄。</p></div>
+<div><a class="brand" href="${root || "./"}"><img src="${root}assets/potato-96.png" alt="" width="36" height="36"><span><b>${BRAND}</b></span></a><p>把蝦皮賣家的數字算清楚。每個數字都用公開的費率逐項算過，費率一改就更新，算錯的地方會留下更正紀錄。</p></div>
 <div><h4>計算工具</h4>${TOOLS.map(t => `<a href="${root}${t.path}">${esc(t.name)}</a>`).join("")}</div>
 <div><h4>賣家算數</h4><a href="${root}learn/">全部文章</a>${cats.map(c => `<a href="${root}learn/#${catId(c)}">${esc(c)}</a>`).join("")}</div>
 <div><h4>追蹤 Potato</h4>${SOCIAL.map(([n, u]) => `<a href="${u}" rel="noopener">${n}</a>`).join("")}<a href="${LINE}" rel="noopener">LINE 官方帳號</a><a href="${SHEET}" rel="noopener">利潤健檢表</a></div>
@@ -250,7 +250,7 @@ export function render(page, src, all = []) {
     })
     // <!--@stories:5:略過的slug-->：首頁的文章清單，第一篇放大，頭條那篇不重複
     .replace(/<!--@stories:(\d+)(?::([\w-]+))?-->/g, (_, n, skip) => all.filter(a => a.slug !== skip).slice(0, +n).map((a, i) => story(a, root, i === 0)).join("\n"))
-    .replace(/<!--@tools-->/g, () => TOOLS.map(t => `<a class="tool" href="${root}${t.path}"><span class="i">${t.no}</span><b>${esc(t.name)}</b><span class="q">${esc(t.q)}</span><span class="arr" aria-hidden="true">→</span></a>`).join("\n"))
+    .replace(/<!--@tools-->/g, () => TOOLS.map(t => `<a class="tool" href="${root}${t.path}"><span class="i">${t.no}</span><b>${esc(t.name)}</b><span class="q">${esc(t.q)}</span></a>`).join("\n"))
     .replace(/\{\{site\}\}/g, SITE)
     .replace(/\{\{root\}\}/g, root);
   check(page, out, all);

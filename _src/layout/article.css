@@ -59,7 +59,7 @@
 .story .c{font:700 13px var(--sans);color:var(--primary)}
 .story h3{font:700 20px/1.5 var(--serif);margin:4px 0;text-wrap:balance}
 .story p{font-size:15px;color:var(--muted);margin:0;line-height:1.7}
-.story .m{font-size:13px;color:var(--muted);margin-top:6px}
+.story .m{display:flex;gap:14px;font-size:13px;color:var(--muted);margin-top:6px}
 .story:hover h3{color:var(--primary)}
 .next{padding-top:10px}
 .list-hero{padding-top:34px;padding-bottom:6px}

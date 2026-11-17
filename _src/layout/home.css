@@ -14,17 +14,17 @@
 .quick .w-out .w-sum:last-child td:last-child{font-size:30px}
 .quick .more{margin-top:12px}
 .home-sec{padding-top:36px;padding-bottom:34px;border-bottom:1px solid var(--line)}
-.sec-h a{font:700 14px var(--sans);text-decoration:none}
+.sec-h a{font:700 14px var(--sans)}
 .stories .story.feat h3{font-size:25px;line-height:1.4}
 .stories .story.feat .fig{display:block;font:700 52px/1 var(--mono);color:var(--primary);margin:12px 0 8px}
 .tools{margin-top:4px}
-.tool{display:grid;grid-template-columns:52px minmax(150px,220px) minmax(0,1fr) 24px;align-items:center;gap:6px 16px;text-decoration:none;color:var(--ink);padding:16px 0;border-top:1px solid var(--line)}
+.tool{display:grid;grid-template-columns:52px minmax(150px,220px) minmax(0,1fr);align-items:center;gap:6px 16px;text-decoration:none;color:var(--ink);padding:16px 0;border-top:1px solid var(--line)}
 .tool .i{font:700 17px var(--mono);color:var(--muted)}
 .tool b{font:700 18px var(--sans)}
 .tool .q{color:var(--muted);font-size:15px}
 .tool .arr{color:var(--muted);font-weight:700}
 .tool:hover b,.tool:hover .arr{color:var(--primary)}
-@media (max-width:700px){.tool{grid-template-columns:40px minmax(0,1fr) 18px}.tool .q{grid-column:2;grid-row:2}.tool .arr{grid-column:3;grid-row:1}}
+@media (max-width:700px){.tool{grid-template-columns:40px minmax(0,1fr)}.tool .q{grid-column:2;grid-row:2}}
 .sheet{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:44px;align-items:center;padding-top:44px;padding-bottom:44px;border-bottom:1px solid var(--line)}
 @media (max-width:860px){.sheet{grid-template-columns:1fr;gap:28px}}
 .sheet h2{font:900 30px/1.35 var(--serif);margin:0 0 12px;text-wrap:balance}
