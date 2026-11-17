@@ -21,7 +21,7 @@
 :root{
   --paper:#F6F7F4;--surface:#FFFFFF;--ink:#16282B;--muted:#5C6B6E;--line:#DCE3E1;--line-strong:#B9C6C4;
   --primary:#174F56;--primary-hover:#0F3B41;--primary-tint:#E3EEEC;--on-primary:#FFFFFF;
-  --accent:#F4A259;--accent-tint:#FDEAD3;--success:#2E7A4F;--error:#B8322A;--error-tint:#F8E3E0;--warn:#8A4B00;--warn-tint:#FFF1D6;
+  --accent:#F4A259;--accent-tint:#FDEAD3;--success:#2E7A4F;--success-tint:#EAF3EE;--error:#B8322A;--error-tint:#F8E3E0;--warn:#8A4B00;--warn-tint:#FFF1D6;
   --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;--sans:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
   --r-sm:4px;--r-md:6px;--r-lg:10px;--max:1180px;
@@ -31,7 +31,7 @@
 @media (prefers-color-scheme:dark){:root{
   --paper:#0F1A1C;--surface:#152427;--ink:#E6EEEC;--muted:#9AAEAE;--line:#243A3D;--line-strong:#33504F;
   --primary:#7CC6C9;--primary-hover:#A4DADC;--primary-tint:#18363A;--on-primary:#0F1A1C;
-  --accent-tint:#3A2A17;--success:#5DBE84;--error:#F07A6E;--error-tint:#3A1D1A;--warn:#FFB74D;--warn-tint:#3A2C12;color-scheme:dark}}
+  --accent-tint:#3A2A17;--success:#5DBE84;--success-tint:#17382A;--error:#F07A6E;--error-tint:#3A1D1A;--warn:#FFB74D;--warn-tint:#3A2C12;color-scheme:dark}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.8 var(--sans)}
@@ -66,14 +66,14 @@ img{max-width:100%}
 .line-btn{flex:none;font:700 14px/1 var(--sans);text-decoration:none;color:var(--primary);border:1.5px solid var(--primary);border-radius:var(--r-md);padding:9px 14px}
 .line-btn:hover{background:var(--primary);color:var(--on-primary)}
 .mnav{display:none;margin-left:auto}
-.mnav>summary{list-style:none;font:700 15px/1 var(--sans);border:1.5px solid var(--line-strong);border-radius:var(--r-md);padding:9px 14px;cursor:pointer;color:var(--ink)}
+.mnav>summary{list-style:none;font:700 15px/1 var(--sans);border:1.5px solid var(--line-strong);border-radius:var(--r-md);padding:13px 16px;cursor:pointer;color:var(--ink)}
 .mnav>summary::-webkit-details-marker{display:none}
 .mnav-panel{position:absolute;left:0;right:0;top:66px;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 12px 24px -16px rgba(22,40,43,.35);max-height:calc(100vh - 66px);overflow:auto}
 .mnav-panel .wrap{padding-top:6px;padding-bottom:18px}
 .mnav-panel h4{font:700 13px/1 var(--sans);letter-spacing:.12em;color:var(--muted);margin:16px 0 4px}
-.mnav-panel a{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink);font-weight:500}
+.mnav-panel a{display:flex;gap:10px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink);font-weight:500}
 .mnav-panel a .i{font:700 13px var(--mono);color:var(--muted);width:24px}
-.mnav-panel .line-btn{display:block;text-align:center;margin-top:16px;padding:12px}
+.mnav-panel .line-btn{display:block;text-align:center;margin-top:16px;padding:15px 12px}
 @media (max-width:900px){.mainnav,.site-head>.wrap>.line-btn{display:none}.mnav{display:block}}
 
 /* ---------- 共用：標題、按鈕、連結 ---------- */
@@ -128,7 +128,7 @@ tr.sum td{font-weight:700;border-bottom:1.5px solid var(--ink)}
 .big{font:700 clamp(26px,3.4vw,34px)/1.25 var(--mono);font-variant-numeric:tabular-nums;color:var(--primary);overflow-wrap:anywhere}
 .neg{color:var(--error)!important}.pos{color:var(--success)!important}.warn{color:var(--warn)!important}
 .badge{display:inline-block;padding:4px 12px;border-radius:var(--r-sm);font-size:14px;font-weight:700}
-.badge.neg{background:var(--error-tint)}.badge.pos{background:var(--primary-tint)}.badge.warn{background:var(--warn-tint)}
+.badge.neg{background:var(--error-tint)}.badge.pos{background:var(--success-tint)}.badge.warn{background:var(--warn-tint)}
 .verdict,.compare{margin-top:14px;padding:12px 14px;border-radius:var(--r-md);font-size:15px;background:var(--surface);border:1px solid var(--line)}
 .note{font-size:13px;color:var(--muted)}
 td.best,th.best{background:var(--accent-tint)}
@@ -184,6 +184,17 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 .foot .fine{border-top:1px solid var(--line);margin-top:28px;padding-top:16px;margin-bottom:0}
 .btn-sec{display:block;width:100%;font:700 15px/1.3 var(--sans);color:var(--primary);background:var(--surface);border:1.5px solid var(--primary);border-radius:var(--r-sm);padding:11px 10px;cursor:pointer}
 .btn-sec:hover{background:var(--primary-tint)}
+/* 觸控裝置：文字連結的點擊範圍至少 44px 高，用負 margin 抵銷，不改版面 */
+@media (pointer:coarse),(max-width:760px){
+.more{padding:11px 0;margin:-11px 0}
+.foot-cols a{padding:11px 0}
+.crumb a{display:inline-block;padding:10px 0;margin:-10px 0}
+.site-head .brand{padding:4px 0}
+}
+/* 鍵盤使用者：Tab 第一下出現「跳到主要內容」 */
+.skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--primary);color:var(--on-primary);font:700 15px var(--sans);padding:12px 16px;border-radius:var(--r-md);text-decoration:none}
+.skip:focus{top:12px}
+#content{display:block;outline:none}
 /* 文章頁與文章列表：見 DESIGN.md「Read」模式。內文欄 720，桌機右側 240 目錄。 */
 .art{display:grid;grid-template-columns:minmax(0,720px) 240px;gap:56px;justify-content:center;padding-top:26px}
 @media (max-width:1060px){.art{grid-template-columns:minmax(0,720px)}.rail{display:none}}
@@ -261,6 +272,7 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"集運費要填多少？","acceptedAnswer":{"@type":"Answer","text":"每家集運商報價差很多，計費方式也不同。最準的方法是拿上一批的帳單，總運費除以總重量，得到你實際的每公斤運費。"}},{"@type":"Question","name":"進口要繳稅嗎？","acceptedAnswer":{"@type":"Answer","text":"很多海運集運報價已經包稅。沒包稅時，海關用貨價加運費計算完稅價格，個人包裹 2,000 元以下通常免稅，但半年內次數有限制。規定以財政部關務署公告為準。"}}]}</script>
 </head>
 <body>
+<a class="skip" href="#content">跳到主要內容</a>
 <header class="site-head"><div class="wrap">
 <a class="brand" href="../../"><img src="../../assets/potato-96.png" alt="" width="36" height="36"><span><b>Potato 賣家工具箱</b></span></a>
 <nav class="mainnav" aria-label="主選單">
@@ -305,10 +317,11 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 <a class="line-btn" href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">加 LINE 收費率通知</a>
 </div></div></details>
 </div></header>
+<span id="content" tabindex="-1"></span>
 <script>
 // 下拉選單：點外面或按 Esc 收起，一次只開一個
 document.addEventListener("click",e=>{document.querySelectorAll("details.dd[open],details.mnav[open]").forEach(d=>{if(!d.contains(e.target))d.open=false})});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll("details.dd[open],details.mnav[open]").forEach(d=>d.open=false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll("details.dd[open],details.mnav[open]").forEach(d=>{const back=d.contains(document.activeElement);d.open=false;if(back)d.querySelector("summary").focus()})});
 document.querySelectorAll("details.dd").forEach(d=>d.addEventListener("toggle",()=>{if(d.open)document.querySelectorAll("details.dd[open]").forEach(o=>{if(o!==d)o.open=false})}));
 </script>
 <main class="wrap">

@@ -167,7 +167,8 @@ function header(page, all) {
     return `<a href="${root}learn/#${catId(c)}"><span class="i">${String(n).padStart(2, "0")}</span><b>${esc(c)}</b><span>${n} 篇</span></a>`;
   }).join("\n");
   const on = s => page.section === s ? ` class="on"` : "";
-  return `<header class="site-head"><div class="wrap">
+  return `<a class="skip" href="#content">跳到主要內容</a>
+<header class="site-head"><div class="wrap">
 <a class="brand" href="${root || "./"}"${cur("")}><img src="${root}assets/potato-96.png" alt="" width="36" height="36"><span><b>${BRAND}</b></span></a>
 <nav class="mainnav" aria-label="主選單">
 <details class="dd"><summary${on("learn")}>賣家算數</summary><div class="dd-panel"><div class="wrap">
@@ -191,10 +192,11 @@ ${TOOLS.map(t => `<a href="${root}${t.path}"${cur(t.path)}><span class="i">${t.n
 <a class="line-btn" href="${LINE}" rel="noopener">加 LINE 收費率通知</a>
 </div></div></details>
 </div></header>
+<span id="content" tabindex="-1"></span>
 <script>
 // 下拉選單：點外面或按 Esc 收起，一次只開一個
 document.addEventListener("click",e=>{document.querySelectorAll("details.dd[open],details.mnav[open]").forEach(d=>{if(!d.contains(e.target))d.open=false})});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll("details.dd[open],details.mnav[open]").forEach(d=>d.open=false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll("details.dd[open],details.mnav[open]").forEach(d=>{const back=d.contains(document.activeElement);d.open=false;if(back)d.querySelector("summary").focus()})});
 document.querySelectorAll("details.dd").forEach(d=>d.addEventListener("toggle",()=>{if(d.open)document.querySelectorAll("details.dd[open]").forEach(o=>{if(o!==d)o.open=false})}));
 </script>`;
 }
