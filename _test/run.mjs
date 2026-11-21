@@ -9,6 +9,7 @@ import {fileURLToPath} from "node:url";
 import {build} from "../_build.mjs";
 import {load} from "./dom.mjs";
 import {readFileSync} from "node:fs";
+import {runInNewContext} from "node:vm";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const Fees = createRequire(import.meta.url)("../lib/fees.js");
@@ -168,6 +169,28 @@ t("文章頁：每篇都有麵包屑、先講答案、作者框、canonical", ()
     }
     assert.doesNotMatch(html, /——/, `${a.path} 有破折號`);
   }
+});
+
+t("量測 track.js：開頁送 pv、計算機只記第一次、LINE／健檢表點擊記位置", () => {
+  const sent = [], handlers = {};
+  const node = (sel) => ({matches: s => s.split(",").includes(sel), closest: s => s.split(",").some(x => x === sel || x === "main") ? {getAttribute: () => null} : null});
+  const link = (href, inFooter) => ({href, closest: s => s === "a[href]" ? link(href, inFooter) : s === "footer" && inFooter ? {} : null});
+  const ctx = {
+    document: {currentScript: {getAttribute: () => "https://m.example/e"}, referrer: "https://www.google.com/search",
+      addEventListener: (k, f) => (handlers[k] ||= []).push(f)},
+    location: {pathname: "/fee/", hostname: "sellerpotato.com"},
+    navigator: {webdriver: false, sendBeacon: (u, b) => sent.push(JSON.parse(b))},
+    matchMedia: () => ({matches: true}), URL, JSON,
+  };
+  ctx.window = ctx;
+  runInNewContext(readFileSync(join(ROOT, "lib/track.js"), "utf8"), ctx);
+  const fire = (k, target) => handlers[k].forEach(f => f({target}));
+  fire("input", node("input")); fire("input", node("input")); fire("change", node("select"));
+  fire("click", link("https://line.me/R/ti/p/@127ulmyu", true));
+  fire("click", link("https://portaly.cc/potatocancode/product/x", false));
+  fire("click", link("https://sellerpotato.com/learn/", false));
+  assert.deepEqual(sent.map(s => [s.e, s.d]), [["pv", ""], ["calc", "fee"], ["line", "foot"], ["sheet", "body"]]);
+  assert.equal(sent[0].r, "www.google.com"); assert.equal(sent[0].m, 1);
 });
 
 console.log(`\n全部 ${n} 項通過`);

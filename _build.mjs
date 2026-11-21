@@ -15,12 +15,26 @@ import {fileURLToPath} from "node:url";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const Fees = createRequire(import.meta.url)("./lib/fees.js");
+const Widgets = createRequire(import.meta.url)("./lib/widgets.js");
 
 // 換網址時只改這一行
 export const SITE = "https://sellerpotato.com/";
 const BRAND = "Potato 賣家工具箱";
+// 結構化資料的日期要帶時區（Rich Results Test 會提醒），文章日期一律當台灣時間 00:00
+const isoTw = d => `${d}T00:00:00+08:00`;
 const LINE = "https://line.me/R/ti/p/@127ulmyu";
 const SHEET = "https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa";
+// 量測（見 ../measure/README.md）：Cloudflare Web Analytics 記瀏覽量與網頁速度；
+// 自訂事件（計算機、LINE、健檢表）送到自己的 Worker。兩個都不用 cookie。
+const CF_BEACON_TOKEN = process.env.CF_BEACON_TOKEN || "8768329764d1426c810486909119cce7";
+const MEASURE_ENDPOINT = process.env.MEASURE_ENDPOINT || "https://m.sellerpotato.com/e";
+const measure = root =>
+  `<script defer src="${root}lib/track.js" data-endpoint="${MEASURE_ENDPOINT}"></script>
+` +
+  // 第三方網域要另外建連線：等頁面載入完才加，不跟第一個畫面搶時間（它讀的是瀏覽器已記錄的速度數據）
+  `<script>addEventListener("load",function(){var s=document.createElement("script");s.defer=true;` +
+  `s.src="https://static.cloudflareinsights.com/beacon.min.js";s.setAttribute("data-cf-beacon",'{"token":"${CF_BEACON_TOKEN}"}');document.body.appendChild(s)})</script>
+`;
 const SOCIAL = [
   ["Threads", "https://www.threads.com/@potato.sellertools"],
   ["Instagram", "https://www.instagram.com/potato.sellertools/"],
@@ -94,8 +108,8 @@ function renderArticle(a, all) {
   const body = a.body.trim().replace(/<h2>(.*?)<\/h2>/g, (_, t) => { const id = "s" + ++n; toc.push([id, t.replace(/<[^>]+>/g, "")]); return `<h2 id="${id}">${t}</h2>`; });
   if (faq.length) toc.push(["faq", "常見問題"]);
   const ld = [
-    {"@context": "https://schema.org", "@type": "Article", headline: a.h1, description: a.description, datePublished: a.date,
-      dateModified: a.updated || a.date, image: url + "og.png", author: {"@type": "Organization", name: BRAND, url: SITE},
+    {"@context": "https://schema.org", "@type": "Article", headline: a.h1, description: a.description, datePublished: isoTw(a.date),
+      dateModified: isoTw(a.updated || a.date), image: url + "og.png", author: {"@type": "Organization", name: BRAND, url: SITE},
       publisher: {"@type": "Organization", name: BRAND, logo: {"@type": "ImageObject", url: SITE + "assets/potato-96.png"}}, mainEntityOfPage: url},
     {"@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
       {"@type": "ListItem", position: 1, name: "賣家算數", item: SITE + "learn/"},
@@ -140,7 +154,7 @@ ${a.fixes && a.fixes.length ? `<section class="fix"><h2>更正紀錄</h2>\n${a.f
 <div class="author"><img src="{{root}}assets/potato-96.png" alt="Potato" width="52" height="52"><p><b>Potato</b>｜${BRAND}。把蝦皮賣家的數字算清楚：每件賺多少、該選哪個方案、廣告打到多少會虧。這篇的數字都用本站計算機的公式算過，費率以蝦皮賣家中心公告為準；算錯的地方會留在更正紀錄裡。</p></div>
 </article>
 <aside class="rail">
-<h4>本文重點</h4>
+<h2>本文重點</h2>
 <nav>${toc.map(([id, t]) => `<a href="#${id}">${esc(t)}</a>`).join("")}</nav>
 ${a.tool ? `<div class="mini"><b>${esc(a.tool.label)}</b><a class="more" href="{{root}}${a.tool.href}">打開工具</a></div>` : ""}
 </aside>
@@ -182,12 +196,12 @@ ${toolLinks}
 </nav>
 <a class="line-btn" href="${LINE}" rel="noopener">加 LINE 收費率通知</a>
 <details class="mnav"><summary>選單</summary><div class="mnav-panel"><div class="wrap">
-<h4>賣家算數</h4>
+<h2>賣家算數</h2>
 <a href="${root}learn/">全部文章</a>
 ${cats.map(c => `<a href="${root}learn/#${catId(c)}">${esc(c)}</a>`).join("\n")}
-<h4>計算工具</h4>
+<h2>計算工具</h2>
 ${TOOLS.map(t => `<a href="${root}${t.path}"${cur(t.path)}><span class="i">${t.no}</span>${esc(t.name)}</a>`).join("\n")}
-<h4>更多</h4>
+<h2>更多</h2>
 <a href="${SHEET}" rel="noopener">蝦皮賣場利潤健檢表（Excel）</a>
 <a class="line-btn" href="${LINE}" rel="noopener">加 LINE 收費率通知</a>
 </div></div></details>
@@ -208,17 +222,35 @@ function footer(page, all, who) {
 <div class="foot-line"><p>蝦皮費率一改，我會在 LINE 上跟你說，順便算好你每件少賺多少。一個月頂多幾則。</p><a href="${LINE}" rel="noopener">加 LINE 好友</a></div>
 <div class="foot-cols">
 <div><a class="brand" href="${root || "./"}"><img src="${root}assets/potato-96.png" alt="" width="36" height="36"><span><b>${BRAND}</b></span></a><p>把蝦皮賣家的數字算清楚。每個數字都用公開的費率逐項算過，費率一改就更新，算錯的地方會留下更正紀錄。</p></div>
-<div><h4>計算工具</h4>${TOOLS.map(t => `<a href="${root}${t.path}">${esc(t.name)}</a>`).join("")}</div>
-<div><h4>賣家算數</h4><a href="${root}learn/">全部文章</a>${cats.map(c => `<a href="${root}learn/#${catId(c)}">${esc(c)}</a>`).join("")}</div>
-<div><h4>追蹤 Potato</h4>${SOCIAL.map(([n, u]) => `<a href="${u}" rel="noopener">${n}</a>`).join("")}<a href="${LINE}" rel="noopener">LINE 官方帳號</a><a href="${SHEET}" rel="noopener">利潤健檢表</a></div>
+<div><h2>計算工具</h2>${TOOLS.map(t => `<a href="${root}${t.path}">${esc(t.name)}</a>`).join("")}</div>
+<div><h2>賣家算數</h2><a href="${root}learn/">全部文章</a>${cats.map(c => `<a href="${root}learn/#${catId(c)}">${esc(c)}</a>`).join("")}</div>
+<div><h2>追蹤 Potato</h2>${SOCIAL.map(([n, u]) => `<a href="${u}" rel="noopener">${n}</a>`).join("")}<a href="${LINE}" rel="noopener">LINE 官方帳號</a><a href="${SHEET}" rel="noopener">利潤健檢表</a></div>
 </div>
 <p class="fine">本站與${who}無任何關係。試算結果僅供參考，費率以各平台公告為準。</p>
 </div></footer>`;
 }
 
-const FONTS = `<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">`;
+// 自架字型（_fonts.py 產生，只含本站用到的字）。直接寫在頁面的 <style> 裡，不再有會擋畫面的外部 CSS。
+// 字型下載完之前先用系統字顯示（swap），中文字寬都是 1em，換字型時版面幾乎不動。
+const FONT_DIR = join(ROOT, "assets", "fonts");
+const FONT_CHARS = existsSync(join(FONT_DIR, "chars.json"))
+  ? new Set([...JSON.parse(readFileSync(join(FONT_DIR, "chars.json"), "utf8")).chars]) : null;
+const fontFaces = root => [
+  ["Noto Sans TC", "sans", "400 700"], ["Noto Serif TC", "serif", "700 900"], ["JetBrains Mono", "mono", "500 700"],
+].map(([family, file, w]) =>
+  `@font-face{font-family:"${family}";src:url(${root}assets/fonts/${file}.woff2) format("woff2");font-weight:${w};font-display:swap}`).join("\n");
+// 何時換成自架字型：之前下載過（瀏覽器有快取）就馬上換；第一次來的人等頁面載入、第一個畫面畫完才下載，
+// 字型不會跟第一個畫面搶頻寬。只記一個 localStorage 旗標，不是 cookie。
+const FONT_SWITCH = `<script>(function(d){var h=d.documentElement,on=function(){h.classList.add("f")};` +
+  `try{if(localStorage.f){on();return}}catch(e){}` +
+  // 三個字型都下載好才一次換上，版面只重排一次
+  `var get=function(){if(!d.fonts)return on();Promise.all(['400 1em "Noto Sans TC"','900 1em "Noto Serif TC"','700 1em "JetBrains Mono"']` +
+  `.map(function(x){return d.fonts.load(x)})).then(function(){on();try{localStorage.f=1}catch(e){}},on)};` +
+  // 等瀏覽器真的畫出第一個畫面（first-contentful-paint）再下載字型；不支援的瀏覽器就等 load 後 1 秒
+  `try{new PerformanceObserver(function(l,o){if(l.getEntriesByName("first-contentful-paint").length){o.disconnect();setTimeout(get,50)}})` +
+  `.observe({type:"paint",buffered:true})}catch(e){addEventListener("load",function(){setTimeout(get,1000)})}})(document)</script>`;
+// 只去掉註解與多餘空白；字串（例如 content:"− "）不受影響
+const minCss = css => css.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\n\s*/g, "\n").replace(/\n+/g, "\n").trim();
 
 const options = {
   "shopee-cats": () => Fees.SHOPEE.cats.map((c, i) =>
@@ -231,10 +263,12 @@ const options = {
 
 export function render(page, src, all = []) {
   const root = rootOf(page.path);
+  let wid = 0;
   let out = src
     .replace(/<!--@nav-->/g, () => header(page, all))
-    .replace(/<!--@css(?::([\w,]+))?-->/g, (_, extra) => FONTS + "\n<style>\n" + layout("base.css") +
-      (extra || "").split(",").filter(Boolean).map(x => "\n" + layout(x + ".css")).join("") + "\n</style>")
+    .replace(/<!--@css(?::([\w,]+))?-->/g, (_, extra) => `<link rel="icon" href="${root}favicon.ico" sizes="32x32">\n${FONT_SWITCH}\n<style>\n` +
+      minCss(fontFaces(root) + "\n" + layout("base.css") +
+      (extra || "").split(",").filter(Boolean).map(x => "\n" + layout(x + ".css")).join("")) + "\n</style>")
     .replace(/<!--@footer(?::([^>]*?))?-->/g, (_, who) => footer(page, all, who ? esc(who) : "蝦皮（Shopee）"))
     .replace(/<!--@toolhead-->/g, () => {
       const t = page.tool;
@@ -253,8 +287,15 @@ export function render(page, src, all = []) {
     // <!--@stories:5:略過的slug-->：首頁的文章清單，第一篇放大，頭條那篇不重複
     .replace(/<!--@stories:(\d+)(?::([\w-]+))?-->/g, (_, n, skip) => all.filter(a => a.slug !== skip).slice(0, +n).map((a, i) => story(a, root, i === 0)).join("\n"))
     .replace(/<!--@tools-->/g, () => TOOLS.map(t => `<a class="tool" href="${root}${t.path}"><span class="i">${t.no}</span><b>${esc(t.name)}</b><span class="q">${esc(t.q)}</span></a>`).join("\n"))
+    // 內嵌計算機：建置時先寫好表單與預設結果，載入後版面不會被撐開（CLS）
+    .replace(/<div data-widget="([\w-]+)"([^>]*)>([\s\S]*?)<\/div>/g, (_, name, attrs, inner) => {
+      const d = Object.fromEntries([...attrs.matchAll(/data-([\w-]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
+      const id = "w" + ++wid;
+      return `<div data-widget="${name}"${attrs} data-wid="${id}" class="w-box">${inner}${Widgets.render(name, d, id)}</div>`;
+    })
     .replace(/\{\{site\}\}/g, SITE)
-    .replace(/\{\{root\}\}/g, root);
+    .replace(/\{\{root\}\}/g, root)
+    .replace("</body>", () => measure(root) + "</body>");
   check(page, out, all);
   return out;
 }
@@ -267,9 +308,16 @@ export function check(page, html, all = []) {
     [/<link rel="canonical" href="https:\/\/[^"]+">/, "canonical"],
     [/<header class="site-head">[\s\S]*<\/header>/, "頁首"],
     [/<footer class="foot">[\s\S]*<\/footer>/, "頁尾"],
-    [/fonts\.googleapis\.com\/css2/, "字型"],
+    [/@font-face\{font-family:"Noto Sans TC";src:url\([^)]*assets\/fonts\/sans\.woff2\)/, "字型"],
+    [/<script defer src="[^"]*lib\/track\.js" data-endpoint="https:\/\/[^"]+">/, "自訂事件量測"],
+    [/"data-cf-beacon",'\{"token":"[0-9a-f]{32}"\}'/, "Cloudflare Web Analytics"],
   ];
   for (const [re, name] of need) if (!re.test(html)) throw new Error(`${where}: 缺少 ${name}`);
+  // 自架字型只含切進去的字：頁面上出現沒切到的字，就會用系統字顯示，所以直接擋下
+  if (!FONT_CHARS) throw new Error("缺 assets/fonts/chars.json：先跑 python _fonts.py <原始字型資料夾>");
+  const text = html.replace(/<(script|style)[\s\S]*?<\/\1>/g, "").replace(/<[^>]+>/g, "");
+  const missing = [...new Set(text)].filter(c => c > "~" && !FONT_CHARS.has(c));
+  if (missing.length) throw new Error(`${where}: 字型沒有這些字 ${missing.join("")}，跑 python _fonts.py <原始字型資料夾> 重切`);
   const left = html.match(/<!--@[^>]*-->|\{\{\w+\}\}/);
   if (left) throw new Error(`${where}: 沒有被取代的標記 ${left[0]}`);
   // 站內相對連結必須指向存在的頁面或檔案

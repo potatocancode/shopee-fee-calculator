@@ -3,12 +3,15 @@
   --paper:#F6F7F4;--surface:#FFFFFF;--ink:#16282B;--muted:#5C6B6E;--line:#DCE3E1;--line-strong:#B9C6C4;
   --primary:#174F56;--primary-hover:#0F3B41;--primary-tint:#E3EEEC;--on-primary:#FFFFFF;
   --accent:#F4A259;--accent-tint:#FDEAD3;--success:#2E7A4F;--success-tint:#EAF3EE;--error:#B8322A;--error-tint:#F8E3E0;--warn:#8A4B00;--warn-tint:#FFF1D6;
-  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;--sans:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  /* 字型：先用系統字畫出畫面；頁面載入完（或之前下載過）才在 <html> 加上 .f 換成自架字型，見 _build.mjs */
+  --serif:"Songti TC","PMingLiU",serif;--sans:"Microsoft JhengHei","PingFang TC",sans-serif;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
   --r-sm:4px;--r-md:6px;--r-lg:10px;--max:1180px;
   /* 舊頁面用的名稱，對到新 token */
   --teal:var(--primary);--teal-l:var(--primary-tint);--bg:var(--paper);--card:var(--surface);--bad:var(--error);--good:var(--success);
 }
+:root.f{--serif:"Noto Serif TC","Songti TC","PMingLiU",serif;--sans:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
 @media (prefers-color-scheme:dark){:root{
   --paper:#0F1A1C;--surface:#152427;--ink:#E6EEEC;--muted:#9AAEAE;--line:#243A3D;--line-strong:#33504F;
   --primary:#7CC6C9;--primary-hover:#A4DADC;--primary-tint:#18363A;--on-primary:#0F1A1C;
@@ -51,7 +54,7 @@ img{max-width:100%}
 .mnav>summary::-webkit-details-marker{display:none}
 .mnav-panel{position:absolute;left:0;right:0;top:66px;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 12px 24px -16px rgba(22,40,43,.35);max-height:calc(100vh - 66px);overflow:auto}
 .mnav-panel .wrap{padding-top:6px;padding-bottom:18px}
-.mnav-panel h4{font:700 13px/1 var(--sans);letter-spacing:.12em;color:var(--muted);margin:16px 0 4px}
+.mnav-panel h2{font:700 13px/1 var(--sans);letter-spacing:.12em;color:var(--muted);margin:16px 0 4px}
 .mnav-panel a{display:flex;gap:10px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink);font-weight:500}
 .mnav-panel a .i{font:700 13px var(--mono);color:var(--muted);width:24px}
 .mnav-panel .line-btn{display:block;text-align:center;margin-top:16px;padding:15px 12px}
@@ -113,6 +116,8 @@ tr.sum td{font-weight:700;border-bottom:1.5px solid var(--ink)}
 .verdict,.compare{margin-top:14px;padding:12px 14px;border-radius:var(--r-md);font-size:15px;background:var(--surface);border:1px solid var(--line)}
 .note{font-size:13px;color:var(--muted)}
 td.best,th.best{background:var(--accent-tint)}
+/* 橘色底上的綠字對比只有 4.45，壓深一點（還是同一個綠） */
+td.best.pos{color:color-mix(in srgb,var(--success) 82%,#000)!important}
 .disc th{text-align:right}.disc th:first-child,.disc td:first-child{text-align:left}.disc td{text-align:right}
 #status{margin-top:10px}
 /* 工具頁上的說明文章 */
@@ -158,7 +163,7 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 .foot-line a:hover{background:var(--primary-hover)}
 .foot-cols{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:28px}
 @media (max-width:760px){.foot-cols{grid-template-columns:1fr 1fr}.foot-cols>div:first-child{grid-column:1/-1}}
-.foot h4{font:700 13px var(--sans);letter-spacing:.1em;color:var(--ink);margin:0 0 10px}
+.foot h2{font:700 13px var(--sans);letter-spacing:.1em;color:var(--ink);margin:0 0 10px}
 .foot-cols a{display:block;text-decoration:none;color:var(--muted);padding:3px 0}
 .foot-cols a:hover{color:var(--primary)}
 .foot .brand{margin-bottom:10px}

@@ -45,7 +45,7 @@
 .author p{margin:0;font-size:15px;color:var(--muted)}.author b{color:var(--ink)}
 /* 右側目錄 */
 .rail{position:sticky;top:20px;align-self:start;font-size:14px;padding-top:30px}
-.rail h4{font:700 13px var(--sans);letter-spacing:.12em;color:var(--muted);margin:0 0 8px}
+.rail h2{font:700 13px var(--sans);letter-spacing:.12em;color:var(--muted);margin:0 0 8px}
 .rail nav a{display:block;text-decoration:none;padding:6px 0 6px 12px;border-left:2px solid var(--line);color:var(--muted);line-height:1.5}
 .rail nav a:hover{color:var(--primary);border-color:var(--primary)}
 .rail .mini{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;margin-top:22px}

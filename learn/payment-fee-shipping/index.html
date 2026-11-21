@@ -13,25 +13,27 @@
 <meta property="og:image" content="https://sellerpotato.com/learn/payment-fee-shipping/og.png">
 <meta property="article:published_time" content="2026-11-13">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="../../favicon.ico" sizes="32x32">
+<script>(function(d){var h=d.documentElement,on=function(){h.classList.add("f")};try{if(localStorage.f){on();return}}catch(e){}var get=function(){if(!d.fonts)return on();Promise.all(['400 1em "Noto Sans TC"','900 1em "Noto Serif TC"','700 1em "JetBrains Mono"'].map(function(x){return d.fonts.load(x)})).then(function(){on();try{localStorage.f=1}catch(e){}},on)};try{new PerformanceObserver(function(l,o){if(l.getEntriesByName("first-contentful-paint").length){o.disconnect();setTimeout(get,50)}}).observe({type:"paint",buffered:true})}catch(e){addEventListener("load",function(){setTimeout(get,1000)})}})(document)</script>
 <style>
-/* 精算刊物：見 DESIGN.md。顏色一律用 token，數字一律用 .num 或 JetBrains Mono。 */
+@font-face{font-family:"Noto Sans TC";src:url(../../assets/fonts/sans.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"Noto Serif TC";src:url(../../assets/fonts/serif.woff2) format("woff2");font-weight:700 900;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url(../../assets/fonts/mono.woff2) format("woff2");font-weight:500 700;font-display:swap}
 :root{
-  --paper:#F6F7F4;--surface:#FFFFFF;--ink:#16282B;--muted:#5C6B6E;--line:#DCE3E1;--line-strong:#B9C6C4;
-  --primary:#174F56;--primary-hover:#0F3B41;--primary-tint:#E3EEEC;--on-primary:#FFFFFF;
-  --accent:#F4A259;--accent-tint:#FDEAD3;--success:#2E7A4F;--success-tint:#EAF3EE;--error:#B8322A;--error-tint:#F8E3E0;--warn:#8A4B00;--warn-tint:#FFF1D6;
-  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;--sans:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
-  --r-sm:4px;--r-md:6px;--r-lg:10px;--max:1180px;
-  /* 舊頁面用的名稱，對到新 token */
-  --teal:var(--primary);--teal-l:var(--primary-tint);--bg:var(--paper);--card:var(--surface);--bad:var(--error);--good:var(--success);
+--paper:#F6F7F4;--surface:#FFFFFF;--ink:#16282B;--muted:#5C6B6E;--line:#DCE3E1;--line-strong:#B9C6C4;
+--primary:#174F56;--primary-hover:#0F3B41;--primary-tint:#E3EEEC;--on-primary:#FFFFFF;
+--accent:#F4A259;--accent-tint:#FDEAD3;--success:#2E7A4F;--success-tint:#EAF3EE;--error:#B8322A;--error-tint:#F8E3E0;--warn:#8A4B00;--warn-tint:#FFF1D6;
+--serif:"Songti TC","PMingLiU",serif;--sans:"Microsoft JhengHei","PingFang TC",sans-serif;
+--mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
+--r-sm:4px;--r-md:6px;--r-lg:10px;--max:1180px;
+--teal:var(--primary);--teal-l:var(--primary-tint);--bg:var(--paper);--card:var(--surface);--bad:var(--error);--good:var(--success);
 }
+:root.f{--serif:"Noto Serif TC","Songti TC","PMingLiU",serif;--sans:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+--mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
 @media (prefers-color-scheme:dark){:root{
-  --paper:#0F1A1C;--surface:#152427;--ink:#E6EEEC;--muted:#9AAEAE;--line:#243A3D;--line-strong:#33504F;
-  --primary:#7CC6C9;--primary-hover:#A4DADC;--primary-tint:#18363A;--on-primary:#0F1A1C;
-  --accent-tint:#3A2A17;--success:#5DBE84;--success-tint:#17382A;--error:#F07A6E;--error-tint:#3A1D1A;--warn:#FFB74D;--warn-tint:#3A2C12;color-scheme:dark}}
+--paper:#0F1A1C;--surface:#152427;--ink:#E6EEEC;--muted:#9AAEAE;--line:#243A3D;--line-strong:#33504F;
+--primary:#7CC6C9;--primary-hover:#A4DADC;--primary-tint:#18363A;--on-primary:#0F1A1C;
+--accent-tint:#3A2A17;--success:#5DBE84;--success-tint:#17382A;--error:#F07A6E;--error-tint:#3A1D1A;--warn:#FFB74D;--warn-tint:#3A2C12;color-scheme:dark}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.8 var(--sans)}
@@ -42,8 +44,6 @@ img{max-width:100%}
 :focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 .hl{background:linear-gradient(transparent 58%,var(--accent) 58%,var(--accent) 92%,transparent 92%);padding:0 .08em}
-
-/* ---------- 頁首 ---------- */
 .site-head{background:var(--surface);border-bottom:1px solid var(--line);position:relative;z-index:20}
 .site-head>.wrap{display:flex;align-items:center;gap:24px;height:66px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);flex:none}
@@ -70,13 +70,11 @@ img{max-width:100%}
 .mnav>summary::-webkit-details-marker{display:none}
 .mnav-panel{position:absolute;left:0;right:0;top:66px;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 12px 24px -16px rgba(22,40,43,.35);max-height:calc(100vh - 66px);overflow:auto}
 .mnav-panel .wrap{padding-top:6px;padding-bottom:18px}
-.mnav-panel h4{font:700 13px/1 var(--sans);letter-spacing:.12em;color:var(--muted);margin:16px 0 4px}
+.mnav-panel h2{font:700 13px/1 var(--sans);letter-spacing:.12em;color:var(--muted);margin:16px 0 4px}
 .mnav-panel a{display:flex;gap:10px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink);font-weight:500}
 .mnav-panel a .i{font:700 13px var(--mono);color:var(--muted);width:24px}
 .mnav-panel .line-btn{display:block;text-align:center;margin-top:16px;padding:15px 12px}
 @media (max-width:900px){.mainnav,.site-head>.wrap>.line-btn{display:none}.mnav{display:block}}
-
-/* ---------- 共用：標題、按鈕、連結 ---------- */
 .crumb{font-size:14px;color:var(--muted)}
 .crumb a{color:var(--muted);text-decoration:none}.crumb a:hover{color:var(--primary)}
 .btn{display:inline-block;font:700 16px/1.2 var(--sans);text-decoration:none;background:var(--primary);color:var(--on-primary);border:0;border-radius:var(--r-md);padding:13px 20px;cursor:pointer}
@@ -85,9 +83,7 @@ img{max-width:100%}
 .more:hover{color:var(--primary-hover);text-decoration-thickness:2.5px}
 .verified{display:inline-flex;align-items:center;gap:6px;color:var(--success);font-weight:700}
 .verified::before{content:"";width:16px;height:16px;flex:none;background:currentColor;-webkit-mask:var(--ok) center/contain no-repeat;mask:var(--ok) center/contain no-repeat;
-  --ok:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 100 16A8 8 0 008 0zm3.6 5.6l-4.4 5a.8.8 0 01-1.2 0L4.4 8.8a.8.8 0 111.2-1.1l1 1.1 3.8-4.3a.8.8 0 011.2 1.1z'/%3E%3C/svg%3E")}
-
-/* ---------- 工具頁 ---------- */
+--ok:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 100 16A8 8 0 008 0zm3.6 5.6l-4.4 5a.8.8 0 01-1.2 0L4.4 8.8a.8.8 0 111.2-1.1l1 1.1 3.8-4.3a.8.8 0 011.2 1.1z'/%3E%3C/svg%3E")}
 .tool-head{padding-top:28px;padding-bottom:6px}
 .tool-head h1{font:900 clamp(28px,4.2vw,38px)/1.3 var(--serif);margin:8px 0 6px;text-wrap:balance}
 .tool-head p{font-size:18px;color:var(--muted);margin:0;max-width:760px}
@@ -132,15 +128,14 @@ tr.sum td{font-weight:700;border-bottom:1.5px solid var(--ink)}
 .verdict,.compare{margin-top:14px;padding:12px 14px;border-radius:var(--r-md);font-size:15px;background:var(--surface);border:1px solid var(--line)}
 .note{font-size:13px;color:var(--muted)}
 td.best,th.best{background:var(--accent-tint)}
+td.best.pos{color:color-mix(in srgb,var(--success) 82%,#000)!important}
 .disc th{text-align:right}.disc th:first-child,.disc td:first-child{text-align:left}.disc td{text-align:right}
 #status{margin-top:10px}
-/* 工具頁上的說明文章 */
 main>article{max-width:760px;font-size:17px}
 main>article h2{font:900 26px/1.4 var(--serif);color:var(--ink);margin:40px 0 10px}
 main>article h3{font:700 18px/1.5 var(--sans);margin:22px 0 4px}
 main>article table td,main>article table th{border:1px solid var(--line);padding:8px 10px}
 main>article table th{background:var(--primary-tint);color:var(--ink)}
-/* 健檢表導流 */
 .cta{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 32px;align-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;margin:10px 0 20px}
 .cta h2{font:900 24px/1.4 var(--serif);margin:0;grid-column:1}
 .cta p,.cta ul{grid-column:1;margin:0;color:var(--muted)}
@@ -148,8 +143,6 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 .cta a{grid-column:2;grid-row:1/span 3;display:inline-block;font:700 16px var(--sans);text-decoration:none;background:var(--primary);color:var(--on-primary);border-radius:var(--r-md);padding:13px 20px;white-space:nowrap}
 .cta a:hover{background:var(--primary-hover)}
 @media (max-width:700px){.cta{grid-template-columns:1fr}.cta a{grid-column:1;grid-row:auto;justify-self:start}}
-
-/* ---------- 內嵌計算機（首頁、文章） ---------- */
 .w-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;margin:8px 0 24px;font-size:16px;line-height:1.6}
 .w-box .w-title{font:700 17px/1.4 var(--serif);margin:0 0 4px;color:var(--ink)}
 .w-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
@@ -168,8 +161,6 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 .w-out .w-sum td{font-size:16px;font-weight:700;border-bottom:1.5px solid var(--line)}
 .w-out .w-sum td:last-child{font-size:22px;color:var(--primary)}
 .w-note{font-size:14px;color:var(--muted);margin:8px 0 0}
-
-/* ---------- 頁尾 ---------- */
 .foot{background:var(--surface);border-top:1px solid var(--line);margin-top:56px;padding-top:40px;padding-bottom:32px;font-size:14px;color:var(--muted)}
 .foot-line{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--line)}
 .foot-line p{margin:0;font-size:16px;color:var(--ink);max-width:620px}
@@ -177,25 +168,22 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 .foot-line a:hover{background:var(--primary-hover)}
 .foot-cols{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:28px}
 @media (max-width:760px){.foot-cols{grid-template-columns:1fr 1fr}.foot-cols>div:first-child{grid-column:1/-1}}
-.foot h4{font:700 13px var(--sans);letter-spacing:.1em;color:var(--ink);margin:0 0 10px}
+.foot h2{font:700 13px var(--sans);letter-spacing:.1em;color:var(--ink);margin:0 0 10px}
 .foot-cols a{display:block;text-decoration:none;color:var(--muted);padding:3px 0}
 .foot-cols a:hover{color:var(--primary)}
 .foot .brand{margin-bottom:10px}
 .foot .fine{border-top:1px solid var(--line);margin-top:28px;padding-top:16px;margin-bottom:0}
 .btn-sec{display:block;width:100%;font:700 15px/1.3 var(--sans);color:var(--primary);background:var(--surface);border:1.5px solid var(--primary);border-radius:var(--r-sm);padding:11px 10px;cursor:pointer}
 .btn-sec:hover{background:var(--primary-tint)}
-/* 觸控裝置：文字連結的點擊範圍至少 44px 高，用負 margin 抵銷，不改版面 */
 @media (pointer:coarse),(max-width:760px){
 .more{padding:11px 0;margin:-11px 0}
 .foot-cols a{padding:11px 0}
 .crumb a{display:inline-block;padding:10px 0;margin:-10px 0}
 .site-head .brand{padding:4px 0}
 }
-/* 鍵盤使用者：Tab 第一下出現「跳到主要內容」 */
 .skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--primary);color:var(--on-primary);font:700 15px var(--sans);padding:12px 16px;border-radius:var(--r-md);text-decoration:none}
 .skip:focus{top:12px}
 #content{display:block;outline:none}
-/* 文章頁與文章列表：見 DESIGN.md「Read」模式。內文欄 720，桌機右側 240 目錄。 */
 .art{display:grid;grid-template-columns:minmax(0,720px) 240px;gap:56px;justify-content:center;padding-top:26px}
 @media (max-width:1060px){.art{grid-template-columns:minmax(0,720px)}.rail{display:none}}
 .art h1{font:900 clamp(29px,5vw,42px)/1.32 var(--serif);margin:12px 0 14px;letter-spacing:.01em;text-wrap:balance}
@@ -219,7 +207,6 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 .prose tr:last-child td{border-bottom:0}
 .prose .formula{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 16px;font-weight:700;margin:0 0 1.1em}
 .prose .tip{font-size:15px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;margin:24px 0 0}
-/* 直式算式 */
 .ledger{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 22px;margin:4px 0 26px;font-size:16px}
 .ledger .cap{font:700 13px var(--sans);color:var(--muted);letter-spacing:.06em;margin-bottom:8px}
 .ledger .ln{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:4px 18px;align-items:baseline;padding:6px 0;line-height:1.5}
@@ -231,7 +218,6 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 .ledger .sum .v{font-size:30px;color:var(--primary);border-bottom:4px double var(--ink);padding-bottom:2px}
 .tape{display:inline-block;background:var(--accent-tint);border-radius:2px;padding:0 7px;font-size:13px;font-weight:700;transform:rotate(-1deg);margin-left:4px}
 @media (max-width:520px){.ledger{padding:16px}.ledger .ln{grid-template-columns:minmax(0,1fr) auto}.ledger .f{grid-column:1;text-align:left}}
-/* 更正紀錄、作者 */
 .fix{border-top:1px solid var(--line);margin-top:30px;padding-top:16px;font-size:15px;color:var(--muted)}
 .fix h2{font:700 16px var(--sans)!important;color:var(--ink);margin:0 0 6px!important}
 .fix p{margin:0 0 6px}
@@ -240,14 +226,12 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 .author{display:flex;gap:14px;align-items:flex-start;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;margin:30px 0}
 .author img{width:52px;height:52px;border-radius:50%;flex:none}
 .author p{margin:0;font-size:15px;color:var(--muted)}.author b{color:var(--ink)}
-/* 右側目錄 */
 .rail{position:sticky;top:20px;align-self:start;font-size:14px;padding-top:30px}
-.rail h4{font:700 13px var(--sans);letter-spacing:.12em;color:var(--muted);margin:0 0 8px}
+.rail h2{font:700 13px var(--sans);letter-spacing:.12em;color:var(--muted);margin:0 0 8px}
 .rail nav a{display:block;text-decoration:none;padding:6px 0 6px 12px;border-left:2px solid var(--line);color:var(--muted);line-height:1.5}
 .rail nav a:hover{color:var(--primary);border-color:var(--primary)}
 .rail .mini{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;margin-top:22px}
 .rail .mini b{display:block;font:700 15px/1.5 var(--serif);margin-bottom:6px}
-/* 文章清單（接著看、/learn/、首頁） */
 .sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 6px}
 .sec-h h2{font:900 26px/1.3 var(--serif);margin:0}
 .stories{display:grid;grid-template-columns:1fr 1fr;gap:0 48px}
@@ -267,7 +251,7 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 .cat-nav a:hover{text-decoration:underline;text-underline-offset:3px}
 .cat-sec{padding-top:28px;scroll-margin-top:12px}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"蝦皮金流與系統處理費 2.5% 怎麼算？運費也要算進去","description":"蝦皮金流與系統處理費是用商品金額加買家付的運費去算 2.5%。390 元商品加 60 元運費，金流費是 11 元不是 10 元。附四捨五入的規則和計算機。","datePublished":"2026-11-13","dateModified":"2026-11-13","image":"https://sellerpotato.com/learn/payment-fee-shipping/og.png","author":{"@type":"Organization","name":"Potato 賣家工具箱","url":"https://sellerpotato.com/"},"publisher":{"@type":"Organization","name":"Potato 賣家工具箱","logo":{"@type":"ImageObject","url":"https://sellerpotato.com/assets/potato-96.png"}},"mainEntityOfPage":"https://sellerpotato.com/learn/payment-fee-shipping/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"蝦皮金流與系統處理費 2.5% 怎麼算？運費也要算進去","description":"蝦皮金流與系統處理費是用商品金額加買家付的運費去算 2.5%。390 元商品加 60 元運費，金流費是 11 元不是 10 元。附四捨五入的規則和計算機。","datePublished":"2026-11-13T00:00:00+08:00","dateModified":"2026-11-13T00:00:00+08:00","image":"https://sellerpotato.com/learn/payment-fee-shipping/og.png","author":{"@type":"Organization","name":"Potato 賣家工具箱","url":"https://sellerpotato.com/"},"publisher":{"@type":"Organization","name":"Potato 賣家工具箱","logo":{"@type":"ImageObject","url":"https://sellerpotato.com/assets/potato-96.png"}},"mainEntityOfPage":"https://sellerpotato.com/learn/payment-fee-shipping/"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"賣家算數","item":"https://sellerpotato.com/learn/"},{"@type":"ListItem","position":2,"name":"手續費與方案","item":"https://sellerpotato.com/learn/#c1"},{"@type":"ListItem","position":3,"name":"蝦皮金流與系統處理費 2.5% 怎麼算？運費也要算進去","item":"https://sellerpotato.com/learn/payment-fee-shipping/"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"成交手續費也含運費嗎？","acceptedAnswer":{"@type":"Answer","text":"不含。成交手續費只用商品售出金額算，只有金流與系統處理費要把買家付的運費加進去。"}},{"@type":"Question","name":"2.5 元會四捨五入成 3 元嗎？","acceptedAnswer":{"@type":"Answer","text":"會。蝦皮每一項費用分開四捨五入，100 元商品的金流費 2.5 會收 3 元。"}}]}</script>
 </head>
@@ -297,14 +281,14 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 </nav>
 <a class="line-btn" href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">加 LINE 收費率通知</a>
 <details class="mnav"><summary>選單</summary><div class="mnav-panel"><div class="wrap">
-<h4>賣家算數</h4>
+<h2>賣家算數</h2>
 <a href="../../learn/">全部文章</a>
 <a href="../../learn/#c1">手續費與方案</a>
 <a href="../../learn/#c2">定價與利潤</a>
 <a href="../../learn/#c3">廣告</a>
 <a href="../../learn/#c4">進貨與經營</a>
 <a href="../../learn/#c5">平台比較</a>
-<h4>計算工具</h4>
+<h2>計算工具</h2>
 <a href="../../fee/"><span class="i">01</span>手續費計算機</a>
 <a href="../../pricing/"><span class="i">02</span>定價與折扣</a>
 <a href="../../ads-roas/"><span class="i">03</span>廣告 ROAS</a>
@@ -312,7 +296,7 @@ main>article table th{background:var(--primary-tint);color:var(--ink)}
 <a href="../../import-cost/"><span class="i">05</span>1688 進貨成本</a>
 <a href="../../returns/"><span class="i">06</span>退貨成本</a>
 <a href="../../monthly-goal/"><span class="i">07</span>月目標</a>
-<h4>更多</h4>
+<h2>更多</h2>
 <a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">蝦皮賣場利潤健檢表（Excel）</a>
 <a class="line-btn" href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">加 LINE 收費率通知</a>
 </div></div></details>
@@ -351,7 +335,16 @@ document.querySelectorAll("details.dd").forEach(d=>d.addEventListener("toggle",(
 <li><b>對帳：</b>帳單跟你自己算的差幾元，常常就是運費和四捨五入造成的。</li>
 </ul>
 
-<div data-widget="shopee-fee" data-price="390"><p class="w-title">試試不同售價（這個小計算機假設買家運費 0，要算含運費請用完整版）</p></div>
+<div data-widget="shopee-fee" data-price="390" data-wid="w1" class="w-box"><p class="w-title">試試不同售價（這個小計算機假設買家運費 0，要算含運費請用完整版）</p><div class="w-grid">
+<div><label for="w1p">售價（元）</label><input id="w1p" type="number" inputmode="decimal" min="0" value="390"></div>
+<div><label for="w1c">分類</label><select id="w1c"><option value="0.06" selected>一般／多數分類 6%</option><option value="0.06">女生衣著 6%</option><option value="0.06">美妝保養 6%</option><option value="0.055">美食伴手禮 5.5%</option><option value="0.055">寵物食品／保健 5.5%</option><option value="0.06">寵物用品 6%</option><option value="0.05">筆記型電腦 5%</option><option value="0.075">手機周邊配件 7.5%</option></select></div>
+<div class="w-full"><div class="w-seg"><label><input type="radio" name="w1plan" value="1" checked><span>方案一 6%</span></label><label><input type="radio" name="w1plan" value="2"><span>方案二 每單 60</span></label></div></div>
+<label class="w-chk w-full"><input id="w1i" type="checkbox" checked>有開發票（每張 2.5 元）</label>
+</div>
+<div class="w-out"><table><tr><td>成交手續費</td><td>$23</td></tr><tr><td>金流與系統處理費</td><td>$10</td></tr>
+<tr><td>免運方案一</td><td>$23</td></tr><tr><td>發票</td><td>$2.5</td></tr>
+<tr class="w-sum"><td>蝦皮收走</td><td>$58.5（15.0%）</td></tr>
+<tr class="w-sum"><td>到手</td><td>$331.5</td></tr></table></div></div>
 
 <h2 id="s3">自己吸收運費的賣家</h2>
 <p>「免運」如果是你自己吸收運費，那筆運費不是金流費的問題，而是你的成本。390 元商品自己吸收 60 元運費，每件淨利直接少 60 元，定價前要先算進成本。保本價怎麼算，看<a href="../breakeven-price/">這篇</a>。</p>
@@ -365,7 +358,7 @@ document.querySelectorAll("details.dd").forEach(d=>d.addEventListener("toggle",(
 <div class="author"><img src="../../assets/potato-96.png" alt="Potato" width="52" height="52"><p><b>Potato</b>｜Potato 賣家工具箱。把蝦皮賣家的數字算清楚：每件賺多少、該選哪個方案、廣告打到多少會虧。這篇的數字都用本站計算機的公式算過，費率以蝦皮賣家中心公告為準；算錯的地方會留在更正紀錄裡。</p></div>
 </article>
 <aside class="rail">
-<h4>本文重點</h4>
+<h2>本文重點</h2>
 <nav><a href="#s1">算法</a><a href="#s2">為什麼要在意這 1 元</a><a href="#s3">自己吸收運費的賣家</a><a href="#faq">常見問題</a></nav>
 <div class="mini"><b>打開蝦皮手續費計算機</b><a class="more" href="../../fee/">打開工具</a></div>
 </aside>
@@ -383,13 +376,15 @@ document.querySelectorAll("details.dd").forEach(d=>d.addEventListener("toggle",(
 <div class="foot-line"><p>蝦皮費率一改，我會在 LINE 上跟你說，順便算好你每件少賺多少。一個月頂多幾則。</p><a href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">加 LINE 好友</a></div>
 <div class="foot-cols">
 <div><a class="brand" href="../../"><img src="../../assets/potato-96.png" alt="" width="36" height="36"><span><b>Potato 賣家工具箱</b></span></a><p>把蝦皮賣家的數字算清楚。每個數字都用公開的費率逐項算過，費率一改就更新，算錯的地方會留下更正紀錄。</p></div>
-<div><h4>計算工具</h4><a href="../../fee/">手續費計算機</a><a href="../../pricing/">定價與折扣</a><a href="../../ads-roas/">廣告 ROAS</a><a href="../../compare/">平台比較</a><a href="../../import-cost/">1688 進貨成本</a><a href="../../returns/">退貨成本</a><a href="../../monthly-goal/">月目標</a></div>
-<div><h4>賣家算數</h4><a href="../../learn/">全部文章</a><a href="../../learn/#c1">手續費與方案</a><a href="../../learn/#c2">定價與利潤</a><a href="../../learn/#c3">廣告</a><a href="../../learn/#c4">進貨與經營</a><a href="../../learn/#c5">平台比較</a></div>
-<div><h4>追蹤 Potato</h4><a href="https://www.threads.com/@potato.sellertools" rel="noopener">Threads</a><a href="https://www.instagram.com/potato.sellertools/" rel="noopener">Instagram</a><a href="https://www.facebook.com/profile.php?id=61596286809788" rel="noopener">Facebook</a><a href="https://www.youtube.com/channel/UC6uLUp_2xdJTXaXAtpPehzA" rel="noopener">YouTube</a><a href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">LINE 官方帳號</a><a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">利潤健檢表</a></div>
+<div><h2>計算工具</h2><a href="../../fee/">手續費計算機</a><a href="../../pricing/">定價與折扣</a><a href="../../ads-roas/">廣告 ROAS</a><a href="../../compare/">平台比較</a><a href="../../import-cost/">1688 進貨成本</a><a href="../../returns/">退貨成本</a><a href="../../monthly-goal/">月目標</a></div>
+<div><h2>賣家算數</h2><a href="../../learn/">全部文章</a><a href="../../learn/#c1">手續費與方案</a><a href="../../learn/#c2">定價與利潤</a><a href="../../learn/#c3">廣告</a><a href="../../learn/#c4">進貨與經營</a><a href="../../learn/#c5">平台比較</a></div>
+<div><h2>追蹤 Potato</h2><a href="https://www.threads.com/@potato.sellertools" rel="noopener">Threads</a><a href="https://www.instagram.com/potato.sellertools/" rel="noopener">Instagram</a><a href="https://www.facebook.com/profile.php?id=61596286809788" rel="noopener">Facebook</a><a href="https://www.youtube.com/channel/UC6uLUp_2xdJTXaXAtpPehzA" rel="noopener">YouTube</a><a href="https://line.me/R/ti/p/@127ulmyu" rel="noopener">LINE 官方帳號</a><a href="https://portaly.cc/potatocancode/product/I25q5eP4I8526I5GPiPa" rel="noopener">利潤健檢表</a></div>
 </div>
 <p class="fine">本站與蝦皮（Shopee）無任何關係。試算結果僅供參考，費率以各平台公告為準。</p>
 </div></footer>
 <script src="../../lib/fees.js"></script>
 <script src="../../lib/widgets.js"></script>
+<script defer src="../../lib/track.js" data-endpoint="https://m.sellerpotato.com/e"></script>
+<script>addEventListener("load",function(){var s=document.createElement("script");s.defer=true;s.src="https://static.cloudflareinsights.com/beacon.min.js";s.setAttribute("data-cf-beacon",'{"token":"8768329764d1426c810486909119cce7"}');document.body.appendChild(s)})</script>
 </body>
 </html>
