@@ -36,6 +36,38 @@ t("每單 2 件：方案二 60 元與發票攤到每件", () => {
   const f = Fees.shopee(100, {...base, plan: 2, qty: 2});
   assert.equal(f.prog, 30); assert.equal(f.inv, 1.25);
 });
+// 2026/12/11 新制：案例照抄蝦皮官方說明（seller.shopee.tw/edu/article/28804、18733）
+const S2 = {s: Fees.SHOPEE_1211};
+t("12/11 新制：官方範例 成交手續費 400×5%=20、40,000 以 35,000 計=1,750、130+500 → 31.5 → 32", () => {
+  assert.equal(Fees.shopee(400, {...S2, rate: 0.05, plan: 1}).comm, 20);
+  assert.equal(Fees.shopee(40000, {...S2, rate: 0.05, plan: 1}).comm, 1750);
+  assert.equal(Fees.R(630 * 0.05), 32);
+});
+t("12/11 新制：官方範例 促銷檔期 5%+4%，400 → 36；參加（長期）蝦幣回饋免收 → 20", () => {
+  assert.equal(Fees.shopee(400, {...S2, rate: 0.05, plan: 1, promo: true}).comm, 36);
+  assert.equal(Fees.shopee(400, {...S2, rate: 0.05, plan: 1, promo: true, coin: true}).comm, 20);
+});
+t("12/11 新制：官方範例 金流費 (400+60)×2.5%=11.5 → 12", () => {
+  assert.equal(Fees.shopee(400, {...S2, rate: 0.05, plan: 1, ship: 60}).pay, 12);
+});
+t("12/11 新制：官方範例 方案一 1,000×6.5%=65、方案二每單 65、99 元以下 6.5%", () => {
+  assert.equal(Fees.shopee(1000, {...S2, rate: 0.08, plan: 1}).prog, 65);
+  assert.equal(Fees.shopee(1000, {...S2, rate: 0.08, plan: 2}).prog, 65);
+  assert.equal(Fees.shopee(99, {...S2, rate: 0.08, plan: 2}).prog, 6);
+});
+t("12/11 新制：分類表和現行一一對應，名稱相同、費率依官方附件", () => {
+  const a = Fees.SHOPEE.cats, b = Fees.SHOPEE_1211.cats;
+  assert.equal(a.length, b.length);
+  a.forEach((c, i) => assert.equal(c.label.replace(/ [\d.]+%$/, ""), b[i].label.replace(/ [\d.]+%$/, "")));
+  assert.deepEqual(b.map(c => c.rate), [0.08, 0.071, 0.08, 0.061, 0.075, 0.08, 0.056, 0.095]);
+  // 現行費率維持原本的數字（文章都用這些算的）
+  assert.deepEqual(a.map(c => c.rate), [0.06, 0.06, 0.06, 0.055, 0.055, 0.06, 0.05, 0.075]);
+});
+t("12/11 新制：390 元、多數分類、方案一、有發票 → 現行 58.5、新制 68.5", () => {
+  assert.equal(Fees.shopee(390, {rate: 0.06, plan: 1, inv: true}).total, 58.5);
+  assert.equal(Fees.shopee(390, {...S2, rate: 0.08, plan: 1, inv: true}).total, 68.5);
+});
+
 t("露天：3% 交易費上限 400、最低 1；新賣家免交易費", () => {
   assert.equal(Fees.ruten(390, 60, {payRate: 0.015}).total, 19);
   assert.equal(Fees.ruten(30000, 0, {payRate: 0.015}).trade, 400);
@@ -154,6 +186,27 @@ t("文章：ROAS 390/175 → 淨利 156.5、保本 2.49；9 折 351 → 2.87", (
 t("文章：金流費 390+60 → 11；促銷 390 → 66.5", () => {
   assert.equal(Fees.shopee(390, o(1, {ship: 60})).pay, 11);
   assert.equal(fee(390, 1, {promo: true}), 66.5);
+});
+t("手續費頁：12/11 起同一件 390 元，費用 58.5 → 68.5、每件多 10 元；換手機周邊 64.5 → 74.5", () => {
+  const x = page("fee/");
+  assert.match(x.el("next").innerHTML, /\$58\.5 → \$68\.5/);
+  assert.match(x.el("next").innerHTML, /多被收 <b>\$10<\/b>/);
+  x.set("cat", 0.075); x.calc();
+  assert.match(x.el("next").innerHTML, /\$64\.5 → \$74\.5（成交手續費 9\.5%/);
+});
+t("12/11 文章：內文數字和 fees.js 一致，文章裡的計算機用新費率", () => {
+  const N = {s: Fees.SHOPEE_1211, inv: true}, O = {inv: true};
+  const html = readFileSync(join(ROOT, "learn/shopee-fee-1211/index.html"), "utf8");
+  assert.equal(Fees.shopee(390, {...N, rate: 0.08, plan: 1, promo: true}).total, 84.5);
+  assert.equal(Fees.shopee(390, {...N, rate: 0.08, plan: 1, promo: true, coin: true}).total, 68.5);
+  assert.equal(Fees.shopee(390, {...N, rate: 0.08, plan: 1}).prog, 25);
+  const be = (o, c) => Fees.shopeeMinPrice(o, c);
+  assert.deepEqual([be({...O, rate: 0.06, plan: 1}, 100), be({...N, rate: 0.08, plan: 1}, 100), be({...O, rate: 0.06, plan: 2}, 100), be({...N, rate: 0.08, plan: 2}, 100), be({...N, rate: 0.08, plan: 1}, 195)], [120, 124, 178, 188, 238]);
+  // 分類表「390 元訂單多收」那一欄
+  const more = Fees.SHOPEE.cats.map((c, i) => Fees.shopee(390, {...N, rate: Fees.SHOPEE_1211.cats[i].rate, plan: 1}).total - Fees.shopee(390, {...O, rate: c.rate, plan: 1}).total);
+  assert.deepEqual(more, [10, 7, 10, 5, 10, 10, 4, 10]);
+  assert.match(html, /data-rates="1211"[^>]*>[\s\S]*?\$68\.5（17\.6%）/);
+  assert.match(html, /方案一 6\.5%/);
 });
 t("手續費頁和定價頁的保本價一致（成本 195 → 232，20% → 302）", () => {
   const x = page("fee/");

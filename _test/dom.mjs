@@ -37,6 +37,8 @@ export function load(htmlPath, {search} = {}) {
       const opts = [...body.matchAll(/<option value="([^"]*)"([^>]*)>/g)].map(o => ({value: o[1], selected: /selected/.test(o[2])}));
       el.value = (opts.find(o => o.selected) || opts[0]).value;
       selects[id] = opts.map(o => o.value);
+      // 同值的選項（例如兩個 6% 分類）取第一個，跟瀏覽器預設選第一個一致
+      Object.defineProperty(el, "selectedIndex", {get: () => selects[id].indexOf(el.value)});
     }
     if (el.attrs.type === "radio") radios.push(el);
     if (tag !== "button") inputs.push(el);
